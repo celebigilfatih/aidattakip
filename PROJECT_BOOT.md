@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.3.2
+- Document version: 0.3.3
 - CDSK version: TBD
 - Last updated: 2026-09-15
 
@@ -9,7 +9,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 ## Project Compass
 
 - North star: Spor kulüplerinin sporcu ve aidat takibini yapabilmesi.
-- Current mission: Broşür demo erişimini çalışır ve izlenebilir hale getirmek; ortak ADMIN, domain ve secret risklerini yönetmek.
+- Current mission: Çalışan broşür demo erişimini işletmek; ortak ADMIN ve secret risklerini yönetmek.
 - Success signal: Ayrıntılı kabul ölçütleri TBD; [REQUIREMENTS](docs/00-product/REQUIREMENTS.md).
 - Accepted trade-offs: TBD — mevcut mimari teknik karar onayı olarak kaydedilmedi.
 
@@ -30,8 +30,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Phase: Mevcut uygulamaya CDSK bağlamı kazandırma; ürün kabul aşaması TBD.
 - Version: package.json 1.0.0; yayınlanmış sürüm doğrulanmadı.
 - Active sprint veya milestone: TBD
-- Current focus: SporManage Coolify production çalışıyor; broşür için aktif ortak ADMIN oluşturuldu ve canlı login doğrulandı. Broşür domain’i çalışan production domain ile henüz uyuşmuyor. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
-- Critical risks: Ortak broşür ADMIN hesabı production verisini değiştirebilir; broşür URL/DNS-TLS uyuşmazlığı, Coolify buildtime secret uyarısı, doğrulanmamış backup/restore ve auth logları; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
+- Current focus: SporManage Coolify production ve `aidat.spormanage.com.tr` broşür erişimi çalışıyor; ortak ADMIN hesabıyla canlı login doğrulandı. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Critical risks: Ortak broşür ADMIN hesabı production verisini değiştirebilir; Coolify buildtime secret uyarısı, doğrulanmamış backup/restore ve auth logları; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
 - Blocking decisions: Yayın erişilebilir; production başlangıç kimliği/rol düzeltmesi ve secret yapılandırması açık onay bekler. ADR-0001 ve ADR-0002 hâlâ Proposed.
 - Last status update: 2026-09-15
 
@@ -80,13 +80,13 @@ Karar gerekçeleri burada kopyalanmaz; asıl belgeye bağlantı verilir.
 - Constraints and prohibitions: [CONSTITUTION](docs/00-product/CONSTITUTION.md) ve [AGENTS.md](AGENTS.md); projeye özel kısıtlar TBD.
 - Open questions: Production başlangıç kimliği/rolü, buildtime secret erişimi, backup/restore; yaş eşiği/veli kuralları, rol matrisi, para kuralları, operasyon hedefleri ve CDSK sürümü; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
 - Recent decisions: Kullanıcı broşür hesabını production’da ADMIN olarak açıkça onayladı; ADR-0004 Accepted. ADR-0001/0002 Proposed, ADR-0003 Accepted kalır.
-- Recently completed work: `demo@spormanage.com.tr` aktif ADMIN olarak oluşturuldu; bcrypt ve canlı login doğrulandı, test oturumu kapatıldı. Diğer kayıtlar değiştirilmedi. [ADR-0004](docs/50-decisions/ADR-0004-brosur-demo-admin-hesabi.md).
+- Recently completed work: `aidat.spormanage.com.tr` mevcut Coolify uygulamasına bağlandı; DNS/TLS/HTTP ve `demo@spormanage.com.tr` ADMIN login’i doğrulandı, test oturumu kapatıldı. Önceki domain ve veriler korundu. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 
 ## 7. Current Priorities
 
-1. CR-018 kapsamında broşür domain’ini çalışan Coolify uygulamasına DNS/TLS ile bağlamak veya broşürü çalışan domain ile yeniden üretmek.
-2. Ortak ADMIN hesabı için kullanım süresi ve parola rotasyonu/iptal tarihi belirlemek; salt okunur/izole demo seçeneğini değerlendirmek.
-3. Coolify buildtime secret erişimi, backup/restore ve healthcheck risklerini ele almak.
+1. Ortak ADMIN hesabı için kullanım süresi ve parola rotasyonu/iptal tarihi belirlemek; salt okunur/izole demo seçeneğini değerlendirmek.
+2. Coolify buildtime secret erişimi, backup/restore ve healthcheck risklerini ele almak.
+3. Production başlangıç kimliği/rol çelişkisini CR-016 kapsamında çözmek.
 
 Bu sıra öneridir; uygulama onayı değildir.
 
@@ -130,11 +130,11 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 ## 11. AI Handoff
 
-- Session summary: Broşür için kullanıcı onaylı ortak production ADMIN hesabı oluşturuldu; bcrypt ve canlı login doğrulandı, oturum kapatıldı.
-- Documents updated: ADR dizini/ADR-0004, Deployment, Runbook, Brochure Guide, change requests, Project Boot, CHANGELOG ve SESSION_HANDOFF.
-- Decisions recorded: Ortak broşür hesabının production ADMIN yetkisi ADR-0004 ile Accepted. Parola repository’ye yazılmadı; diğer hesaplar/veriler değiştirilmedi.
-- Remaining risk: Ortak ADMIN production verisini değiştirebilir; broşür URL’si çalışan domain ile uyuşmuyor. Rotasyon/iptal tarihi, buildtime secret, backup/restore ve healthcheck açık; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
-- Recommended next step: Önce CR-018 broşür domain erişimini düzeltmek; ardından ortak hesabı salt okunur/izole demo tasarımına taşımayı değerlendirmek.
+- Session summary: Broşürün `aidat.spormanage.com.tr` alan adı mevcut Coolify uygulamasına eklendi; DNS/TLS/HTTP ve ortak ADMIN login’i doğrulandı, oturum kapatıldı.
+- Documents updated: Deployment, Runbook, Brochure Guide, CR-018, Project Boot, CHANGELOG ve SESSION_HANDOFF.
+- Decisions recorded: Kullanıcının onayladığı mevcut uygulamaya domain ekleme işlemi tamamlandı; yeni ADR gerekmedi. ADR-0004 Accepted kalır.
+- Remaining risk: Ortak ADMIN production verisini değiştirebilir. Rotasyon/iptal tarihi, buildtime secret, backup/restore ve healthcheck açık; Coolify’ın kullanılmayan `www` varyantında DNS eşleşmesi yoktur. [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
+- Recommended next step: Ortak hesabı salt okunur/izole demo tasarımına taşımayı ve parola rotasyon/iptal tarihini değerlendirmek.
 - Doğrulama ve ayrıntılar: [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md), [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
 
 ## Revision History
@@ -152,3 +152,4 @@ Bu sıra öneridir; uygulama onayı değildir.
 | 0.3.0 | 2026-09-15 | SporManage sunumu ve hesaplar tamamlandı; ortak rapor hesapları, gerçek XLSX, tarayıcı PDF ve Accepted ADR-0003. |
 | 0.3.1 | 2026-09-15 | Coolify production kurulumu, canlı doğrulama ve production giriş bilgilerinin ayrıştırılması. |
 | 0.3.2 | 2026-09-15 | Broşür için kullanıcı onaylı production ADMIN hesabı ve domain erişim riski kaydı. |
+| 0.3.3 | 2026-09-15 | Broşür domain’i Coolify’a bağlandı; DNS/TLS/HTTP ve ADMIN login doğrulandı, CR-018 kapatıldı. |

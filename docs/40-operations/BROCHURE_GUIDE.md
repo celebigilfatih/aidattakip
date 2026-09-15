@@ -14,7 +14,7 @@ Tarih: 2026-09-15. Kullanıcı iki sayfalık A4 dikey PDF planını ve yerel dem
 
 ## Demo ve ekranların ayrımı
 
-Kullanıcının belirttiği demo adresi: [aidat.spormanage.com.tr](https://aidat.spormanage.com.tr). Bütün PDF bağlantıları ve iki QR bu adresi kullanır. 2026-09-15 production kurulumu [aidat.ozlucespor.com](https://aidat.ozlucespor.com) üzerinde doğrulandı; broşür alan adı ise güvenilir TLS/DNS bağlantısı kurmadı. Bu uyuşmazlık CR-018 çözülmeden dağıtılan QR/link erişimi doğrulanmış sayılmaz.
+Kullanıcının belirttiği demo adresi: [aidat.spormanage.com.tr](https://aidat.spormanage.com.tr). Bütün PDF bağlantıları ve iki QR bu adresi kullanır. Alan adı 2026-09-15 tarihinde mevcut Coolify uygulamasına eklendi; DNS eşleşmesi, geçerli TLS, `/login` HTTP 200 ve ortak ADMIN hesabıyla `/dashboard` yönlendirmesi doğrulandı. Önceki [aidat.ozlucespor.com](https://aidat.ozlucespor.com) adresi de korunur. Böylece CR-018 kapsamındaki broşür bağlantısı uyuşmazlığı kapatılmıştır.
 
 Ekranlar, kullanıcının seçtiği yerel `127.0.0.1:3077` demosundan alınır. Demo rehberi buradaki sporcu, veli ve finansal kayıtların kurgusal olduğunu açıklar. Masaüstü ve mobil için ayrı tarayıcı görünümü kullanılır; masaüstü görüntüsü mobil diye kırpılmaz.
 

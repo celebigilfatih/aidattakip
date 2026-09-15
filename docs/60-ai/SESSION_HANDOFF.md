@@ -1,5 +1,22 @@
 # AI Session Handoff
 
+## Session — 2026-09-15 — Broşür domain aktivasyonu
+
+### Session summary
+
+Kullanıcının açık onayıyla `aidat.spormanage.com.tr`, mevcut SporManage Coolify uygulamasına ikinci HTTPS domain olarak eklendi. Mevcut `aidat.ozlucespor.com` adresi ve production verileri korundu.
+
+### Work and verification
+
+- Coolify ana domain için DNS eşleşmesini doğruladı. Yapılandırmayı uygulayan `3ebc3ef` manuel deployment’ı Success durumuyla 10 saniyede tamamlandı.
+- `https://aidat.spormanage.com.tr/login` geçerli TLS ile HTTP 200 verdi ve SporManage giriş ekranını açtı. Ortak demo ADMIN hesabı `/dashboard` sayfasına ulaştı; rol görünümü doğrulandı ve oturum kapatıldı.
+- `https://aidat.ozlucespor.com/login` aynı kontrolde HTTP 200 vermeye devam etti. Uygulama kodu, şema, migration, DB satırları, kullanıcılar, roller ve parolalar değiştirilmedi.
+- Coolify’ın otomatik eklediği `www.aidat.spormanage.com.tr` varyantında DNS eşleşmesi yoktur; broşür ve QR kodları bu varyantı kullanmaz.
+
+### Documents, decisions and next step
+
+Deployment, Runbook, Brochure Guide, CR-018, Project Boot ve CHANGELOG güncellendi. CR-018 kapatıldı. Yeni ADR gerekmedi; ortak ADMIN yetkisini kaydeden ADR-0004 Accepted kalır. Kalan ana risk, broşürü alan herkesin production verisini değiştirebilen ortak ADMIN hesabına erişmesidir. Sonraki öneri, salt okunur/izole demo ve parola rotasyon/iptal tarihi kararıdır.
+
 Bu belge tam sohbet özeti değildir. Sonraki oturumun güvenle devam etmesi için gerekli kısa kalıcı bağlamı içerir.
 
 ## Session — 2026-09-15 — Broşür production ADMIN hesabı

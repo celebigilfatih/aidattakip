@@ -30,7 +30,7 @@ Operasyon sorumlusu ve production erişim prosedürü TBD. Doğrulanmış mevcut
 
 ## Coolify production işlemleri — 2026-09-15
 
-- Canlı uygulama: [https://aidat.ozlucespor.com](https://aidat.ozlucespor.com).
+- Canonical broşür erişimi: [https://aidat.spormanage.com.tr](https://aidat.spormanage.com.tr). Korunan mevcut adres: [https://aidat.ozlucespor.com](https://aidat.ozlucespor.com).
 - Kaynak: canonical GitHub repository `celebigilfatih/aidattakip`, branch `main`, Dockerfile build, port 3000.
 - `main` push webhook’u otomatik deployment başlatır. Aynı push sonrasında ayrıca `Redeploy` kullanmak yinelenen dağıtım oluşturur; yalnızca webhook başlamazsa manuel deployment seçilmelidir.
 - Startup önce `prisma migrate deploy` çalıştırır. Production’da `RUN_SEED` yoktur; genel seed veya demo seed çalıştırılmamalıdır.
@@ -43,8 +43,8 @@ Operasyon sorumlusu ve production erişim prosedürü TBD. Doğrulanmış mevcut
 
 - Ortak hesap: `demo@spormanage.com.tr`, aktif ADMIN. Parola yalnızca kullanıcı tarafından dağıtılır; repository’de tutulmaz.
 - Hesap oluşturma ve yetki kararı [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) kapsamındadır. Ortak ADMIN hesabı production verisini değiştirebilir; kullanım süresi ve rotasyon/iptal tarihi TBD.
-- 2026-09-15 canlı login testi başarılı oldu ve test oturumu kapatıldı.
-- Broşür QR/link hedefi `aidat.spormanage.com.tr`, mevcut canlı uygulama ise `aidat.ozlucespor.com` adresindedir. DNS/TLS çözülmeden broşür erişimi güvenilir değildir; CR-018.
+- 2026-09-15 tarihinde `https://aidat.spormanage.com.tr/login` geçerli TLS ile HTTP 200 verdi; canlı login `/dashboard` yönlendirmesi ve ADMIN görünümüyle başarılı oldu, test oturumu kapatıldı.
+- Broşür QR/link hedefi aynı Coolify uygulamasına bağlıdır. `aidat.ozlucespor.com` adresi korunur ve HTTP 200 vermeye devam eder. Coolify’ın otomatik eklediği `www.aidat.spormanage.com.tr` varyantında DNS eşleşmesi yoktur ve yayınlanan broşür bu adresi kullanmaz. CR-018 kapatıldı.
 
 ## Yerel çalıştırma — 2026-09-14
 

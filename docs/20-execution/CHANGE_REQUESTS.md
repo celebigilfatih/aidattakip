@@ -127,9 +127,9 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 - Etki: Hesabı bilen her broşür alıcısı production verisini görebilir ve uygulamanın izin verdiği yönetim mutasyonlarını yapabilir. Ortak kimlikte kişi bazlı audit ayrımı yoktur.
 - Durum/onay: Hesabın oluşturulması ve ADMIN rolü kullanıcı tarafından açıkça Accepted; tamamlandı. İptal/rotasyon tarihi ve salt okunur/izole demo çözümü açık takip işidir ve yeni onay gerektirir.
 
-## CR-018 — Broşür URL’si çalışan production domain ile uyuşmuyor
+## CR-018 — Broşür URL’si çalışan production domain ile uyuşmuyor — Kapalı
 
 - Kaynaklar: [BROCHURE_GUIDE](../40-operations/BROCHURE_GUIDE.md), PDF/QR üretim kaynağı ve [DEPLOYMENT](../40-operations/DEPLOYMENT.md).
-- Gözlem/çelişki: Broşür bağlantıları ve QR kodları `https://aidat.spormanage.com.tr` hedefini kullanır. Doğrulanmış canlı Coolify domain’i `https://aidat.ozlucespor.com` adresidir. Broşür domain’i 2026-09-15 kontrolünde güvenilir TLS/DNS bağlantısı kurmadı.
-- Etki: Dağıtılan broşürü kullanan ziyaretçi giriş ekranına ulaşamayabilir; doğru hesap oluşturulmuş olsa da erişim akışı tamamlanmaz.
-- Öneri/durum: DNS ve TLS ile broşür domain’ini mevcut Coolify uygulamasına yönlendirmek veya broşürü çalışan domain ile yeniden üretmek. Açık; domain/DNS değişikliği veya artifact yeniden yayını kullanıcı kararı gerektirir.
+- İlk gözlem/çelişki: Broşür bağlantıları ve QR kodları `https://aidat.spormanage.com.tr` hedefini kullanırken doğrulanmış canlı Coolify domain’i `https://aidat.ozlucespor.com` adresiydi. Broşür domain’i ilk kontrolde güvenilir TLS/DNS bağlantısı kurmadı.
+- Etki: Dağıtılan broşürü kullanan ziyaretçi giriş ekranına ulaşamayabilir; doğru hesap oluşturulmuş olsa da erişim akışı tamamlanmazdı.
+- Çözüm/durum: Kullanıcının açık onayıyla `aidat.spormanage.com.tr` aynı Coolify uygulamasına ikinci HTTPS domain olarak eklendi ve `3ebc3ef` manuel deployment’ıyla uygulandı. Coolify DNS eşleşmesi, geçerli TLS, `/login` HTTP 200 ve ortak ADMIN hesabıyla `/dashboard` erişimi 2026-09-15 tarihinde doğrulandı. Önceki domain korunmuştur. Kapalı.

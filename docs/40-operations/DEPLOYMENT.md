@@ -12,10 +12,12 @@ Kullanıcının verdiği Coolify projesindeki mevcut production kaynakları koru
 | Application resource | `rccowokc40kkgss0s0c4440c` |
 | Canonical Git source | `celebigilfatih/aidattakip`, `main`, `HEAD` |
 | Build/runtime | Repository `Dockerfile`, Next standalone, container port `3000` |
-| Public URL | [aidat.ozlucespor.com](https://aidat.ozlucespor.com) |
+| Public URLs | [aidat.spormanage.com.tr](https://aidat.spormanage.com.tr) (broşür/canonical), [aidat.ozlucespor.com](https://aidat.ozlucespor.com) (korunan mevcut adres) |
 | PostgreSQL resource | Mevcut özel Coolify kaynağı `f4gwswcwo48cww88c80s8sg8`; mevcut `ozlucepay` veritabanı |
 
 `833a17d` commit’i GitHub’a gönderildi. Push webhook’u ve aynı commit için ayrıca başlatılan manuel tekrar dağıtım başarıyla tamamlandı; son iki kayıt aynı kaynak içeriğini çalıştırdı. Rolling update yeni konteyneri başlattıktan sonra önceki konteyneri kaldırdı. `/login` dış URL’den HTTP 200 döndürdü ve SporManage arayüzü tarayıcıda doğrulandı.
+
+Broşürde kullanılan `aidat.spormanage.com.tr`, kullanıcının 2026-09-15 tarihli açık onayıyla aynı Coolify uygulamasına ikinci HTTPS domain olarak eklendi. Coolify DNS kontrolü eşleşti; yapılandırmayı uygulayan `3ebc3ef` manuel deployment’ı 10 saniyede başarıyla tamamlandı. Yeni domain’in geçerli TLS ile `/login` HTTP 200 verdiği, SporManage giriş ekranını açtığı ve ortak ADMIN hesabını `/dashboard` sayfasına yönlendirdiği doğrulandı; test oturumu kapatıldı. Önceki `aidat.ozlucespor.com` adresi korunmuştur ve aynı kontrolde HTTP 200 vermeye devam etmiştir. Coolify’ın otomatik eklediği `www.aidat.spormanage.com.tr` varyantı için DNS eşleşmesi yoktur; broşür ve canonical erişim bu `www` adresini kullanmaz.
 
 Startup mevcut 10 migration için `prisma migrate deploy` çalıştırır. `RUN_SEED` ayarlanmadığından genel seed çalışmadı; mevcut production verisi, kullanıcıları, rolleri, parolaları ve veritabanı korunmuştur. SQL restore, demo seed, şema/migration değişikliği veya yıkıcı veri işlemi yapılmadı.
 
@@ -28,7 +30,7 @@ Yerel Docker doğrulamasında build aşamasında `DATABASE_URL` bulunmadığınd
 - Coolify kaynak görünen adı eski repository adını taşıyor ve panelde “configuration changes not applied” bildirimi kalıyor. Kaydedilen canonical kaynak, yeniden yükleme ve dağıtım loguyla doğrulandı; bilinmeyen panel farkı sıfırlanmadı.
 - Uygulama için Coolify healthcheck yapılandırması doğrulanmadı. `/api/health` kimlik doğrulaması istediği ve tam bağımlılık sağlığı vermediği için public readiness kontrolü olarak kullanılamaz; [CR-011](../20-execution/CHANGE_REQUESTS.md).
 - Coolify veritabanı yedeği veya restore denemesi bu kurulumda doğrulanmadı; [BACKUP_RECOVERY](BACKUP_RECOVERY.md).
-- Broşürdeki `aidat.spormanage.com.tr` hedefi doğrulanmış canlı domain ile uyuşmuyor ve güvenilir TLS/DNS bağlantısı vermiyor; [CR-018](../20-execution/CHANGE_REQUESTS.md).
+- Coolify’ın otomatik eklediği `www.aidat.spormanage.com.tr` varyantı DNS ile eşleşmiyor. Broşür `www` kullanmaz; ana `aidat.spormanage.com.tr` TLS/HTTP/login kontrollerini geçmiştir. Önceki broşür domain uyuşmazlığı [CR-018](../20-execution/CHANGE_REQUESTS.md) kapsamında kapatıldı.
 
 ## Broşür demo hesabı — 2026-09-15
 

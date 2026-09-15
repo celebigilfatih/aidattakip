@@ -4,6 +4,13 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Operations — 2026-09-15 — Broşür alan adı aktivasyonu
+
+- `aidat.spormanage.com.tr`, kullanıcının açık onayıyla mevcut Coolify uygulamasına ikinci HTTPS domain olarak eklendi; mevcut `aidat.ozlucespor.com` adresi korunmuştur.
+- Coolify DNS eşleşmesi ve `3ebc3ef` manuel deployment başarısı doğrulandı. Yeni alan adı geçerli TLS ile `/login` HTTP 200 verdi; ortak ADMIN login’i `/dashboard` sayfasına ulaştı ve doğrulama oturumu kapatıldı.
+- Broşür bağlantıları ve QR kodları artık doğrulanmış production hedefiyle eşleşir; CR-018 kapatıldı. Coolify’ın eklediği `www` varyantında DNS kaydı yoktur ve broşür bu varyantı kullanmaz.
+- Uygulama kodu, şema, migration, veritabanı, kullanıcılar, roller ve parolalar değiştirilmedi; yeni ADR gerekmedi.
+
 ### Operations — 2026-09-15 — Broşür production demo hesabı
 
 - Kullanıcının açık onayıyla `demo@spormanage.com.tr`, `Demo Kullanıcı` adı ve ADMIN rolüyle production veritabanında oluşturuldu. Parola bcrypt cost 12 ile saklandı ve repository’ye yazılmadı.
