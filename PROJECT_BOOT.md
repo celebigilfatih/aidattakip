@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.3.0
+- Document version: 0.3.1
 - CDSK version: TBD
 - Last updated: 2026-09-15
 
@@ -9,7 +9,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 ## Project Compass
 
 - North star: Spor kulüplerinin sporcu ve aidat takibini yapabilmesi.
-- Current mission: Çocuk ve yetişkin sporcular için ilk hedefin mevcut kodla uyumunu belgelemek ve açık kararları netleştirmek.
+- Current mission: Coolify production kurulumunu güvenli işletmek ve açık kimlik/secret/backup risklerini karara bağlamak.
 - Success signal: Ayrıntılı kabul ölçütleri TBD; [REQUIREMENTS](docs/00-product/REQUIREMENTS.md).
 - Accepted trade-offs: TBD — mevcut mimari teknik karar onayı olarak kaydedilmedi.
 
@@ -30,9 +30,9 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Phase: Mevcut uygulamaya CDSK bağlamı kazandırma; ürün kabul aşaması TBD.
 - Version: package.json 1.0.0; yayınlanmış sürüm doğrulanmadı.
 - Active sprint veya milestone: TBD
-- Current focus: SporManage yerel gösterim ortamı tamamlandı; sunum metinleri, kullanıcılar, 60 sporcu/300 ödeme/antrenman-yoklama senaryoları ve gerçek XLSX/tarayıcı PDF rapor akışı hazır. [DEMO_GUIDE](docs/40-operations/DEMO_GUIDE.md).
-- Critical risks: Secret/log, kayıt/aidat kuralları, yetki tutarlılığı ve yedek kapsamı; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
-- Blocking decisions: Yerel giriş için engel yok; ADR-0001 ve ADR-0002 hâlâ Proposed.
+- Current focus: SporManage `main` dalı Coolify production ortamında [aidat.ozlucespor.com](https://aidat.ozlucespor.com) adresinde çalışıyor; mevcut production verisi ve hesapları korundu. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Critical risks: Coolify buildtime secret uyarısı, `SEED_ADMIN_*` rol/adlandırma uyuşmazlığı, doğrulanmamış backup/restore, auth logları ve yetki tutarlılığı; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
+- Blocking decisions: Yayın erişilebilir; production başlangıç kimliği/rol düzeltmesi ve secret yapılandırması açık onay bekler. ADR-0001 ve ADR-0002 hâlâ Proposed.
 - Last status update: 2026-09-15
 
 ## 3. Repository Navigation
@@ -58,7 +58,7 @@ Diğer bağlam kaynakları: [GLOSSARY](docs/00-product/GLOSSARY.md), [PERSONAS](
 - Main integrations: Ana PostgreSQL ve ayrı lisans DB bağlantısı; bildirim yollarında simülasyon/TODO var.
 - AI components: N/A — incelenen kaynakta ürün içi AI bileşeni bulunmadı.
 - Data and storage: 20 Prisma modeli; lisans verisi ayrı SQL/pg bağlantısında.
-- Deployment model: Repository’de Next standalone ve Docker Compose; fiili üretim topolojisi TBD.
+- Deployment model: Coolify production, GitHub `main` webhook’u, repository Dockerfile/Next standalone, mevcut özel PostgreSQL kaynağı; Compose production’da kullanılmaz. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 - Ayrıntılar: [OVERVIEW](docs/10-architecture/OVERVIEW.md), [DATA_MODEL](docs/10-architecture/DATA_MODEL.md), [INTEGRATIONS](docs/10-architecture/INTEGRATIONS.md), [AI_ARCHITECTURE](docs/10-architecture/AI_ARCHITECTURE.md), [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 
 ## 5. Decision Snapshot
@@ -77,15 +77,15 @@ Karar gerekçeleri burada kopyalanmaz; asıl belgeye bağlantı verilir.
 
 - Project purpose: [PRODUCT_SPEC](docs/00-product/PRODUCT_SPEC.md) içindeki kullanıcı hedefi.
 - Constraints and prohibitions: [CONSTITUTION](docs/00-product/CONSTITUTION.md) ve [AGENTS.md](AGENTS.md); projeye özel kısıtlar TBD.
-- Open questions: Yaş eşiği/veli kuralları, rol matrisi, para kuralları, operasyon hedefleri ve CDSK sürümü; [BACKLOG](docs/20-execution/BACKLOG.md).
+- Open questions: Production başlangıç kimliği/rolü, buildtime secret erişimi, backup/restore; yaş eşiği/veli kuralları, rol matrisi, para kuralları, operasyon hedefleri ve CDSK sürümü; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
 - Recent decisions: Kullanıcı rapor XLSX/tarayıcı PDF davranışını ve ADMIN/ACCOUNTING export yetkisini onayladı; ADR-0003 Accepted. ADR-0001/0002 Proposed kalır.
-- Recently completed work: SporManage sunum yenilemesi, ortak rapor hesapları, gerçek XLSX ve baskı görünümü tamamlandı; idempotency, 10 test, API rol/durumları, typecheck, production build ve tarayıcı kontrolleri geçti. [DEMO_VALIDATION](docs/30-quality/DEMO_VALIDATION.md).
+- Recently completed work: SporManage sunum/rapor paketi GitHub `main` üzerinden Coolify’a kuruldu; Docker build, migration startup, rolling update ve dış login HTTP 200 doğrulandı. Production verisi, roller ve parolalar değiştirilmedi. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 
 ## 7. Current Priorities
 
-1. Secret/log riskleri ve ADR-0001 önerisini değerlendirmek.
-2. Çocuk/yetişkin kayıt kurallarını ADR-0002 ile netleştirmek.
-3. Otomatik lint yapılandırmasını CR-011/B-008 kapsamında ayrı işte ele almak.
+1. CR-016 production başlangıç kimliği/rol uyuşmazlığını işletim sahibiyle karara bağlamak.
+2. Coolify buildtime secret erişimi ve auth log risklerini ADR-0001 kapsamında değerlendirmek.
+3. Production backup/restore ve healthcheck prosedürünü doğrulamak.
 
 Bu sıra öneridir; uygulama onayı değildir.
 
@@ -96,7 +96,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 - Zaman: TBD
 - Bütçe: TBD
 - Güvenlik: Mevcut riskler [SECURITY_MODEL](docs/10-architecture/SECURITY_MODEL.md); yeni politika onay gerektirir.
-- Operasyon: Üretim ortamı, RPO/RTO ve doğrulanmış restore prosedürü TBD.
+- Operasyon: Coolify production hedefi doğrulandı; RPO/RTO, healthcheck ve doğrulanmış restore prosedürü TBD.
 
 ## 9. Working Agreements
 
@@ -129,12 +129,12 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 ## 11. AI Handoff
 
-- Session summary: SporManage gösterim verisi ve görünür marka tamamlandı; rapor hesapları ortaklaştırıldı, gerçek XLSX ile tarayıcı PDF/yazdırma akışı çalışır hale getirildi.
-- Documents updated: Demo rehberi/doğrulama, API/entegrasyon, Runbook, test stratejisi, change request/backlog, ADR dizini, Project Boot, CHANGELOG ve SESSION_HANDOFF.
-- Decisions recorded: Rapor dışa aktarım ve yetki davranışı ADR-0003 ile Accepted; ADR-0001/0002 Proposed kaldı. Şema/migration değişmedi.
-- Remaining risk: Auth logları, yetişkin kayıt kuralı, gerçek bildirim teslimi ve otomatik lint yapılandırması açık; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
-- Recommended next step: Gösterim akışını kullanmak; sonra ADR-0001 güvenlik riskini veya CR-011/B-008 lint işini ele almak.
-- Doğrulama ve ayrıntılar: [DEMO_VALIDATION](docs/30-quality/DEMO_VALIDATION.md), [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
+- Session summary: SporManage Coolify production kurulumu tamamlandı; canlı login erişilebilir ve yerel demo giriş bilgisi production görünümünden kaldırıldı.
+- Documents updated: Deployment, Runbook, mimari özet, change requests, README, Project Boot, CHANGELOG ve SESSION_HANDOFF.
+- Decisions recorded: Kullanıcının verdiği mevcut Coolify projesi/kaynakları kullanıldı; yeni mimari, şema veya güvenlik kararı alınmadı. ADR-0001/0002 Proposed, ADR-0003 Accepted kalır.
+- Remaining risk: Buildtime secret uyarısı, CR-016 başlangıç kimliği/rol uyuşmazlığı, doğrulanmamış backup/restore ve healthcheck; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
+- Recommended next step: CR-016 hedef yönetici kimliğini doğrulamak; ardından ADR-0001 ve Coolify secret erişimini onaylı bir güvenlik işi olarak ele almak.
+- Doğrulama ve ayrıntılar: [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md), [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
 
 ## Revision History
 
@@ -149,3 +149,4 @@ Bu sıra öneridir; uygulama onayı değildir.
 | 0.2.5 | 2026-09-15 | Teknik kadro kişi adları gerçekçi kurgusal adlarla yenilendi. |
 | 0.2.6 | 2026-09-15 | Kulüp görünen adı SporManage olarak yenilendi. |
 | 0.3.0 | 2026-09-15 | SporManage sunumu ve hesaplar tamamlandı; ortak rapor hesapları, gerçek XLSX, tarayıcı PDF ve Accepted ADR-0003. |
+| 0.3.1 | 2026-09-15 | Coolify production kurulumu, canlı doğrulama ve production giriş bilgilerinin ayrıştırılması. |

@@ -4,6 +4,14 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Operations — 2026-09-15 — Coolify production kurulumu
+
+- SporManage `main` dalı mevcut Coolify production uygulamasına repository Dockerfile’ıyla dağıtıldı; [aidat.ozlucespor.com](https://aidat.ozlucespor.com) HTTP 200 ve canlı SporManage giriş görünümüyle doğrulandı.
+- Mevcut özel PostgreSQL kaynağı, veritabanı, kullanıcılar, roller ve parolalar korundu. Startup migration’ı başarıyla geçti; `RUN_SEED` kapalı tutuldu, demo/genel seed veya restore çalıştırılmadı.
+- Build ortamında `DATABASE_URL` bulunmadığında Prisma istemci kurulumu artık geçersiz `undefined` datasource göndermez. Aynı Dockerfile yerel olarak başarıyla build edildi.
+- Yerel demo giriş bilgileri production giriş ekranında gizlendi; development sunumunda korunur. Coolify başlangıç kimliği/rol uyuşmazlığı CR-016 olarak kaydedildi ve hiçbir kimlik/rol değişikliği yapılmadı.
+- Coolify buildtime secret uyarısı, doğrulanmamış healthcheck ve backup/restore açık risk olarak bırakıldı. Yeni ADR, migration, şema veya dış bağımlılık yok.
+
 ### Added — 2026-09-15 — Aidat Takip tanıtım PDF'si
 
 - İki sayfalık turuncu/beyaz tanıtım PDF'si, 300 DPI sayfa PNG'leri ve birleşik önizleme üretildi. [Broşür rehberi](docs/40-operations/BROCHURE_GUIDE.md).

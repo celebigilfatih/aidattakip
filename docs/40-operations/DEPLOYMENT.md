@@ -1,6 +1,33 @@
 # Deployment
 
-Last updated: 2026-09-14. Durum: Repository kaynaklarından statik olarak belgelenen mevcut durum; çalışma zamanı doğrulaması değildir. Öneriler ayrıca işaretlenmiştir.
+Last updated: 2026-09-15. Durum: Repository kaynakları ve tarihli Coolify çalışma zamanı doğrulaması birlikte belgelenmiştir.
+
+## Coolify production kurulumu — 2026-09-15
+
+Kullanıcının verdiği Coolify projesindeki mevcut production kaynakları korunarak uygulama kuruldu.
+
+| Alan | Doğrulanan değer |
+|---|---|
+| Coolify project/environment | `Aidat_Takip` / `production` |
+| Application resource | `rccowokc40kkgss0s0c4440c` |
+| Canonical Git source | `celebigilfatih/aidattakip`, `main`, `HEAD` |
+| Build/runtime | Repository `Dockerfile`, Next standalone, container port `3000` |
+| Public URL | [aidat.ozlucespor.com](https://aidat.ozlucespor.com) |
+| PostgreSQL resource | Mevcut özel Coolify kaynağı `f4gwswcwo48cww88c80s8sg8`; mevcut `ozlucepay` veritabanı |
+
+`833a17d` commit’i GitHub’a gönderildi. Push webhook’u ve aynı commit için ayrıca başlatılan manuel tekrar dağıtım başarıyla tamamlandı; son iki kayıt aynı kaynak içeriğini çalıştırdı. Rolling update yeni konteyneri başlattıktan sonra önceki konteyneri kaldırdı. `/login` dış URL’den HTTP 200 döndürdü ve SporManage arayüzü tarayıcıda doğrulandı.
+
+Startup mevcut 10 migration için `prisma migrate deploy` çalıştırır. `RUN_SEED` ayarlanmadığından genel seed çalışmadı; mevcut production verisi, kullanıcıları, rolleri, parolaları ve veritabanı korunmuştur. SQL restore, demo seed, şema/migration değişikliği veya yıkıcı veri işlemi yapılmadı.
+
+Yerel Docker doğrulamasında build aşamasında `DATABASE_URL` bulunmadığında Prisma istemcisine `undefined` datasource gönderen hata düzeltildi. Runtime’da tanımlı bağlantı yine Prisma tarafından kullanılır; production veritabanı secret’ı image build için gerekli değildir.
+
+### Açık production riskleri
+
+- Coolify build logu, secret nitelikli bazı environment değerlerinin build argümanı olarak sunulduğunu uyardı. Değerler bu belgeye veya komut çıktısına alınmadı. Buildtime erişimini kaldırma ve secret rotasyonu [CR-007](../20-execution/CHANGE_REQUESTS.md) ile birlikte güvenlik onayı gerektirir.
+- `SEED_ADMIN_*` adıyla tanımlı başlangıç kimliği mevcut veritabanında aktif `TRAINER` rolüne bağlıdır; ayrıca ayrı bir aktif ADMIN vardır. Hiçbir rol/parola değiştirilmedi. Çelişki [CR-016](../20-execution/CHANGE_REQUESTS.md) içinde izlenir.
+- Coolify kaynak görünen adı eski repository adını taşıyor ve panelde “configuration changes not applied” bildirimi kalıyor. Kaydedilen canonical kaynak, yeniden yükleme ve dağıtım loguyla doğrulandı; bilinmeyen panel farkı sıfırlanmadı.
+- Uygulama için Coolify healthcheck yapılandırması doğrulanmadı. `/api/health` kimlik doğrulaması istediği ve tam bağımlılık sağlığı vermediği için public readiness kontrolü olarak kullanılamaz; [CR-011](../20-execution/CHANGE_REQUESTS.md).
+- Coolify veritabanı yedeği veya restore denemesi bu kurulumda doğrulanmadı; [BACKUP_RECOVERY](BACKUP_RECOVERY.md).
 
 ## Mevcut dosya modeli
 
@@ -10,10 +37,10 @@ Last updated: 2026-09-14. Durum: Repository kaynaklarından statik olarak belgel
 
 ## Açık bağımlılıklar
 
-Compose `init.sql` dosyasına referans veriyor fakat çalışma ağacında yok. Dockerfile .npmrc kopyalıyor; secret etkisi incelenmeden içeriği belgelere taşınmamalı. [CR-006/007](../20-execution/CHANGE_REQUESTS.md).
+Compose `init.sql` dosyasına referans veriyor fakat çalışma ağacında yok. Coolify kurulumu Compose kullanmaz. Dockerfile `.npmrc` kopyalıyor; dosyada registry/auth satırı bulunmadığı biçimsel olarak doğrulandı, ancak paket yapılandırması yine image kapsamındadır. [CR-006/007](../20-execution/CHANGE_REQUESTS.md).
 
 [deploy-production.sh](../../deploy-production.sh) durdurma/yeniden build ile başlatma komutları içeriyor; bu dosyanın varlığı güncel ve güvenle çalıştırılabilir prosedür olduğunu göstermez. Bu oturum çalıştırılmadı.
 
 ## Yayın doğrulaması ve geri alma
 
-Build, migration ve sağlık kontrolünün çalışma zamanı sonucu TBD. Yedek/restore kanıtı [BACKUP_RECOVERY](BACKUP_RECOVERY.md) içinde eksik olarak kayıtlı. Geri alma komutu ve kabul edilmiş dağıtım modeli değişikliği yok. Model, migration ve operasyon değişiklikleri açık onay gerektirir.
+Production Docker build, migration başlangıcı, rolling update, dış HTTP 200 ve giriş görünümü doğrulandı. Yetkili production iş akışları ve yedek/restore kanıtı eksiktir. Geri alma için Coolify’da önceki başarılı image/deployment kaydını seçme prosedürü çalışma zamanı üzerinde denenmedi; rollback gerektiğinde veritabanı migration uyumluluğu ayrıca kontrol edilmelidir. Model, migration ve operasyon politikası değişiklikleri açık onay gerektirir.

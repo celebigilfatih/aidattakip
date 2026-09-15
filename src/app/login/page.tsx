@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Eye, EyeOff, Mail, Lock, Users, Trophy, Target, Shield } from 'lucide-react'
 
 export default function LoginPage() {
+  const showExampleCredentials = process.env.NODE_ENV !== 'production'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -174,20 +175,24 @@ export default function LoginPage() {
                 </Button>
               </form>
               
-              {/* Example credentials for the local presentation environment */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Örnek Hesap Bilgileri:</h4>
-                <div className="text-xs text-gray-600 space-y-1">
-                  <div className="flex justify-between">
-                    <span>E-posta:</span>
-                    <code className="bg-white px-2 py-1 rounded text-blue-600">admin@spormanage.example</code>
+              {showExampleCredentials && (
+                <>
+                  {/* Example credentials for the local presentation environment */}
+                  <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">Örnek Hesap Bilgileri:</h4>
+                    <div className="text-xs text-gray-600 space-y-1">
+                      <div className="flex justify-between">
+                        <span>E-posta:</span>
+                        <code className="bg-white px-2 py-1 rounded text-blue-600">admin@spormanage.example</code>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Şifre:</span>
+                        <code className="bg-white px-2 py-1 rounded text-blue-600">admin123</code>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Şifre:</span>
-                    <code className="bg-white px-2 py-1 rounded text-blue-600">admin123</code>
-                  </div>
-                </div>
-              </div>
+                </>
+              )}
             </CardContent>
           </Card>
         </div>

@@ -26,7 +26,18 @@ Komut tanımları kaynakla doğrulandı. Aşağıdaki yerel çalıştırma kayd�
 
 `/api/health` veritabanı sorgusu ve tablo sayımları yapar; middleware kimlik doğrulaması gerekir. Uç içindeki servis operational değerleri sabittir. Yetkisiz 401 tüm servislerin bozuk olduğunu göstermez. [OBSERVABILITY](OBSERVABILITY.md).
 
-Operasyon sorumlusu, üretim hostu, erişim prosedürü, doğrulanmış müdahale komutları TBD. Deploy/restore/migration bu bağlam görevinde çalıştırılmaz.
+Operasyon sorumlusu ve production erişim prosedürü TBD. Doğrulanmış mevcut production hedefi ve dağıtım kaydı [DEPLOYMENT](DEPLOYMENT.md) içindedir.
+
+## Coolify production işlemleri — 2026-09-15
+
+- Canlı uygulama: [https://aidat.ozlucespor.com](https://aidat.ozlucespor.com).
+- Kaynak: canonical GitHub repository `celebigilfatih/aidattakip`, branch `main`, Dockerfile build, port 3000.
+- `main` push webhook’u otomatik deployment başlatır. Aynı push sonrasında ayrıca `Redeploy` kullanmak yinelenen dağıtım oluşturur; yalnızca webhook başlamazsa manuel deployment seçilmelidir.
+- Startup önce `prisma migrate deploy` çalıştırır. Production’da `RUN_SEED` yoktur; genel seed veya demo seed çalıştırılmamalıdır.
+- Production kullanıcı/rol/parola değişikliği ayrı güvenlik onayı olmadan yapılmaz. `SEED_ADMIN_*` adlandırma/rol çelişkisi CR-016 kapsamında açıktır.
+- Dağıtım sonrası en az `/login` HTTP 200, SporManage marka görünümü, beklenmeyen örnek parola görünmemesi ve Coolify deployment başarı durumu kontrol edilir.
+- Hata halinde eski image’a dönmeden önce yeni migration olup olmadığı kontrol edilir. Bu kurulumda migration dosyası değişmedi; doğrulanmış otomatik rollback prosedürü TBD.
+- Veritabanı restore veya demo seed dağıtım doğrulaması değildir; mevcut production verisini değiştireceği için bu prosedüre dahil değildir.
 
 ## Yerel çalıştırma — 2026-09-14
 

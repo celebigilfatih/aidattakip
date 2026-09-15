@@ -73,7 +73,10 @@ A comprehensive web-based management system for football schools, built with Nex
 6. **Access the application**
    Open [http://localhost:3000](http://localhost:3000) in your browser
 
-### Default Login Credentials
+### Local Demo Login Credentials
+
+Bu bilgiler yalnızca yerel gösterim ortamı içindir; production giriş ekranında gösterilmez ve production hesabı olarak kullanılmaz.
+
 - **Email**: admin@spormanage.example
 - **Password**: admin123
 

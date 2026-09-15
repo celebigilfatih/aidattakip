@@ -2,6 +2,24 @@
 
 Bu belge tam sohbet özeti değildir. Sonraki oturumun güvenle devam etmesi için gerekli kısa kalıcı bağlamı içerir.
 
+## Session — 2026-09-15 — Coolify production kurulumu
+
+### Session summary
+
+Kullanıcının verdiği Coolify project içindeki mevcut production uygulaması, Git kaynağı ve özel PostgreSQL kaynağı korunarak SporManage kuruldu. Canonical kaynak `celebigilfatih/aidattakip` `main`, repository Dockerfile ve port 3000 olarak kaydedildi. Canlı hedef [aidat.ozlucespor.com](https://aidat.ozlucespor.com) HTTP 200 döndürdü ve SporManage giriş görünümü tarayıcıda doğrulandı.
+
+### Work and verification
+
+- `833a17d` push webhook deployment’ı ve aynı commit için yanlışlıkla yinelenen manuel deployment başarıyla tamamlandı. Rolling update yeni container’ı başlattıktan sonra eski container’ı kaldırdı.
+- Yerel exact Docker build ilk denemede build ortamında `DATABASE_URL` bulunmadığı için Prisma istemci kurulumunda durdu. `src/lib/prisma.ts`, yalnızca değer varsa datasource override verecek şekilde düzeltildi; sonraki Docker build ve 53 sayfalık Next üretim derlemesi geçti.
+- Startup `prisma migrate deploy` çalıştırdı; production’da `RUN_SEED` tanımlı olmadığı için seed çalışmadı. Production DB, kullanıcılar, roller ve parolalar değiştirilmedi. Demo seed, SQL restore, schema/migration değişikliği veya veri silme yapılmadı.
+- Coolify terminalinde secret değerlerini göstermeden yapılan salt okunur kontrol, `SEED_ADMIN_*` kimliğinin aktif TRAINER olduğunu ve ayrı bir aktif ADMIN bulunduğunu gösterdi. Parola hash eşleşmesi doğrulandı; giriş için secret tarayıcıya gönderilmedi.
+- Production sayfasında geçersiz yerel demo hesabının görünmemesi için örnek hesap kutusu yalnız development ortamında gösterilecek şekilde daraltıldı.
+
+### Documents, decisions and remaining risk
+
+Deployment, Runbook, mimari özet, CR-007/CR-016, README, Project Boot ve CHANGELOG güncellendi. Yeni ADR yok; mevcut deployment isteği dışında mimari, yetkilendirme veya parola politikası kararı alınmadı. Coolify buildtime secret uyarısı, CR-016 kimlik/rol uyuşmazlığı, kaynak görünen adındaki eski etiket/paneldeki pending config bildirimi, doğrulanmamış healthcheck ve backup/restore açıktır. Sonraki öneri, gerçek hedef yönetici kimliğini doğrulayıp CR-016 ile ADR-0001’i açık onaylı güvenlik işi olarak çözmektir.
+
 ## Session — 2026-09-15 — Aidat Takip PDF tanıtımı
 
 - Kullanıcı futbolcms turuncu v3 tasarımının iki sayfalık A4 dikey Aidat Takip uyarlamasını ve yerel demo ekranlarını onayladı. İçerik, demo hedefi, üretim ve doğrulama ayrıntıları [BROCHURE_GUIDE](../40-operations/BROCHURE_GUIDE.md) içinde.

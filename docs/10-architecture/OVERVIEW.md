@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 2026-09-14. Durum: Repository kaynaklarından statik olarak belgelenen mevcut durum; çalışma zamanı doğrulaması değildir. Öneriler ayrıca işaretlenmiştir.
+Last updated: 2026-09-15. Durum: Repository kaynakları ve tarihli deployment doğrulaması birlikte belgelenmiştir. Öneriler ayrıca işaretlenmiştir.
 
 ## Mevcut yapı
 
@@ -29,7 +29,7 @@ Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL
 | tailwindcss | `^3.4.17` | `3.4.17` |
 | eslint | `^9.36.0` | `9.36.0` |
 
-Kaynaklar: [package.json](../../package.json), [package-lock.json](../../package-lock.json). İlk statik incelemede node_modules yoktu. Yerel çalıştırma oturumunda Node v24.15.0/npm 11.12.1 doğrulandı ve kilit dosyasından bağımlılıklar kuruldu; [RUNBOOK](../40-operations/RUNBOOK.md). Docker Node 20 Alpine ve Compose PostgreSQL 15 Alpine tanımlar; üretim sürümü TBD.
+Kaynaklar: [package.json](../../package.json), [package-lock.json](../../package-lock.json). İlk statik incelemede node_modules yoktu. Yerel çalıştırma oturumunda Node v24.15.0/npm 11.12.1 doğrulandı ve kilit dosyasından bağımlılıklar kuruldu; [RUNBOOK](../40-operations/RUNBOOK.md). Docker Node 20 Alpine tanımlar. 2026-09-15 production kurulumu Coolify üzerinde repository Dockerfile’ı ve mevcut özel PostgreSQL 17 Alpine kaynağını kullanır; Compose production’da kullanılmaz. [DEPLOYMENT](../40-operations/DEPLOYMENT.md).
 
 ## Bütünlük ve sınırlar
 

@@ -51,7 +51,7 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 ## CR-007 — Secret ve kimlik doğrulama logları
 
 - Kaynaklar: [login](../../src/app/api/auth/login/route.ts), [auth](../../src/lib/auth.ts), [Compose](../../docker-compose.yml).
-- Gözlem/çelişki: Parola/secret parçası loglama, sabit secret fallback ve Compose’a yazılı değerler var. .env/.npmrc/SQL dökümü git ls-files içinde takip ediliyor; hassas içerikleri açılmadı.
+- Gözlem/çelişki: Parola/secret parçası loglama, sabit secret fallback ve Compose’a yazılı değerler var. .env/.npmrc/SQL dökümü git ls-files içinde takip ediliyor; hassas içerikleri açılmadı. 2026-09-15 Coolify build logu secret nitelikli environment değerlerinin build argümanı olarak sunulduğu konusunda ayrıca uyardı.
 - Etki ve öneri: Öncelikli değerlendirme önerilir; değerler belgelere taşınmadı. Ayrı ortam envanteri olmadan rotasyon yapılmamalı.
 - Durum/onay: [ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) Proposed; uygulama/rotasyon onayı yok.
 
@@ -111,3 +111,11 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 - Etki: Genel seed ile oluşturulan yönetici varsayılan parolayla giriş yapamayabilir; yalnızca hesap isteyen kurulumda istenmeyen örnek veriler eklenir.
 - Bu oturum: Kullanıcının onayladığı temiz yerel DB’de yalnızca yönetici, mevcut bcrypt cost 12 biçiminde oluşturuldu; login 200 doğrulandı. Seed kodu değiştirilmedi.
 - Öneri/durum: Genel seed’in mevcut auth ile tutarlılığını ve yalnızca yönetici kurulum seçeneğini ayrı görevde düzeltmek. Açık; yeni güvenlik politikası/ADR kabulü yok.
+
+## CR-016 — Production başlangıç kimliği adı ve rolü uyuşmuyor
+
+- Kaynaklar: Coolify application environment adları ve production veritabanındaki salt okunur kullanıcı/rol doğrulaması, 2026-09-15.
+- Gözlem/çelişki: `SEED_ADMIN_*` adıyla tanımlı mevcut kimlik production veritabanında aktif `TRAINER` rolüne bağlıdır. Veritabanında ayrıca ayrı bir aktif ADMIN vardır. Production login ekranındaki yerel demo hesabı da bu ortam için geçerli değildir.
+- Bu oturum: Kullanıcı, rol, e-posta, parola ve hash değiştirilmedi. Yerel örnek hesap kutusu production build’de gizlendi; development gösteriminde korunur.
+- Etki ve öneri: Otomatik bootstrap/işletim beklentisi yanlış hesaba bağlanabilir. Değişiklikten önce gerçek işletim sahibi, hedef ADMIN kimliği ve rotasyon yöntemi doğrulanmalı; ardından Coolify değişkenleri ile kullanıcı rolü tutarlı hale getirilmelidir.
+- Durum/onay: Açık. Kimlik, parola ve rol değişikliği güvenlik/yetkilendirme kararıdır ve açık kullanıcı onayı gerektirir.
