@@ -39,6 +39,13 @@ Operasyon sorumlusu ve production erişim prosedürü TBD. Doğrulanmış mevcut
 - Hata halinde eski image’a dönmeden önce yeni migration olup olmadığı kontrol edilir. Bu kurulumda migration dosyası değişmedi; doğrulanmış otomatik rollback prosedürü TBD.
 - Veritabanı restore veya demo seed dağıtım doğrulaması değildir; mevcut production verisini değiştireceği için bu prosedüre dahil değildir.
 
+### Broşür demo erişimi
+
+- Ortak hesap: `demo@spormanage.com.tr`, aktif ADMIN. Parola yalnızca kullanıcı tarafından dağıtılır; repository’de tutulmaz.
+- Hesap oluşturma ve yetki kararı [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) kapsamındadır. Ortak ADMIN hesabı production verisini değiştirebilir; kullanım süresi ve rotasyon/iptal tarihi TBD.
+- 2026-09-15 canlı login testi başarılı oldu ve test oturumu kapatıldı.
+- Broşür QR/link hedefi `aidat.spormanage.com.tr`, mevcut canlı uygulama ise `aidat.ozlucespor.com` adresindedir. DNS/TLS çözülmeden broşür erişimi güvenilir değildir; CR-018.
+
 ## Yerel çalıştırma — 2026-09-14
 
 - Node.js v24.15.0 ve npm 11.12.1 mevcut ortamda doğrulandı; bunlar yeni zorunlu sürüm seçimi değildir.

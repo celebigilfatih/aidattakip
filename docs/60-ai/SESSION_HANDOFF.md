@@ -2,6 +2,20 @@
 
 Bu belge tam sohbet özeti değildir. Sonraki oturumun güvenle devam etmesi için gerekli kısa kalıcı bağlamı içerir.
 
+## Session — 2026-09-15 — Broşür production ADMIN hesabı
+
+### Session summary
+
+Kullanıcı broşür alıcılarının girişi için `demo@spormanage.com.tr` hesabını istedi ve rol sorusuna açıkça ADMIN yanıtı verdi. E-posta production’da boşta doğrulandı; `Demo Kullanıcı` adıyla aktif ADMIN oluşturuldu. Kullanıcının verdiği parola bcrypt cost 12 hash olarak saklandı, repository’ye veya belgelere yazılmadı.
+
+### Verification and decisions
+
+Production kaydı oluşturma çıktısı rol/aktiflik ve bcrypt eşleşmesini doğruladı. Canlı [aidat.ozlucespor.com](https://aidat.ozlucespor.com) login’i `/dashboard` sayfasına yönlendi ve ADMIN menüleri göründü; doğrulama oturumu kapatıldı. Başka kullanıcı/veri mutasyonu yapılmadı. Yetki kararı [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) ile Accepted kaydedildi.
+
+### Remaining risk and next step
+
+Ortak ADMIN hesabı production’daki mevcut kayıtları görebilir ve değiştirebilir; kişi bazlı audit ayrımı, sona erme veya rotasyon tarihi yoktur. Ayrıca broşür QR/link hedefi `aidat.spormanage.com.tr`, çalışan Coolify domain’i `aidat.ozlucespor.com` adresidir; broşür domain’i güvenilir TLS/DNS bağlantısı vermedi. CR-017/CR-018 açık takip kaydıdır. Önce broşür domain’ini çalışan uygulamaya bağlamak veya artifact’i yeniden üretmek; ardından salt okunur/izole demo ve parola iptal süresi kararı önerilir.
+
 ## Session — 2026-09-15 — Coolify production kurulumu
 
 ### Session summary

@@ -14,11 +14,11 @@ Tarih: 2026-09-15. Kullanıcı iki sayfalık A4 dikey PDF planını ve yerel dem
 
 ## Demo ve ekranların ayrımı
 
-Kullanıcının belirttiği demo adresi: [aidat.spormanage.com.tr](https://aidat.spormanage.com.tr). Bütün PDF bağlantıları ve iki QR bu adresi kullanır. Planlama sırasında alan adı bu ortamdan çözümlenemedi; canlı demo girişinin çalıştığı doğrulanmış sayılmaz.
+Kullanıcının belirttiği demo adresi: [aidat.spormanage.com.tr](https://aidat.spormanage.com.tr). Bütün PDF bağlantıları ve iki QR bu adresi kullanır. 2026-09-15 production kurulumu [aidat.ozlucespor.com](https://aidat.ozlucespor.com) üzerinde doğrulandı; broşür alan adı ise güvenilir TLS/DNS bağlantısı kurmadı. Bu uyuşmazlık CR-018 çözülmeden dağıtılan QR/link erişimi doğrulanmış sayılmaz.
 
 Ekranlar, kullanıcının seçtiği yerel `127.0.0.1:3077` demosundan alınır. Demo rehberi buradaki sporcu, veli ve finansal kayıtların kurgusal olduğunu açıklar. Masaüstü ve mobil için ayrı tarayıcı görünümü kullanılır; masaüstü görüntüsü mobil diye kırpılmaz.
 
-PDF’de kullanıcı tarafından sunum için açıkça verilen demo hesabı yer alır. Parola kaynak koduna, manifestlere veya bu belgelere yazılmaz; oluşturucuya yalnızca çalışma anında `AIDAT_BROCHURE_DEMO_PASSWORD` ortam değişkeniyle sağlanır. PDF ile türetilmiş sayfa PNG/önizleme dosyaları, tasarım gereği aynı demo giriş kutusunu içerir.
+PDF’de kullanıcı tarafından sunum için açıkça verilen demo hesabı yer alır. Parola kaynak koduna, manifestlere veya bu belgelere yazılmaz; oluşturucuya yalnızca çalışma anında `AIDAT_BROCHURE_DEMO_PASSWORD` ortam değişkeniyle sağlanır. PDF ile türetilmiş sayfa PNG/önizleme dosyaları, tasarım gereği aynı demo giriş kutusunu içerir. Hesap 2026-09-15 tarihinde production’da aktif ADMIN olarak oluşturuldu ve canlı login geçti; yetki sonuçları [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) içindedir.
 
 ## Yeniden üretim
 

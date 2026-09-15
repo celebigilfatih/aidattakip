@@ -12,13 +12,14 @@
 
 ## Karar dizini
 
-Üç proje ADR’si vardır. ADR-0001 ve ADR-0002 Proposed kalır; rapor dışa aktarım kararı ADR-0003 ile kullanıcı onayı üzerine Accepted durumundadır.
+Dört proje ADR’si vardır. ADR-0001 ve ADR-0002 Proposed kalır; ADR-0003 rapor dışa aktarımını, ADR-0004 broşür demo hesabının production ADMIN yetkisini kullanıcı onayıyla Accepted olarak kaydeder.
 
 | ADR | Başlık | Durum | Onay kaydı | Yerine geçen karar |
 |---|---|---|---|---|
 | [ADR-0001](ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) | Secret ve kimlik doğrulama logları | Proposed | TBD | N/A — ilk öneri |
 | [ADR-0002](ADR-0002-cocuk-yetiskin-sporcu-kaydi.md) | Çocuk ve yetişkin sporcu kaydı | Proposed | TBD | N/A — ilk öneri |
 | [ADR-0003](ADR-0003-rapor-disa-aktarim-ve-yetki.md) | Rapor dışa aktarımı ve yetki kapsamı | Accepted | Kullanıcı, 2026-09-15 | CR-010 rapor biçimi |
+| [ADR-0004](ADR-0004-brosur-demo-admin-hesabi.md) | Broşür demo hesabına production ADMIN yetkisi | Accepted | Kullanıcı, 2026-09-15 | N/A — ilk karar |
 
 ## Açık karar ihtiyaçları
 

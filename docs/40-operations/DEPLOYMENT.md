@@ -28,6 +28,11 @@ Yerel Docker doğrulamasında build aşamasında `DATABASE_URL` bulunmadığınd
 - Coolify kaynak görünen adı eski repository adını taşıyor ve panelde “configuration changes not applied” bildirimi kalıyor. Kaydedilen canonical kaynak, yeniden yükleme ve dağıtım loguyla doğrulandı; bilinmeyen panel farkı sıfırlanmadı.
 - Uygulama için Coolify healthcheck yapılandırması doğrulanmadı. `/api/health` kimlik doğrulaması istediği ve tam bağımlılık sağlığı vermediği için public readiness kontrolü olarak kullanılamaz; [CR-011](../20-execution/CHANGE_REQUESTS.md).
 - Coolify veritabanı yedeği veya restore denemesi bu kurulumda doğrulanmadı; [BACKUP_RECOVERY](BACKUP_RECOVERY.md).
+- Broşürdeki `aidat.spormanage.com.tr` hedefi doğrulanmış canlı domain ile uyuşmuyor ve güvenilir TLS/DNS bağlantısı vermiyor; [CR-018](../20-execution/CHANGE_REQUESTS.md).
+
+## Broşür demo hesabı — 2026-09-15
+
+Kullanıcının açık onayıyla `demo@spormanage.com.tr` hesabı mevcut production veritabanında aktif ADMIN olarak oluşturuldu. E-posta önceden boşta doğrulandı; diğer kullanıcıların üzerine yazılmadı. Parola bcrypt cost 12 hash olarak saklandı, repository’ye yazılmadı. Canlı login `/dashboard` yönlendirmesi ve ADMIN menüleriyle geçti; doğrulama oturumu kapatıldı. Yetki kararı ve sonuçları [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) içindedir.
 
 ## Mevcut dosya modeli
 

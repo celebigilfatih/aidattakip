@@ -4,6 +4,13 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Operations — 2026-09-15 — Broşür production demo hesabı
+
+- Kullanıcının açık onayıyla `demo@spormanage.com.tr`, `Demo Kullanıcı` adı ve ADMIN rolüyle production veritabanında oluşturuldu. Parola bcrypt cost 12 ile saklandı ve repository’ye yazılmadı.
+- Canlı login dashboard’a yönlendi, ADMIN menüleri göründü ve doğrulama oturumu kapatıldı. Başka production kaydı değiştirilmedi.
+- Ortak ADMIN yetkisinin veri/gizlilik sonuçları [ADR-0004](docs/50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) ile Accepted kaydedildi; rotasyon/iptal tarihi ve salt okunur demo çözümü açık bırakıldı.
+- Broşürün `aidat.spormanage.com.tr` QR/link hedefi ile çalışan `aidat.ozlucespor.com` production domain’i arasındaki uyuşmazlık CR-018 olarak kaydedildi.
+
 ### Operations — 2026-09-15 — Coolify production kurulumu
 
 - SporManage `main` dalı mevcut Coolify production uygulamasına repository Dockerfile’ıyla dağıtıldı; [aidat.ozlucespor.com](https://aidat.ozlucespor.com) HTTP 200 ve canlı SporManage giriş görünümüyle doğrulandı.

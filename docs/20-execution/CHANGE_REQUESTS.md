@@ -119,3 +119,17 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 - Bu oturum: Kullanıcı, rol, e-posta, parola ve hash değiştirilmedi. Yerel örnek hesap kutusu production build’de gizlendi; development gösteriminde korunur.
 - Etki ve öneri: Otomatik bootstrap/işletim beklentisi yanlış hesaba bağlanabilir. Değişiklikten önce gerçek işletim sahibi, hedef ADMIN kimliği ve rotasyon yöntemi doğrulanmalı; ardından Coolify değişkenleri ile kullanıcı rolü tutarlı hale getirilmelidir.
 - Durum/onay: Açık. Kimlik, parola ve rol değişikliği güvenlik/yetkilendirme kararıdır ve açık kullanıcı onayı gerektirir.
+
+## CR-017 — Ortak broşür hesabı production ADMIN yetkisine sahip
+
+- Kaynaklar: Kullanıcının 2026-09-15 tarihli açık hesabı ve ADMIN rolü onayı; [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md); production login doğrulaması.
+- Gözlem: Broşür için oluşturulan ortak hesap aktif ADMIN’dir. Canlı dashboard mevcut production kayıtlarını gösterir; ADMIN rolü kullanıcılar ve ayarlar dahil bütün menülere erişir.
+- Etki: Hesabı bilen her broşür alıcısı production verisini görebilir ve uygulamanın izin verdiği yönetim mutasyonlarını yapabilir. Ortak kimlikte kişi bazlı audit ayrımı yoktur.
+- Durum/onay: Hesabın oluşturulması ve ADMIN rolü kullanıcı tarafından açıkça Accepted; tamamlandı. İptal/rotasyon tarihi ve salt okunur/izole demo çözümü açık takip işidir ve yeni onay gerektirir.
+
+## CR-018 — Broşür URL’si çalışan production domain ile uyuşmuyor
+
+- Kaynaklar: [BROCHURE_GUIDE](../40-operations/BROCHURE_GUIDE.md), PDF/QR üretim kaynağı ve [DEPLOYMENT](../40-operations/DEPLOYMENT.md).
+- Gözlem/çelişki: Broşür bağlantıları ve QR kodları `https://aidat.spormanage.com.tr` hedefini kullanır. Doğrulanmış canlı Coolify domain’i `https://aidat.ozlucespor.com` adresidir. Broşür domain’i 2026-09-15 kontrolünde güvenilir TLS/DNS bağlantısı kurmadı.
+- Etki: Dağıtılan broşürü kullanan ziyaretçi giriş ekranına ulaşamayabilir; doğru hesap oluşturulmuş olsa da erişim akışı tamamlanmaz.
+- Öneri/durum: DNS ve TLS ile broşür domain’ini mevcut Coolify uygulamasına yönlendirmek veya broşürü çalışan domain ile yeniden üretmek. Açık; domain/DNS değişikliği veya artifact yeniden yayını kullanıcı kararı gerektirir.
