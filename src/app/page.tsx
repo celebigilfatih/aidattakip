@@ -22,7 +22,7 @@ export default function Home() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-24">
         <div className="text-center">
-          <h1 className="text-4xl font-bold mb-4">Futbol Okulu Aidat Takip Sistemi</h1>
+          <h1 className="text-4xl font-bold mb-4">SporManage Aidat Takip Sistemi</h1>
           <p className="text-lg text-gray-600">Yükleniyor...</p>
         </div>
       </main>
@@ -33,7 +33,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-center font-mono text-sm">
         <h1 className="text-4xl font-bold text-center mb-8">
-          Futbol Okulu Aidat Takip Sistemi
+          SporManage Aidat Takip Sistemi
         </h1>
         <p className="text-center text-lg text-gray-600 mb-8">
           Öğrenci aidat ve devamsızlık takibinin yönetileceği web uygulaması

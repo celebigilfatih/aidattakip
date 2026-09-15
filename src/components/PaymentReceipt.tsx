@@ -29,10 +29,10 @@ export function PaymentReceipt({
 }: PaymentReceiptProps) {
   const printRef = useRef<HTMLDivElement>(null)
   const [settings, setSettings] = useState<Settings>({
-    schoolName: 'Futbol Okulu',
+    schoolName: 'SporManage',
     schoolAddress: 'İstanbul, Türkiye',
     schoolPhone: '+90 212 555 0000',
-    schoolEmail: 'info@futbolokulu.com'
+    schoolEmail: 'info@spormanage.example'
   })
 
   useEffect(() => {

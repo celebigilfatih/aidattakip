@@ -219,7 +219,7 @@ export function StudentPrintForm({ student, onClose }: StudentPrintFormProps) {
                 ${schoolLogo ? `<img src="${schoolLogo}" alt="Logo" class="header-logo" />` : ''}
                 <div class="header-content">
                   <h1>Öğrenci Bilgi Formu</h1>
-                  <p>Futbol Okulu - Öğrenci Kayıt Sistemi</p>
+                  <p>SporManage - Sporcu Kayıt Sistemi</p>
                 </div>
               </div>
               
@@ -364,7 +364,7 @@ export function StudentPrintForm({ student, onClose }: StudentPrintFormProps) {
               )}
               <div className="text-center">
                 <h1 className="text-2xl font-bold text-blue-600 mb-1">Öğrenci Bilgi Formu</h1>
-                <p className="text-xs text-gray-600">Futbol Okulu - Öğrenci Kayıt Sistemi</p>
+                <p className="text-xs text-gray-600">SporManage - Sporcu Kayıt Sistemi</p>
               </div>
             </div>
 

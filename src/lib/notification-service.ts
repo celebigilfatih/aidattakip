@@ -94,7 +94,7 @@ export class NotificationService {
     const transporter = nodemailer.createTransporter(this.emailConfig);
     
     const mailOptions = {
-      from: process.env.SMTP_FROM || 'noreply@futbolokulu.com',
+      from: process.env.SMTP_FROM || 'noreply@spormanage.example',
       to: notification.recipientEmail,
       subject: notification.title,
       html: this.generateEmailTemplate(notification)
@@ -184,7 +184,7 @@ export class NotificationService {
       <body>
         <div class="container">
           <div class="header">
-            <h1>Futbol Okulu</h1>
+            <h1>SporManage</h1>
             <span class="type-badge ${this.getTypeBadgeClass(notification.type)}">${this.getTypeLabel(notification.type)}</span>
           </div>
           <div class="content">
@@ -193,7 +193,7 @@ export class NotificationService {
             <p>${notification.message.replace(/\n/g, '<br>')}</p>
           </div>
           <div class="footer">
-            <p>Bu mesaj Futbol Okulu Yönetim Sistemi tarafından gönderilmiştir.</p>
+            <p>Bu mesaj SporManage Yönetim Sistemi tarafından gönderilmiştir.</p>
             <p>Sorularınız için bizimle iletişime geçebilirsiniz.</p>
           </div>
         </div>

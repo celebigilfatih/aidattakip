@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 
     // Simulate email test
     console.log('📧 Test Email Sent:');
-    console.log('To: admin@futbolokulu.com');
+    console.log('To: admin@spormanage.example');
     console.log('Subject: Email Test - Football School Management System');
     console.log('Body: This is a test email to verify email settings are working correctly.');
     console.log('---');
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Test email sent successfully',
       details: {
-        recipient: 'admin@futbolokulu.com',
+        recipient: 'admin@spormanage.example',
         subject: 'Email Test - Football School Management System',
         sentAt: new Date().toISOString()
       }

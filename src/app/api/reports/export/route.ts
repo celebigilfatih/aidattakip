@@ -1,93 +1,40 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { AuthService } from '@/lib/auth';
+import { NextRequest, NextResponse } from 'next/server'
+import { AuthService } from '@/lib/auth'
+import { buildReportWorkbook } from '@/lib/report-export'
+import { prisma } from '@/lib/prisma'
+import { getReportData, parseReportFilters, ReportFilterError } from '@/lib/reporting'
+
+async function getCurrentUser(request: NextRequest) {
+  const token = request.cookies.get('auth-token')?.value
+  const payload = AuthService.verifyToken(token || '')
+  if (!payload) return null
+  return prisma.user.findFirst({ where: { id: payload.userId, isActive: true }, select: { role: true } })
+}
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.headers.get('authorization')?.replace('Bearer ', '');
-    const user = await AuthService.verifyToken(token || '');
-    
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const user = await getCurrentUser(request)
+    if (!user) return NextResponse.json({ error: 'Kimlik doğrulama gerekli' }, { status: 401 })
+    if (user.role !== 'ADMIN' && user.role !== 'ACCOUNTING') return NextResponse.json({ error: 'Rapor dışa aktarma yetkiniz yok' }, { status: 403 })
 
-    const { searchParams } = new URL(request.url);
-    const format = searchParams.get('format') || 'pdf';
-    const dateRange = searchParams.get('dateRange') || '30';
-    const groupId = searchParams.get('groupId');
+    const searchParams = new URL(request.url).searchParams
+    const format = searchParams.get('format') ?? 'pdf'
+    if (format === 'pdf') return NextResponse.json({ error: 'PDF çıktısı rapor ekranındaki Yazdır / PDF Kaydet işlemiyle oluşturulur.' }, { status: 410 })
+    if (format !== 'excel') return NextResponse.json({ error: 'Geçersiz rapor biçimi.' }, { status: 400 })
 
-    // For development, we'll return a simple text file with report data
-    // In production, this would generate actual PDF/Excel files
-    const reportContent = generateReportContent(format, dateRange, groupId);
-    
-    const headers = new Headers();
-    
-    if (format === 'pdf') {
-      headers.set('Content-Type', 'application/pdf');
-      headers.set('Content-Disposition', `attachment; filename="rapor-${new Date().toISOString().split('T')[0]}.pdf"`);
-    } else if (format === 'excel') {
-      headers.set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      headers.set('Content-Disposition', `attachment; filename="rapor-${new Date().toISOString().split('T')[0]}.xlsx"`);
-    } else {
-      headers.set('Content-Type', 'text/plain');
-      headers.set('Content-Disposition', `attachment; filename="rapor-${new Date().toISOString().split('T')[0]}.txt"`);
-    }
-
-    return new Response(reportContent, { headers });
+    const filters = parseReportFilters(searchParams)
+    const workbook = buildReportWorkbook(await getReportData(prisma, filters), filters)
+    const body = new ArrayBuffer(workbook.byteLength)
+    new Uint8Array(body).set(workbook)
+    const date = new Date().toISOString().slice(0, 10)
+    return new Response(body, { headers: {
+      'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      'Content-Disposition': `attachment; filename="spormanage-${filters.reportType}-${date}.xlsx"`,
+      'Cache-Control': 'no-store',
+    } })
   } catch (error) {
-    console.error('Error exporting report:', error);
-    return NextResponse.json(
-      { error: 'Failed to export report' },
-      { status: 500 }
-    );
+    if (error instanceof ReportFilterError) return NextResponse.json({ error: error.message }, { status: 400 })
+    console.error('Error exporting report:', error)
+    return NextResponse.json({ error: 'Failed to export report' }, { status: 500 })
   }
-}
-
-function generateReportContent(format: string, dateRange: string, groupId?: string | null): string {
-  const currentDate = new Date().toLocaleDateString('tr-TR');
-  
-  const content = `
-FUTBOL OKULU YÖNETİM SİSTEMİ RAPORU
-====================================
-
-Rapor Tarihi: ${currentDate}
-Zaman Aralığı: Son ${dateRange} gün
-${groupId ? `Grup Filtresi: ${groupId}` : 'Tüm Gruplar'}
-
-Bu rapor ${format.toUpperCase()} formatında oluşturulmuştur.
-
-ÖZET İSTATİSTİKLER
-==================
-
-1. ÖĞRENCİ BİLGİLERİ
-   - Toplam Öğrenci: [Veri API'den alınacak]
-   - Aktif Öğrenci: [Veri API'den alınacak]
-   - Yeni Kayıtlar: [Veri API'den alınacak]
-
-2. MALİ DURUM
-   - Toplam Gelir: [Veri API'den alınacak]
-   - Aylık Gelir: [Veri API'den alınacak]
-   - Geciken Ödemeler: [Veri API'den alınacak]
-
-3. DEVAM DURUMU
-   - Ortalama Devam Oranı: [Veri API'den alınacak]
-   - Toplam Antrenman: [Veri API'den alınacak]
-
-4. BİLDİRİMLER
-   - Gönderilen Bildirim: [Veri API'den alınacak]
-   - Başarısızlık Oranı: [Veri API'den alınacak]
-
-DETAYLI ANALİZ
-==============
-
-Bu bölümde gruplar bazında detaylı analizler yer alacaktır.
-
-NOT: Bu örnek bir rapor içeriğidir. Gerçek uygulamada:
-- PDF için PDFKit veya Puppeteer kullanılabilir
-- Excel için ExcelJS kütüphanesi kullanılabilir
-- Veriler gerçek API'den çekilecektir
-
-Rapor Oluşturma Zamanı: ${new Date().toLocaleString('tr-TR')}
-`;
-
-  return content;
 }

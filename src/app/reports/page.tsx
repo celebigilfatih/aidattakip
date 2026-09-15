@@ -1,418 +1,130 @@
-'use client';
+'use client'
 
-import { useState, useEffect } from 'react';
-import AppLayout from '@/components/AppLayout';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  DollarSign, 
-  Calendar,
-  Download,
-  FileText,
-  PieChart,
-  Activity
-} from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useEffect, useMemo, useState } from 'react'
+import { Activity, BarChart3, Download, FileText, PieChart, TrendingUp, Users } from 'lucide-react'
+import AppLayout from '@/components/AppLayout'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { useAuth } from '@/contexts/AuthContext'
+import { useSettings } from '@/contexts/SettingsContext'
+import { useToast } from '@/hooks/use-toast'
+import type { ReportData, ReportType } from '@/lib/reporting'
 
-interface ReportData {
-  students: {
-    total: number;
-    active: number;
-    byGroup: Array<{ groupName: string; count: number }>;
-    newThisMonth: number;
-  };
-  payments: {
-    totalRevenue: number;
-    monthlyRevenue: number;
-    overdue: number;
-    paidThisMonth: number;
-    byMonth: Array<{ month: string; amount: number }>;
-  };
-  attendance: {
-    averageRate: number;
-    totalSessions: number;
-    attendanceByGroup: Array<{ groupName: string; rate: number }>;
-  };
-  notifications: {
-    totalSent: number;
-    failureRate: number;
-    byType: Array<{ type: string; count: number }>;
-  };
+type GroupOption = { id: string; name: string }
+
+const reportLabels: Record<ReportType, string> = {
+  overview: 'Genel Bakış', financial: 'Mali Durum', attendance: 'Devam Durumu', student: 'Sporcu Analizi',
 }
 
 export default function ReportsPage() {
-  const [reportData, setReportData] = useState<ReportData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [filters, setFilters] = useState({
-    dateRange: '30',
-    groupId: '',
-    reportType: 'overview'
-  });
-  const { toast } = useToast();
+  const [reportData, setReportData] = useState<ReportData | null>(null)
+  const [groups, setGroups] = useState<GroupOption[]>([])
+  const [loading, setLoading] = useState(true)
+  const [exporting, setExporting] = useState(false)
+  const [filters, setFilters] = useState<{ dateRange: string; groupId: string; reportType: ReportType }>({ dateRange: '30', groupId: 'all', reportType: 'overview' })
+  const { user } = useAuth()
+  const { settings } = useSettings()
+  const { toast } = useToast()
+  const canExport = user?.role === 'ADMIN' || user?.role === 'ACCOUNTING'
+  const showStudents = filters.reportType === 'overview' || filters.reportType === 'student'
+  const showPayments = filters.reportType === 'overview' || filters.reportType === 'financial'
+  const showAttendance = filters.reportType === 'overview' || filters.reportType === 'attendance'
+  const selectedGroup = useMemo(() => groups.find(group => group.id === filters.groupId)?.name ?? 'Tüm gruplar', [groups, filters.groupId])
 
   useEffect(() => {
-    fetchReportData();
-  }, [filters]);
+    fetch('/api/groups?isActive=true').then(async response => {
+      if (!response.ok) throw new Error('Gruplar yüklenemedi')
+      setGroups(await response.json())
+    }).catch(() => toast({ title: 'Hata', description: 'Grup filtresi yüklenemedi', variant: 'destructive' }))
+  }, [toast])
 
-  const fetchReportData = async () => {
-    try {
-      setLoading(true);
-      const params = new URLSearchParams();
-      params.set('dateRange', filters.dateRange);
-      if (filters.groupId) params.set('groupId', filters.groupId);
-      
-      const response = await fetch(`/api/reports/overview?${params.toString()}`);
-      if (response.ok) {
-        const data = await response.json();
-        setReportData(data);
-      }
-    } catch (error) {
-      toast({
-        title: "Hata",
-        description: "Rapor verileri yüklenemedi",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true)
+        const params = new URLSearchParams({ dateRange: filters.dateRange, reportType: filters.reportType })
+        if (filters.groupId !== 'all') params.set('groupId', filters.groupId)
+        const response = await fetch(`/api/reports/overview?${params}`)
+        const body = await response.json()
+        if (!response.ok) throw new Error(body.error || 'Rapor verileri yüklenemedi')
+        setReportData(body)
+      } catch (error) {
+        toast({ title: 'Hata', description: error instanceof Error ? error.message : 'Rapor verileri yüklenemedi', variant: 'destructive' })
+      } finally { setLoading(false) }
     }
-  };
+    load()
+  }, [filters, toast])
 
-  const handleExportReport = async (format: 'pdf' | 'excel') => {
+  const exportExcel = async () => {
     try {
-      const params = new URLSearchParams();
-      params.set('format', format);
-      params.set('dateRange', filters.dateRange);
-      if (filters.groupId) params.set('groupId', filters.groupId);
-      
-      const response = await fetch(`/api/reports/export?${params.toString()}`);
-      if (response.ok) {
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `rapor-${new Date().toISOString().split('T')[0]}.${format === 'pdf' ? 'pdf' : 'xlsx'}`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        
-        toast({
-          title: "Başarılı",
-          description: `Rapor ${format.toUpperCase()} olarak indirildi`,
-        });
+      setExporting(true)
+      const params = new URLSearchParams({ format: 'excel', dateRange: filters.dateRange, reportType: filters.reportType })
+      if (filters.groupId !== 'all') params.set('groupId', filters.groupId)
+      const response = await fetch(`/api/reports/export?${params}`)
+      if (!response.ok) {
+        const body = await response.json().catch(() => ({}))
+        throw new Error(body.error || 'Excel raporu oluşturulamadı')
       }
+      const url = URL.createObjectURL(await response.blob())
+      const anchor = document.createElement('a')
+      anchor.href = url
+      anchor.download = `spormanage-${filters.reportType}-${new Date().toISOString().slice(0, 10)}.xlsx`
+      anchor.click()
+      URL.revokeObjectURL(url)
+      toast({ title: 'Başarılı', description: 'Excel raporu indirildi' })
     } catch (error) {
-      toast({
-        title: "Hata",
-        description: "Rapor indirilemedi",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('tr-TR', {
-      style: 'currency',
-      currency: 'TRY'
-    }).format(amount);
-  };
-
-  const formatPercentage = (rate: number) => {
-    return `${Math.round(rate)}%`;
-  };
-
-  if (loading) {
-    return (
-      <AppLayout>
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-lg">Raporlar yükleniyor...</div>
-          </div>
-        </div>
-      </AppLayout>
-    );
+      toast({ title: 'Hata', description: error instanceof Error ? error.message : 'Rapor indirilemedi', variant: 'destructive' })
+    } finally { setExporting(false) }
   }
+
+  const formatCurrency = (amount: number) => new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(amount)
+  const formatPercentage = (rate: number) => `${Math.round(rate)}%`
 
   return (
     <AppLayout>
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      {/* Page Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">Raporlar ve Analitik</h1>
-          <p className="text-muted-foreground">
-            Okul performansı ve istatistikleri
-          </p>
+      <div className="print-report w-full px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+        <div className="print-only">
+          <h1>{settings.schoolName} — {reportLabels[filters.reportType]}</h1>
+          <p>Son {filters.dateRange} gün · {selectedGroup} · {new Date().toLocaleString('tr-TR')}</p>
         </div>
-        <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
-            onClick={() => handleExportReport('excel')}
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Excel İndir
-          </Button>
-          <Button 
-            variant="outline"
-            onClick={() => handleExportReport('pdf')}
-          >
-            <FileText className="h-4 w-4 mr-2" />
-            PDF İndir
-          </Button>
-        </div>
-      </div>
 
-      {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Filtreler</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <div className="print-hidden flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
+          <div><h1 className="text-3xl font-bold">Raporlar ve Analitik</h1><p className="text-muted-foreground">SporManage performansı ve istatistikleri</p></div>
+          {canExport && <div className="flex flex-wrap gap-2">
+            <Button variant="outline" onClick={exportExcel} disabled={exporting}><Download className="h-4 w-4 mr-2" />{exporting ? 'Hazırlanıyor...' : 'Excel İndir'}</Button>
+            <Button variant="outline" onClick={() => window.print()}><FileText className="h-4 w-4 mr-2" />Yazdır / PDF Kaydet</Button>
+          </div>}
+        </div>
+
+        <Card className="print-hidden"><CardHeader><CardTitle>Filtreler</CardTitle></CardHeader><CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="dateRange">Zaman Aralığı</Label>
-              <Select value={filters.dateRange} onValueChange={(value) => setFilters(prev => ({ ...prev, dateRange: value }))}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="7">Son 7 Gün</SelectItem>
-                  <SelectItem value="30">Son 30 Gün</SelectItem>
-                  <SelectItem value="90">Son 3 Ay</SelectItem>
-                  <SelectItem value="365">Son 1 Yıl</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div>
-              <Label htmlFor="reportType">Rapor Türü</Label>
-              <Select value={filters.reportType} onValueChange={(value) => setFilters(prev => ({ ...prev, reportType: value }))}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="overview">Genel Bakış</SelectItem>
-                  <SelectItem value="financial">Mali Durum</SelectItem>
-                  <SelectItem value="attendance">Devam Durumu</SelectItem>
-                  <SelectItem value="student">Öğrenci Analizi</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <div><Label>Zaman Aralığı</Label><Select value={filters.dateRange} onValueChange={dateRange => setFilters(current => ({ ...current, dateRange }))}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{[['7','Son 7 Gün'],['30','Son 30 Gün'],['90','Son 3 Ay'],['365','Son 1 Yıl']].map(([value,label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent></Select></div>
+            <div><Label>Grup</Label><Select value={filters.groupId} onValueChange={groupId => setFilters(current => ({ ...current, groupId }))}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">Tüm Gruplar</SelectItem>{groups.map(group => <SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>)}</SelectContent></Select></div>
+            <div><Label>Rapor Türü</Label><Select value={filters.reportType} onValueChange={reportType => setFilters(current => ({ ...current, reportType: reportType as ReportType }))}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{Object.entries(reportLabels).map(([value,label]) => <SelectItem key={value} value={value}>{label}</SelectItem>)}</SelectContent></Select></div>
           </div>
-        </CardContent>
-      </Card>
+        </CardContent></Card>
 
-      {/* Overview Statistics */}
-      {reportData && (
-        <>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Toplam Öğrenci</CardTitle>
-                <Users className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{reportData.students.total}</div>
-                <p className="text-xs text-muted-foreground">
-                  {reportData.students.active} aktif
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Toplam Gelir</CardTitle>
-                <DollarSign className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{formatCurrency(reportData.payments.totalRevenue)}</div>
-                <p className="text-xs text-muted-foreground">
-                  Bu ay: {formatCurrency(reportData.payments.monthlyRevenue)}
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Devam Oranı</CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{formatPercentage(reportData.attendance.averageRate)}</div>
-                <p className="text-xs text-muted-foreground">
-                  {reportData.attendance.totalSessions} toplam antrenman
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Geciken Ödemeler</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-red-600">{formatCurrency(reportData.payments.overdue)}</div>
-                <p className="text-xs text-muted-foreground">
-                  Takip gerekli
-                </p>
-              </CardContent>
-            </Card>
+        {loading && <div className="flex items-center justify-center h-64 text-lg">Raporlar yükleniyor...</div>}
+        {!loading && reportData && <>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+            {showStudents && <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm">Toplam Sporcu</CardTitle><Users className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold">{reportData.students.total}</div><p className="text-xs text-muted-foreground">{reportData.students.active} aktif</p></CardContent></Card>}
+            {showPayments && <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm">Dönem Tahsilatı</CardTitle><TrendingUp className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold">{formatCurrency(reportData.payments.totalRevenue)}</div><p className="text-xs text-muted-foreground">Bu ay: {formatCurrency(reportData.payments.monthlyRevenue)}</p></CardContent></Card>}
+            {showAttendance && <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm">Devam Oranı</CardTitle><Activity className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold">{formatPercentage(reportData.attendance.averageRate)}</div><p className="text-xs text-muted-foreground">{reportData.attendance.totalSessions} tamamlanan antrenman</p></CardContent></Card>}
+            {showPayments && <Card><CardHeader className="flex flex-row items-center justify-between pb-2"><CardTitle className="text-sm">Geciken Bakiye</CardTitle><BarChart3 className="h-4 w-4 text-muted-foreground" /></CardHeader><CardContent><div className="text-2xl font-bold text-red-600">{formatCurrency(reportData.payments.overdue)}</div><p className="text-xs text-muted-foreground">Seçili dönemde takip gerekli</p></CardContent></Card>}
           </div>
 
-          {/* Charts and Detailed Reports */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Student Distribution by Group */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <PieChart className="h-5 w-5" />
-                  Gruplara Göre Öğrenci Dağılımı
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {reportData.students.byGroup.map((group, index) => (
-                    <div key={group.groupName} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div 
-                          className="w-3 h-3 rounded-full" 
-                          style={{ backgroundColor: `hsl(${index * 50}, 70%, 50%)` }}
-                        />
-                        <span className="text-sm font-medium">{group.groupName}</span>
-                      </div>
-                      <span className="text-sm text-muted-foreground">{group.count} öğrenci</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Monthly Revenue */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5" />
-                  Aylık Gelir Trendi
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {reportData.payments.byMonth.slice(-6).map((month) => (
-                    <div key={month.month} className="flex items-center justify-between">
-                      <span className="text-sm">{month.month}</span>
-                      <span className="text-sm font-medium">{formatCurrency(month.amount)}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Attendance by Group */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Activity className="h-5 w-5" />
-                  Gruplara Göre Devam Oranları
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {reportData.attendance.attendanceByGroup.map((group) => (
-                    <div key={group.groupName} className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>{group.groupName}</span>
-                        <span className="font-medium">{formatPercentage(group.rate)}</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-600 h-2 rounded-full" 
-                          style={{ width: `${Math.min(group.rate, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Notification Statistics */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  Bildirim İstatistikleri
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Toplam Gönderilen</span>
-                    <span className="font-medium">{reportData.notifications.totalSent}</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Başarısızlık Oranı</span>
-                    <span className="font-medium text-red-600">{formatPercentage(reportData.notifications.failureRate)}</span>
-                  </div>
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-medium">Türe Göre Dağılım:</h4>
-                    {reportData.notifications.byType.map((type) => (
-                      <div key={type.type} className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">{type.type}</span>
-                        <span>{type.count}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {showStudents && <Card><CardHeader><CardTitle className="flex items-center gap-2"><PieChart className="h-5 w-5" />Gruplara Göre Sporcular</CardTitle></CardHeader><CardContent className="space-y-3">{reportData.students.byGroup.map(group => <div key={group.groupName} className="flex justify-between"><span>{group.groupName}</span><span>{group.count} sporcu</span></div>)}</CardContent></Card>}
+            {showPayments && <Card><CardHeader><CardTitle>Aylık Tahsilat</CardTitle></CardHeader><CardContent className="space-y-3">{reportData.payments.byMonth.length ? reportData.payments.byMonth.map(month => <div key={month.month} className="flex justify-between"><span>{month.month}</span><span>{formatCurrency(month.amount)}</span></div>) : <p className="text-muted-foreground">Seçili dönemde tahsilat yok.</p>}</CardContent></Card>}
+            {showAttendance && <Card><CardHeader><CardTitle>Gruplara Göre Devam</CardTitle></CardHeader><CardContent className="space-y-4">{reportData.attendance.attendanceByGroup.map(group => <div key={group.groupName}><div className="flex justify-between text-sm"><span>{group.groupName}</span><span>{formatPercentage(group.rate)}</span></div><div className="w-full bg-gray-200 rounded-full h-2 mt-2"><div className="bg-blue-600 h-2 rounded-full" style={{ width: `${Math.min(group.rate, 100)}%` }} /></div></div>)}</CardContent></Card>}
+            {filters.reportType === 'overview' && <Card><CardHeader><CardTitle>Bildirim İstatistikleri</CardTitle></CardHeader><CardContent className="space-y-3"><div className="flex justify-between"><span>Gönderilen</span><span>{reportData.notifications.totalSent}</span></div><div className="flex justify-between"><span>Başarısızlık oranı</span><span>{formatPercentage(reportData.notifications.failureRate)}</span></div>{reportData.notifications.byType.map(type => <div key={type.type} className="flex justify-between text-sm"><span>{type.type}</span><span>{type.count}</span></div>)}</CardContent></Card>}
           </div>
 
-          {/* Recent Activity Summary */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Özet Bilgiler</CardTitle>
-              <CardDescription>
-                Son {filters.dateRange} günlük aktivite özeti
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <h4 className="font-medium text-green-600">Pozitif Gelişmeler</h4>
-                  <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• {reportData.students.newThisMonth} yeni öğrenci kaydı</li>
-                    <li>• {formatCurrency(reportData.payments.paidThisMonth)} tahsilat</li>
-                    <li>• Ortalama {formatPercentage(reportData.attendance.averageRate)} devam oranı</li>
-                  </ul>
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="font-medium text-yellow-600">Dikkat Edilmesi Gerekenler</h4>
-                  <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• {formatCurrency(reportData.payments.overdue)} geciken ödeme</li>
-                    <li>• %{Math.round(reportData.notifications.failureRate)} bildirim başarısızlığı</li>
-                    <li>• Devam oranı düşük gruplar var</li>
-                  </ul>
-                </div>
-                
-                <div className="space-y-2">
-                  <h4 className="font-medium text-blue-600">Öneriler</h4>
-                  <ul className="text-sm space-y-1 text-muted-foreground">
-                    <li>• Geciken ödemeler için hatırlatma gönder</li>
-                    <li>• Düşük devam oranlı öğrencileri takip et</li>
-                    <li>• Yeni öğrenci kaydı için kampanya düşün</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
+          {filters.reportType === 'overview' && <Card><CardHeader><CardTitle>Özet Bilgiler</CardTitle><CardDescription>Son {filters.dateRange} günlük aktivite özeti</CardDescription></CardHeader><CardContent><div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm"><div><strong>Bu ay yeni kayıt</strong><p>{reportData.students.newThisMonth} sporcu</p></div><div><strong>Bu ay tahsilat</strong><p>{formatCurrency(reportData.payments.paidThisMonth)}</p></div><div><strong>Geciken bakiye</strong><p>{formatCurrency(reportData.payments.overdue)}</p></div></div></CardContent></Card>}
+        </>}
       </div>
     </AppLayout>
-  );
+  )
 }

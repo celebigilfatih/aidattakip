@@ -98,10 +98,10 @@ interface Location {
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState<SystemSettings>({
-    schoolName: 'Futbol Okulu',
+    schoolName: 'SporManage',
     schoolAddress: 'İstanbul, Türkiye',
     schoolPhone: '+90 212 555 0000',
-    schoolEmail: 'info@futbolokulu.com',
+    schoolEmail: 'info@spormanage.example',
     currency: 'TRY',
     timeZone: 'Europe/Istanbul',
     language: 'tr',
@@ -1175,7 +1175,7 @@ export default function SettingsPage() {
                     <Input
                       id="branchEmail"
                       type="email"
-                      placeholder="sube@futbolokulu.com"
+                      placeholder="sube@spormanage.example"
                       value={newBranch.email}
                       onChange={(e) => setNewBranch(prev => ({ ...prev, email: e.target.value }))}
                     />

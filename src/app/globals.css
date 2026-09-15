@@ -49,6 +49,59 @@
   }
 }
 
+.print-only {
+  display: none;
+}
+
+@media print {
+  @page {
+    margin: 12mm;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .app-shell,
+  .app-content,
+  .app-main {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  .app-shell > aside,
+  .app-content > header,
+  .app-license-banner,
+  .print-hidden {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+    margin-bottom: 1.5rem;
+  }
+
+  .print-only h1 {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .print-only p {
+    color: #4b5563;
+    font-size: 12px;
+  }
+
+  .print-report {
+    padding: 0 !important;
+  }
+
+  .print-report [class*="shadow"] {
+    box-shadow: none !important;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

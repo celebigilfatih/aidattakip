@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     // Simulate SMS test
     console.log('📱 Test SMS Sent:');
     console.log('To: +90 555 123 4567');
-    console.log('Message: Bu bir test mesajıdır. Futbol Okulu Yönetim Sistemi SMS ayarları çalışıyor.');
+    console.log('Message: Bu bir test mesajıdır. SporManage Yönetim Sistemi SMS ayarları çalışıyor.');
     console.log('---');
 
     // In a real application, you would use the actual SMS service here
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       message: 'Test SMS sent successfully',
       details: {
         recipient: '+90 555 123 4567',
-        message: 'Bu bir test mesajıdır. Futbol Okulu Yönetim Sistemi SMS ayarları çalışıyor.',
+        message: 'Bu bir test mesajıdır. SporManage Yönetim Sistemi SMS ayarları çalışıyor.',
         sentAt: new Date().toISOString()
       }
     });

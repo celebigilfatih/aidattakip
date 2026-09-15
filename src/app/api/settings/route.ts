@@ -10,10 +10,10 @@ async function getOrCreateSettings() {
   if (!row) {
     row = await prisma.systemSetting.create({
       data: {
-        schoolName: process.env.NEXT_PUBLIC_SCHOOL_NAME || 'Futbol Okulu',
+        schoolName: process.env.NEXT_PUBLIC_SCHOOL_NAME || 'SporManage',
         schoolAddress: process.env.NEXT_PUBLIC_SCHOOL_ADDRESS || 'İstanbul, Türkiye',
         schoolPhone: process.env.NEXT_PUBLIC_SCHOOL_PHONE || '+90 212 555 0000',
-        schoolEmail: process.env.NEXT_PUBLIC_SCHOOL_EMAIL || 'info@futbolokulu.com',
+        schoolEmail: process.env.NEXT_PUBLIC_SCHOOL_EMAIL || 'info@spormanage.example',
         schoolLogo: DEFAULT_LOGO,
       },
     });

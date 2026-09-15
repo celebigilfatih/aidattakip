@@ -44,13 +44,13 @@ export default function LoginPage() {
               <Trophy className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Futbol Okulu
+              SporManage
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-green-600">
                 Yönetim Sistemi
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8">
-              Öğrenci aidat ve devamsızlık takibi için profesyonel çözüm
+              Sporcu aidat ve devamsızlık takibi için profesyonel çözüm
             </p>
           </div>
 
@@ -116,7 +116,7 @@ export default function LoginPage() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="ornek@futbolokulu.com"
+                      placeholder="ornek@spormanage.example"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
@@ -174,13 +174,13 @@ export default function LoginPage() {
                 </Button>
               </form>
               
-              {/* Demo Credentials */}
+              {/* Example credentials for the local presentation environment */}
               <div className="mt-6 p-4 bg-gray-50 rounded-lg border">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Demo Hesap Bilgileri:</h4>
+                <h4 className="text-sm font-medium text-gray-700 mb-2">Örnek Hesap Bilgileri:</h4>
                 <div className="text-xs text-gray-600 space-y-1">
                   <div className="flex justify-between">
                     <span>E-posta:</span>
-                    <code className="bg-white px-2 py-1 rounded text-blue-600">admin@futbolokulu.com</code>
+                    <code className="bg-white px-2 py-1 rounded text-blue-600">admin@spormanage.example</code>
                   </div>
                   <div className="flex justify-between">
                     <span>Şifre:</span>

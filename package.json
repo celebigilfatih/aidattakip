@@ -19,9 +19,17 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:sample": "tsx prisma/sample-data.ts",
     "db:notes": "tsx prisma/sample-notes.ts",
-    "db:groups": "tsx prisma/sample-groups.ts"
+    "db:groups": "tsx prisma/sample-groups.ts",
+    "demo:seed": "tsx prisma/demo-seed.ts",
+    "demo:refresh-people": "tsx prisma/demo-refresh-people.ts",
+    "demo:refresh-brand": "tsx prisma/demo-refresh-brand.ts",
+    "demo:refresh-presentation": "tsx prisma/demo-refresh-presentation.ts",
+    "demo:check": "tsx prisma/demo-check.ts",
+    "demo:test": "node --import tsx --test prisma/demo.test.ts",
+    "demo:test:db": "node --import tsx --test prisma/demo.integration.test.ts",
+    "report:test": "node --import tsx --test src/lib/reporting.test.ts"
   },
-  "description": "Football School Management System - Student fee and attendance tracking",
+  "description": "SporManage - athlete fee and attendance tracking",
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.17.1",

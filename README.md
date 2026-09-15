@@ -1,4 +1,10 @@
-# Futbol Okulu Yönetim Sistemi (Football School Management System)
+> SporManage Aidat Takip: [Tanıtım PDF](output/pdf/spormanage-aidat-takip-tanitim.pdf) · [Broşür rehberi](docs/40-operations/BROCHURE_GUIDE.md) · [Gösterim rehberi](docs/40-operations/DEMO_GUIDE.md) · [Doğrulama kaydı](docs/30-quality/DEMO_VALIDATION.md). Kurulum: `npm run demo:seed -- --dry-run`, ardından `npm run demo:seed`. Mevcut ortamı yenilemek için önce `npm run demo:refresh-presentation -- --dry-run` kullanın.
+
+> **CDSK çalışma bağlamı:** Bu proje **Aidat Takip** adıyla, spor kulüplerinde **çocuk ve yetişkin sporcuların ve aidatların takibi** hedefiyle ilerler. Başlangıç: [PROJECT_BOOT](PROJECT_BOOT.md); görev kuralları: [AGENTS](AGENTS.md).
+>
+> Aşağıdaki mevcut README içeriği tarihsel kaynak olarak korunmuştur. Kurulumda SQLite/3000 portu ve eksik ortam şablonu, rol matrisi, bildirim/rapor hazırlığı ve LICENSE referansı güncel kaynaklarla uyuşmuyor veya doğrulanmamış. Ayrıntılı etkiler ve çözüm önerileri [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md) içinde kayıtlıdır. Kaynakta tanımlı güncel komutlar için [RUNBOOK](docs/40-operations/RUNBOOK.md), mimari için [OVERVIEW](docs/10-architecture/OVERVIEW.md) okunmalıdır. Bu metin yeni teknoloji, kapsam veya lisans kararı değildir.
+
+# SporManage Yönetim Sistemi
 
 A comprehensive web-based management system for football schools, built with Next.js, TypeScript, and Prisma.
 
@@ -68,7 +74,7 @@ A comprehensive web-based management system for football schools, built with Nex
    Open [http://localhost:3000](http://localhost:3000) in your browser
 
 ### Default Login Credentials
-- **Email**: admin@futbolokulu.com
+- **Email**: admin@spormanage.example
 - **Password**: admin123
 
 ## 📱 System Overview

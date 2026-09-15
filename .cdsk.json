@@ -1,0 +1,19 @@
+{
+  "standard": "Çelebigil Development Standard Kit (CDSK)",
+  "cdsk_version": "TBD",
+  "document_version": "0.2.0",
+  "last_updated": "2026-09-14",
+  "status": "context-documented",
+  "project": {
+    "name": "Aidat Takip",
+    "problem_statement": "Spor kulüplerinin sporcularını ve aidatlarını takip etmek",
+    "initial_goal": "Sporcu ve Aidat Takibi",
+    "athlete_scope": "Çocuk ve yetişkin sporcular"
+  },
+  "entrypoint": "PROJECT_BOOT.md",
+  "agent_instructions": "AGENTS.md",
+  "constitution": "docs/00-product/CONSTITUTION.md",
+  "documentation_root": "docs",
+  "decisions": "docs/50-decisions",
+  "handoff": "docs/60-ai/SESSION_HANDOFF.md"
+}

@@ -7,7 +7,7 @@ export async function seedNotifications() {
   try {
     // Get admin user and some students
     const admin = await prisma.user.findFirst({
-      where: { email: 'admin@futbolokulu.com' }
+      where: { email: 'admin@spormanage.example' }
     });
 
     if (!admin) {
