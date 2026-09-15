@@ -18,6 +18,10 @@ Tek repository içinde Next.js App Router arayüzü ve API rotaları bulunur; i�
 
 Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL. Lisans servisi `pg.Pool` ile ayrıca bağlanır. Kök layout AuthProvider ve SettingsProvider sağlar; oturum middleware ve rota kontrolleriyle işlenir. [layout](../../src/app/layout.tsx), [middleware](../../middleware.ts), [prisma](../../src/lib/prisma.ts), [license](../../src/lib/license.ts).
 
+## Dağıtım topolojisi
+
+Özlüce production ve SporManage demo iki ayrı Coolify uygulamasıdır. İkisi aynı fiziksel PostgreSQL 15 kaynağını paylaşır; `ozlucepay` ile `spormanage_aidat_demo` ayrı mantıksal veritabanları ve ayrı uygulama rolleri kullanır. Demo lisans tablosu kullanıcı kararıyla demo DB içinde tutulur. Alan adı ve veri izolasyonu [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md), işletim ayrıntısı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içindedir.
+
 ## Sürümler
 
 | Paket | package.json aralığı | package-lock.json sürümü |

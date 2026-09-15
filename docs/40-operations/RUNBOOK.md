@@ -6,6 +6,16 @@ Last updated: 2026-09-15. Komut envanteri kaynaklıdır; çalışma zamanı sonu
 
 [package.json](../../package.json), [Dockerfile](../../Dockerfile), [Compose](../../docker-compose.yml), [startup](../../scripts/startup.sh). Docker Node 20 Alpine tanımlar; yerelde zorunlu Node sürümü için ayrı pin bulunmadı. README’nin Node 18+ iddiası bu oturumda doğrulanmadı. `DATABASE_URL` PostgreSQL bağlantısı gerekir; değerler belgelerde tutulmaz.
 
+## Coolify demo işletimi
+
+- Canonical demo: [https://aidat.spormanage.com.tr](https://aidat.spormanage.com.tr); uygulama `spormanage-aidat-demo`, DB `spormanage_aidat_demo`.
+- Özlüce production: [https://aidat.ozlucespor.com](https://aidat.ozlucespor.com); uygulama ve `ozlucepay` DB'si demo ortamından ayrıdır.
+- İki uygulama aynı fiziksel PostgreSQL kaynağını paylaşır; bir uygulamanın bağlantı URL'sini diğer DB'ye yöneltme. `RUN_SEED=false` kalmalıdır.
+- `main` push'u iki uygulamada da webhook dağıtımı başlatabilir. Son commit, migration sonucu, container başlangıcı ve her iki `/login` yanıtı kontrol edilmelidir.
+- Demo doğrulaması: TLS/HTTP 200, broşür ADMIN login, 60 toplam/54 aktif sporcu, 6 grup ve 6 antrenör. Özlüce'de aynı hesap aktif olmamalıdır.
+- Secret değerlerini terminal çıktısına, deployment loguna veya repository belgesine yazma. Parola ve bağlantı secret'ı rotasyonunda DB rolü ile iki runtime URL'si aynı işlemde güncellenmelidir.
+- Domain geçişi başarısızsa yeni demo doğrulanmadan Özlüce hesabını yeniden etkinleştirme veya production DB verisini değiştirme. Güncel karar: [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md).
+
 ## Komut envanteri — tanımlar ve son doğrulama
 
 | Amaç | Repository’de tanımlı komut | Etki |

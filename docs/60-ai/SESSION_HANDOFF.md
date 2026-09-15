@@ -1,5 +1,27 @@
 # AI Session Handoff
 
+## Session — 2026-09-15 — Ayrı SporManage demo dağıtımı
+
+### Session summary
+
+Kullanıcının onayladığı ayrı demo topolojisi kuruldu. `aidat.spormanage.com.tr`, Özlüce production uygulamasından alınarak yeni `SporManage Aidat Demo` Coolify uygulamasına bağlandı. Kullanıcının sonraki yönlendirmesiyle ikinci PostgreSQL servisi kurulmadı; mevcut PostgreSQL kaynağında ayrı `spormanage_aidat_demo` veritabanı ve kısıtlı rol kullanıldı.
+
+### Work and verification
+
+- Yerel sentetik snapshot owner/ACL olmadan aktarıldı; checksum, 10 migration, 2 şube, 6 grup, 60 sporcu, 300 ödeme, 78 seans ve 378 yoklama doğrulandı. Broşür ADMIN hesabıyla kullanıcı toplamı 10'dur.
+- Runtime secret'ları yalnız Coolify'a yazıldı; kaynaklara ve belgelere alınmadı. `RUN_SEED=false` kaldı. Lisans kaydı kullanıcı tarafından seçilen aynı demo DB'de tutuldu.
+- Yeni domain geçerli TLS ile `/login` HTTP 200 verdi. Broşür ADMIN'i `/dashboard` sayfasına girdi; 54 aktif sporcu, altı grup, altı antrenör ve rapor özetleri görüldü.
+- `aidat.ozlucespor.com/login` HTTP 200 vermeye devam etti. Özlüce DB'deki aynı broşür hesabı silinmeden pasifleştirildi; eski giriş “Hesabınız aktif değil” yanıtı verdi.
+- Login API'sindeki parola/e-posta/hash debug logları kaldırıldı. Yeni container loglarında kimlik bilgisi görülmedi. Grup detayının teknik saha kimliğini göstermesi fark edilerek ilişki adı gösterimi düzeltildi.
+
+### Documents, decisions and next step
+
+[ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) Accepted, ADR-0004 Superseded. CR-017 ve CR-018 doğru izole topolojiyle kapalıdır. Deployment, Runbook, Backup/Recovery, Demo/Brochure Guide, Project Boot, CHANGELOG ve doğrulama kaydı güncellendi.
+
+Kalan riskler: Demo ADMIN sentetik veriyi değiştirebilir; iki uygulama fiziksel PostgreSQL servisinin erişilebilirliğini paylaşır; zamanlanmış demo yedeği/restore tatbikatı ve parola rotasyon tarihi yoktur. Sonraki öneri bu operasyon kurallarını belirlemektir.
+
+Bu belge tam sohbet özeti değildir. Sonraki oturumun güvenle devam etmesi için gerekli kısa kalıcı bağlamı içerir.
+
 ## Session — 2026-09-15 — Broşür domain aktivasyonu
 
 ### Session summary

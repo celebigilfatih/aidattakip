@@ -12,14 +12,15 @@
 
 ## Karar dizini
 
-Dört proje ADR’si vardır. ADR-0001 ve ADR-0002 Proposed kalır; ADR-0003 rapor dışa aktarımını, ADR-0004 broşür demo hesabının production ADMIN yetkisini kullanıcı onayıyla Accepted olarak kaydeder.
+Beş proje ADR’si vardır. ADR-0001 ve ADR-0002 Proposed kalır; ADR-0003 rapor dışa aktarımını, ADR-0005 ayrı demo dağıtımını kullanıcı onayıyla Accepted olarak kaydeder. ADR-0004, ADR-0005 tarafından Superseded durumundadır.
 
 | ADR | Başlık | Durum | Onay kaydı | Yerine geçen karar |
 |---|---|---|---|---|
 | [ADR-0001](ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) | Secret ve kimlik doğrulama logları | Proposed | TBD | N/A — ilk öneri |
 | [ADR-0002](ADR-0002-cocuk-yetiskin-sporcu-kaydi.md) | Çocuk ve yetişkin sporcu kaydı | Proposed | TBD | N/A — ilk öneri |
 | [ADR-0003](ADR-0003-rapor-disa-aktarim-ve-yetki.md) | Rapor dışa aktarımı ve yetki kapsamı | Accepted | Kullanıcı, 2026-09-15 | CR-010 rapor biçimi |
-| [ADR-0004](ADR-0004-brosur-demo-admin-hesabi.md) | Broşür demo hesabına production ADMIN yetkisi | Accepted | Kullanıcı, 2026-09-15 | N/A — ilk karar |
+| [ADR-0004](ADR-0004-brosur-demo-admin-hesabi.md) | Broşür demo hesabına production ADMIN yetkisi | Superseded | Kullanıcı, 2026-09-15 | [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md) |
+| [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md) | SporManage ayrı demo dağıtımı | Accepted | Kullanıcı, 2026-09-15 | ADR-0004 ve CR-017/CR-018 dağıtım kararı |
 
 ## Açık karar ihtiyaçları
 

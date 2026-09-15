@@ -1,6 +1,6 @@
 # ADR-0004 — Broşür Demo Hesabına Production ADMIN Yetkisi
 
-- Status: Accepted
+- Status: Superseded by [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md)
 - Date: 2026-09-15
 - Decision owner: Kullanıcı
 - Approval record: Kullanıcı `demo@spormanage.com.tr` hesabının broşür alıcılarının girişi için oluşturulmasını istedi ve takip eden mesajda rolü açıkça `ADMIN` olarak onayladı.
@@ -40,3 +40,7 @@ Broşürde paylaşılan ziyaretçilerin canlı SporManage uygulamasına girebilm
 - Broşür dağıtım süresi için parola rotasyonu/iptal tarihi belirlenmeli.
 - Ortak hesabın değiştirme yetkisini kaldıracak ayrı, salt okunur demo rolü veya izole demo veritabanı için yeni karar hazırlanmalı.
 - Broşür URL’si ile çalışan production domain uyuşmazlığı CR-018 kapsamında çözülmeli.
+
+## Supersession
+
+2026-09-15 tarihinde kullanıcı onayıyla broşür hesabı ve alan adı ayrı sentetik demo dağıtımına taşındı. Özlüce production hesabı silinmeden pasifleştirildi. Güncel karar [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md) içindedir; bu belge ilk production ADMIN kararının tarihsel kaydıdır.

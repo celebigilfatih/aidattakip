@@ -2,6 +2,23 @@
 
 Last updated: 2026-09-15. Durum: Repository kaynakları ve tarihli Coolify çalışma zamanı doğrulaması birlikte belgelenmiştir.
 
+## SporManage ayrı demo kurulumu — 2026-09-15
+
+| Alan | Doğrulanan değer |
+|---|---|
+| Coolify project/environment | `SporManage Aidat Demo` / `production` |
+| Application | `spormanage-aidat-demo` (`oibkjai6tfoeur5gxnx3ekxt`) |
+| Git/build | `celebigilfatih/aidattakip`, `main`, repository Dockerfile, port 3000 |
+| Canonical URL | [aidat.spormanage.com.tr](https://aidat.spormanage.com.tr) |
+| PostgreSQL | Mevcut kaynak `f4gwswcwo48cww88c80s8sg8`; ayrı DB `spormanage_aidat_demo`, ayrı kısıtlı rol |
+| Seed | `RUN_SEED=false`; restore edilmiş doğrulanmış sentetik snapshot |
+
+Bu dağıtım Özlüce production uygulamasından ayrıdır. Fiziksel PostgreSQL servisi paylaşılır; `ozlucepay` ve `spormanage_aidat_demo` mantıksal veritabanları ile roller ayrıdır. Demo lisans kaydı aynı demo DB'de tutulur; yeni PostgreSQL/lisans servisi kurulmadı. Runtime bağlantıları ve secret'lar yalnız Coolify environment içinde bulunur ve buildtime kapsamına açılmaz.
+
+Alan adı eski uygulamadan kaldırılıp yeni uygulamaya bağlandı; Coolify'ın otomatik oluşturduğu kullanılmayan `www` kaydı kaldırıldı. Yeni `/login` geçerli TLS ile HTTP 200 verdi ve broşür ADMIN'i demo dashboard'a girdi. `aidat.ozlucespor.com/login` HTTP 200 vermeye devam eder; aynı broşür hesabı Özlüce DB'de pasiftir. Karar ve sonuçlar [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) içindedir.
+
+Bu bölüm güncel topolojidir. Aşağıdaki “Coolify production kurulumu” bölümü Özlüce uygulamasının tarihsel kurulum kaydını içerir; burada broşür domain'inin aynı uygulamaya bağlandığını söyleyen kayıt ADR-0005 öncesindeki geçici durumu anlatır.
+
 ## Coolify production kurulumu — 2026-09-15
 
 Kullanıcının verdiği Coolify projesindeki mevcut production kaynakları korunarak uygulama kuruldu.

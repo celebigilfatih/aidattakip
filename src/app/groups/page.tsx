@@ -1104,7 +1104,7 @@ export default function GroupsPage() {
 
                       {/* Right: Field & Assistant */}
                       <div className="space-y-4">
-                        {(selectedGroup as any).fieldId && (
+                        {(selectedGroup as any).field && (
                           <div className="flex items-start gap-3 group">
                             <div className="mt-1 bg-purple-50 p-2 rounded-md group-hover:bg-purple-100 transition-colors">
                               <Layout className="h-4 w-4 text-purple-600" />
@@ -1112,7 +1112,7 @@ export default function GroupsPage() {
                             <div>
                               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Antrenman Sahası</p>
                               <p className="font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-100 inline-block mt-0.5">
-                                {(selectedGroup as any).fieldId}
+                                {(selectedGroup as any).field.name}
                               </p>
                             </div>
                           </div>

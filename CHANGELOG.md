@@ -4,6 +4,17 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Operations — 2026-09-15 — İzole SporManage demo dağıtımı
+
+- `SporManage Aidat Demo` ayrı Coolify proje/uygulaması olarak kuruldu; mevcut PostgreSQL 15 kaynağında ayrı `spormanage_aidat_demo` veritabanı ve kısıtlı uygulama rolü kullanıldı.
+- Yerel sentetik snapshot 2 şube, 6 grup, 60 sporcu, 300 ödeme, 78 seans ve 378 yoklama ile aktarıldı. Broşür ADMIN hesabı yeni DB'de aktifleştirildi; Özlüce DB'deki aynı hesap silinmeden pasifleştirildi.
+- `aidat.spormanage.com.tr` yeni uygulamaya taşındı; TLS/HTTP, ADMIN login ve demo ekranları doğrulandı. `aidat.ozlucespor.com` eski uygulamada çalışmaya devam eder; kullanılmayan `www` varyantı kaldırıldı.
+- Runtime secret'ları Coolify'da tutuldu, `RUN_SEED=false` bırakıldı. Ayrı PostgreSQL servisi kurulmadı; dağıtım kararı [ADR-0005](docs/50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) ile Accepted, ADR-0004 Superseded kaydedildi.
+
+### Fixed — 2026-09-15 — Grup saha adı görünümü
+
+- Grup detayına saha ilişkisi eklendi ve arayüzde teknik `demo-v1-...` kimliği yerine saha adı gösterildi.
+
 ### Fixed — 2026-09-15 — Giriş loglarında kimlik bilgisi sızıntısı
 
 - Login API'sindeki e-posta, parola ve parola hash önizlemesi üreten geçici debug logları kaldırıldı.

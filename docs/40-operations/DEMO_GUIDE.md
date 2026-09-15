@@ -1,6 +1,8 @@
-# SporManage — Yerel Gösterim Rehberi
+# SporManage — Gösterim Rehberi
 
-Kurulum tarihi: **15 Eylül 2026**. Yerel uygulama: [127.0.0.1:3077](http://127.0.0.1:3077/dashboard). Bütün sporcu, iletişim, ücret ve işlem bilgileri kurgusaldır; gerçek kişileri veya ticari tarifeyi temsil etmez. Teknik `demo-v1-` kimlikleri tekrar çalıştırma güvenliği için korunur ve arayüzde gösterilmez.
+Kurulum tarihi: **15 Eylül 2026**. Canlı demo: [aidat.spormanage.com.tr](https://aidat.spormanage.com.tr). Yerel kaynak: [127.0.0.1:3077](http://127.0.0.1:3077/dashboard). Bütün sporcu, iletişim, ücret ve işlem bilgileri kurgusaldır; gerçek kişileri veya ticari tarifeyi temsil etmez. Teknik `demo-v1-` kimlikleri tekrar çalıştırma güvenliği için korunur ve arayüzde gösterilmez.
+
+Canlı demo ayrı Coolify uygulaması ve `spormanage_aidat_demo` veritabanını kullanır. Özlüce production verisi bu uygulamada bulunmaz. Broşür hesabının parolası kullanıcı tarafından dağıtılır; repository ve bu rehberde tutulmaz. Dağıtım ayrıntıları [DEPLOYMENT](DEPLOYMENT.md), karar [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) içindedir.
 
 ## Gruplar ve ücretler
 
@@ -69,7 +71,7 @@ Referans tarih ilk `demo-v1-branch-merkez` kaydında korunur; tekrar seed tarih�
 - Dashboard’un bazı özet kartlarında mevcut `-` yer tutucuları ve sabit sistem/aktivite metinleri vardır.
 - Ücret listesi tarife adını/periyodunu/grubunu gösterir; tutarı listelemeyebilir. Tutarlar FeeType ve Payment kayıtlarında tanımlıdır.
 - Bildirim gönderim yollarında simülasyon/TODO bulunur; bu kurulum dış kanala bildirim göndermez.
-- Mevcut auth kaynağında hassas log riski sürer; [ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) Proposed durumundadır.
+- Login API'sindeki e-posta/parola/hash debug logları kaldırıldı. Kalan genel secret/log politikası [ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) kapsamında Proposed durumundadır.
 - Yetişkin kayıt kuralı [ADR-0002](../50-decisions/ADR-0002-cocuk-yetiskin-sporcu-kaydi.md) kapsamında açıktır.
 - Otomatik lint yapılandırması CR-011/B-008 altında ayrı iştir.
 

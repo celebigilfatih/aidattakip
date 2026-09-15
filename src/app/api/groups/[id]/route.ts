@@ -46,6 +46,12 @@ export async function GET(
             name: true
           }
         },
+        field: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
         students: {
           where: { isActive: true },
           include: {

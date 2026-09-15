@@ -18,6 +18,8 @@ Middleware `auth-token` çerezi bekler. Bazı rapor ve test uçları ayrıca Aut
 
 Bu dar rapor kararı diğer uçlardaki Bearer/çerez tutarsızlığını veya genel rol/nesne erişim matrisini çözmez; CR-002/003 açık kalır.
 
+`GET /api/groups/[id]`, grup detayında ilişkili sahanın `id` ve `name` alanlarını döndürür. Arayüz kullanıcıya `fieldId` teknik anahtarını değil saha adını gösterir; liste rotasının mevcut saha ilişkisiyle uyumludur.
+
 GET’in yan etkisiz olduğu varsayılmamalı: [settings GET](../../src/app/api/settings/route.ts) kayıt yoksa ayar kaydı oluşturur. Salt okunur incelemede API çağrısı yapılmadı.
 
 ## Rota envanteri — 48 dosya

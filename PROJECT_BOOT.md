@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.3.3
+- Document version: 0.4.0
 - CDSK version: TBD
 - Last updated: 2026-09-15
 
@@ -9,7 +9,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 ## Project Compass
 
 - North star: Spor kulüplerinin sporcu ve aidat takibini yapabilmesi.
-- Current mission: Çalışan broşür demo erişimini işletmek; ortak ADMIN ve secret risklerini yönetmek.
+- Current mission: Ayrı SporManage demo dağıtımını işletmek; demo verisi, secret ve yedekleme risklerini yönetmek.
 - Success signal: Ayrıntılı kabul ölçütleri TBD; [REQUIREMENTS](docs/00-product/REQUIREMENTS.md).
 - Accepted trade-offs: TBD — mevcut mimari teknik karar onayı olarak kaydedilmedi.
 
@@ -30,9 +30,9 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Phase: Mevcut uygulamaya CDSK bağlamı kazandırma; ürün kabul aşaması TBD.
 - Version: package.json 1.0.0; yayınlanmış sürüm doğrulanmadı.
 - Active sprint veya milestone: TBD
-- Current focus: SporManage Coolify production ve `aidat.spormanage.com.tr` broşür erişimi çalışıyor; ortak ADMIN hesabıyla canlı login doğrulandı. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
-- Critical risks: Ortak broşür ADMIN hesabı production verisini değiştirebilir; Coolify buildtime secret uyarısı, doğrulanmamış backup/restore ve auth logları; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
-- Blocking decisions: Yayın erişilebilir; production başlangıç kimliği/rol düzeltmesi ve secret yapılandırması açık onay bekler. ADR-0001 ve ADR-0002 hâlâ Proposed.
+- Current focus: `aidat.spormanage.com.tr` ayrı Coolify uygulaması ve ayrı mantıksal demo DB ile çalışıyor; Özlüce production erişimi korunuyor. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Critical risks: Demo ADMIN sentetik veriyi değiştirebilir; iki DB aynı fiziksel PostgreSQL servisinin kapasite/erişilebilirliğini paylaşır; doğrulanmış zamanlanmış backup/restore ve parola rotasyon tarihi yoktur. [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
+- Blocking decisions: Yayın erişilebilir. Production başlangıç kimliği/rol düzeltmesi ve genel secret politikası açık onay bekler. ADR-0001 ve ADR-0002 hâlâ Proposed.
 - Last status update: 2026-09-15
 
 ## 3. Repository Navigation
@@ -55,10 +55,10 @@ Diğer bağlam kaynakları: [GLOSSARY](docs/00-product/GLOSSARY.md), [PERSONAS](
 ## 4. Architecture Snapshot
 
 - Layers: React arayüzü → Next API → Prisma → PostgreSQL; [OVERVIEW](docs/10-architecture/OVERVIEW.md).
-- Main integrations: Ana PostgreSQL ve ayrı lisans DB bağlantısı; bildirim yollarında simülasyon/TODO var.
+- Main integrations: PostgreSQL ve lisans bağlantısı; demo dağıtımında uygulama ile lisans tablosu aynı mantıksal demo DB'dedir. Bildirim yollarında simülasyon/TODO var.
 - AI components: N/A — incelenen kaynakta ürün içi AI bileşeni bulunmadı.
 - Data and storage: 20 Prisma modeli; lisans verisi ayrı SQL/pg bağlantısında.
-- Deployment model: Coolify production, GitHub `main` webhook’u, repository Dockerfile/Next standalone, mevcut özel PostgreSQL kaynağı; Compose production’da kullanılmaz. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Deployment model: Özlüce production ve SporManage demo için iki ayrı Coolify uygulaması; GitHub `main` webhook'u, repository Dockerfile/Next standalone ve aynı fiziksel PostgreSQL kaynağında ayrı mantıksal DB/roller. Compose production’da kullanılmaz. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 - Ayrıntılar: [OVERVIEW](docs/10-architecture/OVERVIEW.md), [DATA_MODEL](docs/10-architecture/DATA_MODEL.md), [INTEGRATIONS](docs/10-architecture/INTEGRATIONS.md), [AI_ARCHITECTURE](docs/10-architecture/AI_ARCHITECTURE.md), [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 
 ## 5. Decision Snapshot
@@ -70,7 +70,8 @@ Diğer bağlam kaynakları: [GLOSSARY](docs/00-product/GLOSSARY.md), [PERSONAS](
 | Secret/log düzenlemesi | Proposed; uygulanmadı | [ADR-0001](docs/50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) |
 | Yaşa göre kayıt koşulları | Proposed; uygulanmadı | [ADR-0002](docs/50-decisions/ADR-0002-cocuk-yetiskin-sporcu-kaydi.md) |
 | Rapor XLSX, tarayıcı PDF ve export yetkisi | Accepted; uygulandı | [ADR-0003](docs/50-decisions/ADR-0003-rapor-disa-aktarim-ve-yetki.md) |
-| Broşür demo hesabı production ADMIN rolü | Accepted; hesap oluşturuldu | [ADR-0004](docs/50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) |
+| Broşür demo hesabı production ADMIN rolü | Superseded | [ADR-0004](docs/50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) |
+| SporManage ayrı demo uygulaması ve mantıksal DB | Accepted; uygulandı | [ADR-0005](docs/50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) |
 
 Karar gerekçeleri burada kopyalanmaz; asıl belgeye bağlantı verilir.
 
@@ -79,13 +80,13 @@ Karar gerekçeleri burada kopyalanmaz; asıl belgeye bağlantı verilir.
 - Project purpose: [PRODUCT_SPEC](docs/00-product/PRODUCT_SPEC.md) içindeki kullanıcı hedefi.
 - Constraints and prohibitions: [CONSTITUTION](docs/00-product/CONSTITUTION.md) ve [AGENTS.md](AGENTS.md); projeye özel kısıtlar TBD.
 - Open questions: Production başlangıç kimliği/rolü, buildtime secret erişimi, backup/restore; yaş eşiği/veli kuralları, rol matrisi, para kuralları, operasyon hedefleri ve CDSK sürümü; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
-- Recent decisions: Kullanıcı broşür hesabını production’da ADMIN olarak açıkça onayladı; ADR-0004 Accepted. ADR-0001/0002 Proposed, ADR-0003 Accepted kalır.
-- Recently completed work: `aidat.spormanage.com.tr` mevcut Coolify uygulamasına bağlandı; DNS/TLS/HTTP ve `demo@spormanage.com.tr` ADMIN login’i doğrulandı, test oturumu kapatıldı. Önceki domain ve veriler korundu. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Recent decisions: Kullanıcı ayrı demo uygulamasını ve mevcut PostgreSQL kaynağında ayrı mantıksal DB kullanımını onayladı; ADR-0005 Accepted, ADR-0004 Superseded. ADR-0001/0002 Proposed, ADR-0003 Accepted kalır.
+- Recently completed work: `aidat.spormanage.com.tr` yeni demo uygulamasına taşındı; TLS/HTTP ve ADMIN login ile 60 sporculuk sentetik veri doğrulandı. `aidat.ozlucespor.com` korunup eski broşür hesabı pasifleştirildi. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 
 ## 7. Current Priorities
 
-1. Ortak ADMIN hesabı için kullanım süresi ve parola rotasyonu/iptal tarihi belirlemek; salt okunur/izole demo seçeneğini değerlendirmek.
-2. Coolify buildtime secret erişimi, backup/restore ve healthcheck risklerini ele almak.
+1. Demo ADMIN hesabı için kullanım süresi ve parola rotasyonu/iptal tarihi belirlemek.
+2. Demo DB için zamanlanmış backup/restore ve paylaşılan PostgreSQL kapasite izlemesini ele almak.
 3. Production başlangıç kimliği/rol çelişkisini CR-016 kapsamında çözmek.
 
 Bu sıra öneridir; uygulama onayı değildir.
@@ -130,11 +131,11 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 ## 11. AI Handoff
 
-- Session summary: Broşürün `aidat.spormanage.com.tr` alan adı mevcut Coolify uygulamasına eklendi; DNS/TLS/HTTP ve ortak ADMIN login’i doğrulandı, oturum kapatıldı.
-- Documents updated: Deployment, Runbook, Brochure Guide, CR-018, Project Boot, CHANGELOG ve SESSION_HANDOFF.
-- Decisions recorded: Kullanıcının onayladığı mevcut uygulamaya domain ekleme işlemi tamamlandı; yeni ADR gerekmedi. ADR-0004 Accepted kalır.
-- Remaining risk: Ortak ADMIN production verisini değiştirebilir. Rotasyon/iptal tarihi, buildtime secret, backup/restore ve healthcheck açık; Coolify’ın kullanılmayan `www` varyantında DNS eşleşmesi yoktur. [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
-- Recommended next step: Ortak hesabı salt okunur/izole demo tasarımına taşımayı ve parola rotasyon/iptal tarihini değerlendirmek.
+- Session summary: Broşür domain'i ayrı Coolify demo uygulamasına ve `spormanage_aidat_demo` DB'sine taşındı; Özlüce production korunup eski broşür hesabı pasifleştirildi.
+- Documents updated: ADR-0004/0005, Deployment, Runbook, Backup/Recovery, Demo/Brochure Guide, CR-017/018, Project Boot, CHANGELOG, validation ve SESSION_HANDOFF.
+- Decisions recorded: Ayrı uygulama ve aynı fiziksel PostgreSQL içinde ayrı DB/rol topolojisi ADR-0005 ile Accepted; ADR-0004 Superseded.
+- Remaining risk: Demo ADMIN sentetik veriyi değiştirebilir. Rotasyon/iptal tarihi, paylaşılan DB kaynağı, zamanlanmış backup/restore ve healthcheck açık. [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
+- Recommended next step: Demo DB için zamanlanmış yedek/izole restore tatbikatı ve broşür parolası rotasyon tarihi belirlemek.
 - Doğrulama ve ayrıntılar: [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md), [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
 
 ## Revision History
@@ -153,3 +154,4 @@ Bu sıra öneridir; uygulama onayı değildir.
 | 0.3.1 | 2026-09-15 | Coolify production kurulumu, canlı doğrulama ve production giriş bilgilerinin ayrıştırılması. |
 | 0.3.2 | 2026-09-15 | Broşür için kullanıcı onaylı production ADMIN hesabı ve domain erişim riski kaydı. |
 | 0.3.3 | 2026-09-15 | Broşür domain’i Coolify’a bağlandı; DNS/TLS/HTTP ve ADMIN login doğrulandı, CR-018 kapatıldı. |
+| 0.4.0 | 2026-09-15 | Ayrı Coolify demo uygulaması, mantıksal DB izolasyonu ve domain cutover; ADR-0005 Accepted. |

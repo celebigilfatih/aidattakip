@@ -2,6 +2,21 @@
 
 Tarih: 2026-09-15. Ortam: mevcut yerel PostgreSQL 15, `aidat_takip`, loopback:5477; Next geliştirme sunucusu 127.0.0.1:3077. Kapsam: kullanıcının onayladığı mevcut model üzerinde tam futbol demosu. [DEMO_GUIDE](../40-operations/DEMO_GUIDE.md).
 
+## Coolify ayrı demo dağıtımı — 2026-09-15
+
+| Kontrol | Sonuç / kanıt |
+|---|---|
+| Topoloji | PASS; ayrı `SporManage Aidat Demo` uygulaması, mevcut PostgreSQL kaynağında ayrı `spormanage_aidat_demo` DB'si ve kısıtlı rol. Özlüce `ozlucepay` DB'si korunmuştur. |
+| Restore | PASS; custom dump checksum doğrulandı. 10 migration; 2 şube, 6 grup, 60 sporcu, 300 ödeme, 78 seans, 378 yoklama ve 10 kullanıcı. |
+| Runtime | PASS; repository Dockerfile, port 3000, `main` webhook ve `RUN_SEED=false`. Yeni secret'lar yalnız Coolify runtime kapsamındadır. |
+| Yeni domain | PASS; `https://aidat.spormanage.com.tr/login` geçerli TLS ile HTTP 200; broşür hesabı ADMIN dashboard'a girdi. 54 aktif sporcu, 6 grup ve 6 antrenör tarayıcıda görüldü. |
+| Raporlar | PASS; 60 toplam/54 aktif, 89.250 TL dönem tahsilatı, 59.250 TL seçili dönem geciken bakiyesi ve %59 yuvarlanmış devam oranı canlı ekranda görüldü. |
+| Eski production | PASS; `https://aidat.ozlucespor.com/login` HTTP 200. Broşür hesabı Özlüce DB'de pasif ve giriş “Hesabınız aktif değil” yanıtı veriyor. |
+| Alan adı ayrımı | PASS; ana domain yalnız yeni uygulamada, Özlüce domain yalnız eski uygulamada; otomatik `www` varyantı kaldırıldı. |
+| Kimlik bilgisi logu | PASS; login debug logları kaldırıldı ve yeni container login sonrasında parola/hash/e-posta debug kaydı üretmedi. |
+
+Dağıtım kararı ve paylaşılan fiziksel PostgreSQL riski [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) içindedir. Zamanlanmış yedek/restore tatbikatı bu doğrulamanın kapsamında değildir.
+
 ## SporManage sunum ve rapor tamamlama — 2026-09-15
 
 | Kontrol | Sonuç / kanıt |

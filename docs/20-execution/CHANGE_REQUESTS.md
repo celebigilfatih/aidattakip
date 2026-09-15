@@ -120,16 +120,16 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 - Etki ve öneri: Otomatik bootstrap/işletim beklentisi yanlış hesaba bağlanabilir. Değişiklikten önce gerçek işletim sahibi, hedef ADMIN kimliği ve rotasyon yöntemi doğrulanmalı; ardından Coolify değişkenleri ile kullanıcı rolü tutarlı hale getirilmelidir.
 - Durum/onay: Açık. Kimlik, parola ve rol değişikliği güvenlik/yetkilendirme kararıdır ve açık kullanıcı onayı gerektirir.
 
-## CR-017 — Ortak broşür hesabı production ADMIN yetkisine sahip
+## CR-017 — Ortak broşür hesabı production ADMIN yetkisine sahip — Kapalı
 
 - Kaynaklar: Kullanıcının 2026-09-15 tarihli açık hesabı ve ADMIN rolü onayı; [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md); production login doğrulaması.
 - Gözlem: Broşür için oluşturulan ortak hesap aktif ADMIN’dir. Canlı dashboard mevcut production kayıtlarını gösterir; ADMIN rolü kullanıcılar ve ayarlar dahil bütün menülere erişir.
 - Etki: Hesabı bilen her broşür alıcısı production verisini görebilir ve uygulamanın izin verdiği yönetim mutasyonlarını yapabilir. Ortak kimlikte kişi bazlı audit ayrımı yoktur.
-- Durum/onay: Hesabın oluşturulması ve ADMIN rolü kullanıcı tarafından açıkça Accepted; tamamlandı. İptal/rotasyon tarihi ve salt okunur/izole demo çözümü açık takip işidir ve yeni onay gerektirir.
+- Çözüm/durum: [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) ile broşür hesabı ayrı sentetik demo veritabanına taşındı. Özlüce veritabanındaki aynı e-posta silinmeden `isActive=false` yapıldı ve eski uygulama girişi reddedildi. Demo ortamında ADMIN'in sentetik veriyi değiştirme ve parola rotasyon tarihi riskleri ADR-0005 takibindedir. Kapalı.
 
 ## CR-018 — Broşür URL’si çalışan production domain ile uyuşmuyor — Kapalı
 
 - Kaynaklar: [BROCHURE_GUIDE](../40-operations/BROCHURE_GUIDE.md), PDF/QR üretim kaynağı ve [DEPLOYMENT](../40-operations/DEPLOYMENT.md).
 - İlk gözlem/çelişki: Broşür bağlantıları ve QR kodları `https://aidat.spormanage.com.tr` hedefini kullanırken doğrulanmış canlı Coolify domain’i `https://aidat.ozlucespor.com` adresiydi. Broşür domain’i ilk kontrolde güvenilir TLS/DNS bağlantısı kurmadı.
 - Etki: Dağıtılan broşürü kullanan ziyaretçi giriş ekranına ulaşamayabilir; doğru hesap oluşturulmuş olsa da erişim akışı tamamlanmazdı.
-- Çözüm/durum: Kullanıcının açık onayıyla `aidat.spormanage.com.tr` aynı Coolify uygulamasına ikinci HTTPS domain olarak eklendi ve `3ebc3ef` manuel deployment’ıyla uygulandı. Coolify DNS eşleşmesi, geçerli TLS, `/login` HTTP 200 ve ortak ADMIN hesabıyla `/dashboard` erişimi 2026-09-15 tarihinde doğrulandı. Önceki domain korunmuştur. Kapalı.
+- Çözüm/durum: İlk geçici çözüm domain'i Özlüce uygulamasına ekledi. Kullanıcının sonraki açık kararıyla [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) uygulanarak domain yeni `SporManage Aidat Demo` uygulamasına taşındı. Geçerli TLS, `/login` HTTP 200 ve yeni demo DB ile ADMIN dashboard doğrulandı. `aidat.ozlucespor.com` yalnız eski uygulamada korunur; `www` varyantı iki uygulamada da yoktur. Kapalı.

@@ -16,3 +16,5 @@ Last updated: 2026-09-15. Durum: Repository kaynakları ve tarihli yerel doğrul
 Banka/kart enum değerleri ödeme kaydetme yöntemidir; incelenen aidat akışında ödeme sağlayıcı entegrasyonu yok. Yeni sağlayıcı, maliyet, lisans ve vendor seçimi TBD ve açık onaya tabidir. Bu oturum dış servise bağlanmadı.
 
 Rapor biçimi ve export yetkisi [ADR-0003](../50-decisions/ADR-0003-rapor-disa-aktarim-ve-yetki.md) ile Accepted durumundadır. Sunucu tarafı PDF kütüphanesi/servisi eklenmedi; `format=pdf` çağrısı `410` döndürür.
+
+Coolify demo dağıtımında `DATABASE_URL` ile `LICENSE_DB_URL` aynı `spormanage_aidat_demo` mantıksal veritabanını hedefler; farklı tabloları kullanırlar. Bu, kullanıcı tarafından ayrı servis kurulmadan demo izolasyonu için kabul edilen dağıtım istisnasıdır ve genel lisans mimarisini değiştirmez. [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md).
