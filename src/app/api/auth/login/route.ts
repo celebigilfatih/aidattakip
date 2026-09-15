@@ -19,32 +19,22 @@ export async function POST(request: NextRequest) {
       where: { email },
     })
 
-    console.error('[LOGIN-DEBUG] User lookup for:', email, 'Found:', !!user)
-
     if (!user) {
-      console.error('[LOGIN-DEBUG] User not found:', email)
       return NextResponse.json(
-        { error: 'Geçersiz email veya şifre', debug: 'user_not_found' },
+        { error: 'Geçersiz email veya şifre' },
         { status: 401 }
       )
     }
-
-    console.error('[LOGIN-DEBUG] User found. Hash preview:', user.password.substring(0, 20))
 
     // Verify password
     const isPasswordValid = await AuthService.verifyPassword(password, user.password)
-    
-    console.error('[LOGIN-DEBUG] Password verification for:', email, 'Valid:', isPasswordValid, 'Input:', password)
 
     if (!isPasswordValid) {
-      console.error('[LOGIN-DEBUG] Password verification FAILED')
       return NextResponse.json(
-        { error: 'Geçersiz email veya şifre', debug: 'password_invalid' },
+        { error: 'Geçersiz email veya şifre' },
         { status: 401 }
       )
     }
-
-    console.error('[LOGIN-DEBUG] Password valid! Checking isActive...')
 
     if (!user.isActive) {
       return NextResponse.json(
@@ -97,10 +87,10 @@ export async function POST(request: NextRequest) {
     })
 
     return response
-  } catch (error) {
-    console.error('[LOGIN-ERROR] Exception:', error)
+  } catch {
+    console.error('[Auth] Login request failed unexpectedly')
     return NextResponse.json(
-      { error: 'Sunucu hatası', debug: String(error) },
+      { error: 'Sunucu hatası' },
       { status: 500 }
     )
   }

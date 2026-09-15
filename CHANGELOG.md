@@ -4,6 +4,11 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Fixed — 2026-09-15 — Giriş loglarında kimlik bilgisi sızıntısı
+
+- Login API'sindeki e-posta, parola ve parola hash önizlemesi üreten geçici debug logları kaldırıldı.
+- Başarısız login yanıtlarındaki kullanıcı/parola ayrımını açığa çıkaran `debug` alanları ve ham exception metni kaldırıldı; mevcut HTTP durumları ile kullanıcı mesajları korundu.
+
 ### Operations — 2026-09-15 — Broşür alan adı aktivasyonu
 
 - `aidat.spormanage.com.tr`, kullanıcının açık onayıyla mevcut Coolify uygulamasına ikinci HTTPS domain olarak eklendi; mevcut `aidat.ozlucespor.com` adresi korunmuştur.
