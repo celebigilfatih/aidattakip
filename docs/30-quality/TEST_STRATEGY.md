@@ -2,7 +2,7 @@
 
 ## Bildirim ekranından personel oluşturma — 2026-10-19
 
-[staff-onboarding.integration.test.ts](../../src/lib/staff-onboarding.integration.test.ts) yalnız loopback5477/aidat_takip üzerinde6 test: veli/oturumsuz/pasif/ACCOUNTING/origin reddi, şube ve grup kapsamı, atomik hesap/alıcı, hash doğrulaması ve yanıt gizliliği, mevcut e-posta, paralel mükerrer kayıt, alıcı kutusu kapalı hesap ve pozitif antrenör grup kaydı. Kendi sentetik fixture'larını temizler; dış push yok. Mevcut30 regresyon da geçti. Typecheck ve yerel Docker adayı başarılı; son küçük UI arama temizliği dahil nihai demo build handoff'ta izlenir. Gerçek tarayıcı390px dialog taşması, rol/şube/gruplar, alıcı kutusu ve personel araması kontrol edildi; gerçek yeni personel/iPhone kurulumu bu görevde yapılmadı.
+[staff-onboarding.integration.test.ts](../../src/lib/staff-onboarding.integration.test.ts) yalnız loopback5477/aidat_takip üzerinde6 test: veli/oturumsuz/pasif/ACCOUNTING/origin reddi, şube ve grup kapsamı, atomik hesap/alıcı, hash doğrulaması ve yanıt gizliliği, mevcut e-posta, paralel mükerrer kayıt, alıcı kutusu kapalı hesap ve pozitif antrenör grup kaydı. Kendi sentetik fixture'larını temizler; dış push yok. Mevcut30 regresyon da geçti. Typecheck, yerel Docker adayı ve son UI arama temizliği dahil nihai demo48d55af Docker build başarılı. Gerçek tarayıcı390px dialog taşması, rol/şube/gruplar, alıcı kutusu ve personel araması; canlı1280px form ve arama kontrol edildi. Canlı API'de mevcut personel/cihaz/bakiye/kural korundu; gerçek yeni personel/iPhone kurulumu bu görevde yapılmadı. Genel lint CR-011 nedeniyle, restore/rollback ve tam erişilebilirlik taraması bu dar işte çalıştırılmadı.
 
 ## ADR-0007 personel ve özet testleri
 

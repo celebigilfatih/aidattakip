@@ -3,10 +3,10 @@
 ## CR-023 — Bildirim ekranından personel ekleme
 
 - Kullanıcı talebi (2026-10-19): Yeni personel hesabı ve bildirim alıcısı seçimi Bildirimler ekranında birlikte yönetilsin.
-- Status: Uygulandı; yerel doğrulama ve yalnız demo yayın kontrolü sürüyor.
+- Status: Closed — yalnız demo48d55af yayımlandı, canlı form/arama ve koruma kontrolleri başarılı.
 - Çözüm: Personel ve Cihazlar → Yeni personel ekle; mevcut roller, şube ve antrenör grup seçimleri. Varsayılan Sekreter; bildirim alıcısı kutusu açık. Hesap ve isteğe bağlı alıcı tek transaction ile oluşturulur. Mevcut personel araması/seçimi korunur. Cihaz izni ve haftalık kural alıcısı ayrıca seçilir.
 - Sınır: Yalnız aktif ADMIN; mevcut şube/rol politikası ve ADR-0007 korunur. Yeni model/migration/entegrasyon veya yetki genişlemesi yok; additive API, eski kullanıcı API'si değişmez. Yeni ADR gerekmez.
-- Doğrulama: Typecheck, mevcut30 regresyon ve6 yeni onboarding entegrasyon testi başarılı. Yerel Docker adayı ve390px form/arama/rol/şube/grup/alıcı kutusu kontrolü geçti; nihai Docker/demo sonucu handoff'ta izlenir.
+- Doğrulama: Typecheck, mevcut30 regresyon ve6 yeni onboarding entegrasyon testi başarılı. Yerel Docker adayı ve390px form/arama/rol/şube/grup/alıcı kutusu kontrolü geçti. Nihai48d55af Docker demo build Success/3m40s; canlı1280px form ve arama,10 personel/17 bildirim/54 sporcu150 aidat201.000 toplamı ve etkin Pazartesi09:00/Demo Kullanıcı kuralı korundu. Gerçek yeni personel/telefon kurulumu bu görevde yapılmadı.
 
 ## CR-022 — Geciken aidat listesi okunabilirliği
 

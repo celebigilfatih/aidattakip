@@ -25,7 +25,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 
 ## 2. Current Status
 
-- Güncel geliştirme: Kullanıcı talebiyle Bildirimler → Personel ve Cihazlar bölümüne ADMIN personel oluşturma ve aynı formda alıcı seçimi eklendi (CR-023). Hesap/alıcı atomik, şube/antrenör grupları ve mevcut rol sınırı korunur. Yerel kontroller/yayın sonucu [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md) içinde izlenir; yeni model/ADR yok. Pazartesi09:00 Demo Kullanıcı kuralı değiştirilmez.
+- Güncel yayın: Kullanıcı talebiyle Bildirimler → Personel ve Cihazlar bölümüne ADMIN personel oluşturma ve aynı formda alıcı seçimi eklendi (CR-023 kapalı). Hesap/alıcı atomik, şube/antrenör grupları ve mevcut rol sınırı korunur. Typecheck,30 regresyon+6 yeni test ve Docker başarılı; yalnız demo48d55af Success/3m40s. Canlı form/arama doğrulandı;10 personel/17 bildirim, açık bakiye ve etkin Pazartesi09:00 Demo Kullanıcı kuralı korundu. Yeni model/ADR yok. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
 
 - Güncel işletim: Kullanıcı iPhone UI görünümünü onayladı; yalnız Demo Kullanıcı için mevcut haftalık aidat özeti Pazartesi09:00 Europe/Istanbul etkinleştirildi. Sonraki çalışma26 Ekim2026 09:00. Aktif ana iPhone, kalıcılık ve etkin kuralı değerlendiren gerçek worker doğrulandı; anlık bildirim gönderilmedi. Kod/yayın değişmedi, runtime1db9776. [İşletim kaydı](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kapalı kural kayıtları etkinleştirme öncesinin tarihçesidir.
 
@@ -166,6 +166,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
+| 0.4.12 | 2026-10-19 | Bildirim ekranından personel ve alıcı ekleme;36 test, Docker ve yalnız demo48d55af canlı kabulü. |
 | 0.1.0 | 2026-09-14 | CDSK iskeleti; projeye özel alanlar TBD. |
 | 0.2.0 | 2026-09-14 | Kaynaklı proje bağlamı, çocuk/yetişkin hedefi ve Proposed karar bağlantıları. |
 | 0.2.1 | 2026-09-14 | Yerel giriş ekranı çalıştırıldı; DB kurulumu tercihi bekleniyor. |

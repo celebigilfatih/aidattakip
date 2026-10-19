@@ -1,5 +1,11 @@
 # Deployment
 
+## 2026-10-19 — Bildirim ekranından personel ekleme yalnız demo
+
+Kaynak codex/staff-summary-20261019, sabit48d55af2b32b4e769dedda9d13cfe246b1e6b0e6. Coolify4mwc4uzb1ateelgbalszgryd Success/Finished,03m40s; başlangıç12:32:42 UTC. Nihai kaynak Docker build geçti. Yalnız demo kaynak pini güncellendi; dal ve manuel dağıtım modeli korunur. Yeni model/migration/paket/secret yok; main veya Özlüce'ye işlem yapılmadı.
+
+Canlı ADMIN ekranında yeni personel formu, Sekreter varsayılanı/alıcı kutusu açık, şube seçenekleri ve Demo araması doğrulandı;1280px taşma yok. Yeni GET staff endpoint'i form seçeneklerini döndürdü. Yeni hesap oluşturma yalnız yerel sentetik entegrasyonda sınandı; demoya deneme personeli eklenmedi. Yayın öncesi/sonrası10 personel/17 bildirim/54 sporcu150 gecikmiş aidat201.000 bakiye, Demo Kullanıcı'nın etkin ana iPhone'u ve mevcut Pazartesi09:00 etkin tek alıcılı/tek geçmiş çalışmalı kural korundu. Worker lastEvaluatedAt12:37:08.290 UTC ile yayından sonra ilerledi; yeni push yok. output/staff-onboarding/live-personnel.png ve live-create-personnel.png kaydedilip incelendi (Git dışında). CR-023 kapalı; ayrıntı [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+
 ## 2026-10-19 — Geciken aidat UI/UX yalnız demo yayını tamamlandı
 
 Kaynak codex/staff-summary-20261019, sabit1db9776f823bef9e7cf7a8457e267b0d1e077c86. Coolify yslyduhrhiazinxddvlpv1e4 Success/Finished,03m09s; rolling update12:06:09 UTC /15:06:09 İstanbul tamamlandı. Yeni container adı oibkjai6tfoeur5gxnx3ekxt-20261019T120300, image SHA968736093f0490bc052e5742295d02c466a2696d89a798411e89dcc2b327dd46. Nihai kaynak gerçek demo Docker üretim derlemesi/tip kontrolünden geçti. Yerel Docker adayı da tamamlandı (config eae84b299d14010fbee6ebe3af9b286335948ff4e572c58fde8c36e122ac74d5); son responsive sınıf düzeltmelerinden önceki adaydır, nihai kaynak kanıtı remote build'dir.

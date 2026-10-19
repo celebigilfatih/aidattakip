@@ -7,7 +7,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 ### Added — 2026-10-19 — Bildirim ekranından personel ekleme
 
 - Personel ve Cihazlar bölümünde yeni personel formu ve adla arama. Giriş hesabı ile isteğe bağlı bildirim alıcısı tek kayıtta oluşturulur; şube ve antrenör grupları seçilebilir. Mobil dialog, yükleme/hata ve başarı yönlendirmesi.
-- Yalnız aktif ADMIN ve mevcut şube sınırı; yeni additive staff API, atomik kayıt ve mükerrer e-posta kontrolü. Cihaz izni, mali yetki ve haftalık kural üyeliği ayrı kalır. Model/migration/paket/anahtar değişmedi; ADR-0007 geçerli. Nihai kontrol/yayın handoff'ta izlenir.
+- Yalnız aktif ADMIN ve mevcut şube sınırı; yeni additive staff API, atomik kayıt ve mükerrer e-posta kontrolü. Cihaz izni, mali yetki ve haftalık kural üyeliği ayrı kalır. Model/migration/paket/anahtar değişmedi; ADR-0007 geçerli. Typecheck,30 regresyon+6 yeni test, Docker ve canlı kontroller geçti. Yalnız demo48d55af Success/3m40s; etkin Pazartesi09:00 kuralı, cihaz ve mevcut veriler korundu; CR-023 kapalı.
 
 ### Operations — 2026-10-19 — Pazartesi aidat özeti etkinleştirildi
 
