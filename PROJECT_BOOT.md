@@ -25,7 +25,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 
 ## 2. Current Status
 
-- Güncel görev (CR-027): Personel ve Cihazlar takvim kartında Etkinleştir/Durdur; mevcut mali yönetici/şube sınırı, ortak etki ve alıcı/sahip doğrulaması. Takvim/alıcı/geçmiş korunur; etkinleşme geleceğe uygulanır, no-op cursor korunur. Typecheck/51 test ve yerel UI başarılı; Docker/demo doğrulaması sürüyor. Mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi korunacak. ADR-0007/model/paket/anahtar değişmedi. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
+- Güncel yayın (CR-027 kapalı): Personel ve Cihazlar takvim kartında Etkinleştir/Durdur; mevcut mali yönetici/şube sınırı, ortak etki ve alıcı/sahip doğrulaması. Takvim/alıcı/geçmiş korunur; etkinleşme geleceğe uygulanır, no-op cursor korunur. Typecheck/51 test, yerel/nihai Docker ve yerel UI başarılı; yalnız demo6c4ee5b Success/2m55s. Canlı559px Durdur kartı ve10 personel/17 bildirim/aynı ana iPhone/etkin Pazartesi09:00 tek Demo Kullanıcı kuralı/tek eski run korundu. ADR-0007/model/paket/anahtar değişmedi. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
 
 - Güncel yayın (CR-026 kapalı): Personel ve Cihazlar ekranında haftalık aidat takvimi gün/saat dialogu; tüm bağlı alıcılar için ortak, mevcut yetki/şube ve alıcı/sahip/etkinlik/geçmiş korunur. Yeni/mevcut personel seçimleri güncel haftalık takvimleri gösterir; eski tam Pazartesi09:00 UI kısıtı kullanıcı talebiyle kalktı. Typecheck/47 test, yerel kaydet/yenile/vazgeç ve yerel/nihai Docker başarılı; yalnız demo ec5e2dc Success/3m06s. Canlı559px form ve10 personel/17 bildirim/aynı ana cihaz/etkin Pazartesi09:00 tek Demo Kullanıcı kuralı/tek eski run korundu; worker yayın sonrası ilerledi. ADR-0007 geçerli; model/paket/anahtar değişmedi. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
 
@@ -174,7 +174,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
-| 0.4.16 | 2026-10-19 | Personel ekranında özet kuralını etkinleştirme/durdurma;51 test/typecheck ve yerel UI, demo yayını hazırlanıyor. |
+| 0.4.16 | 2026-10-19 | Personel ekranında özet kuralını etkinleştirme/durdurma;51 test/typecheck/Docker ve yalnız demo6c4ee5b canlı kabulü. |
 | 0.4.15 | 2026-10-19 | Personel ekranında ortak aidat takvimi gün/saat düzenleme;47 test/Docker ve yalnız demo ec5e2dc canlı kabulü. |
 | 0.4.14 | 2026-10-19 | Mevcut personel kartından Pazartesi09:00 özet seçimi;44 test/Docker ve yalnız demo27bd03c kabulü. |
 | 0.4.13 | 2026-10-19 | Personel formunda Pazartesi09:00 özetine katılım;40 test/Docker ve yalnız demo fed6e33 kabulü. |

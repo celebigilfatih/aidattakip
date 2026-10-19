@@ -3,11 +3,12 @@
 ## CR-027 — Personel ekranından kuralı etkinleştirme/durdurma
 
 - Kullanıcı talebi (2026-10-19): Etkinleştirme ve durdurma da Personel ve Cihazlar ekranından yapılsın.
-- Status: Implemented — typecheck/51 test ve yerel UI başarılı; Docker/demo doğrulaması sürüyor.
+- Status: Closed — yalnız demo6c4ee5b Success/2m55s; typecheck/51 test, yerel/nihai Docker ve UI/koruma kontrolleri başarılı.
 - CR-026 kısa kartının gün/saat dışındaki durum yönetimi için ayrı sekmeye gitme sınırı kullanıcı talebiyle kaldırılır. Kartta mevcut duruma göre Etkinleştir/Durdur, tüm bağlı personele etki ve alıcısız kural açıklaması. Sonuç/hata kartların üstünde; diğer ayarlar korunur.
 - PATCH staff-summary ek strict `{ruleId,enabled}` gövdesi; mevcut üyelik biçimi korunur. Aynı aktif mali yönetici/origin/şube ve kural kilidi. Etkinleştirmede mevcut tüm üyeler ve sahip doğrulanır; stop geçersiz seçimler olsa da açıktır. Yalnız etkinleştirme geçişinde cursor şimdiye alınır, geçmiş saatler gönderilmez; aynı durumu tekrar yazmak cursor'ı korur.
 - Yeni yetki/model/migration/paket/anahtar/retention/dağıtım kararı yok; ADR-0007 korunur, yeni ADR gerekmedi. Yalnız demo yayını; mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi değiştirilmez.
 - Yerel kanıt:51 test (onboarding21+diğer30), typecheck; yetki/origin/şube, bozuk/karışık alan, alıcı/sahip, no-op/cursor, tarihçe koruması, paralel gün/saat ve etkinlik, eski slot atlama ve durmuş kuralda gelecek worker0. Gerçek1280px UI etkinleştir/yenile/durdur/yenile, boş alıcılı düğme koruması ve durumun personel kartına yansıması başarılı; iki kural/tek üyeli kendi fixture'ları0 run ile temizlendi. Yeni gerçek iPhone testi yapılmadı.
+- Yayın kanıtı: yalnız demo6c4ee5b, cgkadbvpctgupn7m0gjghe52 Success/2m55s. Canlı559px kartında etkin kural/Durdur ve gün/saat düğmeleri; tercih değiştirilmeden10 personel/17 bildirim/aynı ana iPhone/etkin Pazartesi09:00 tek Demo Kullanıcı kuralı/sahip/tek eski run korundu. Yeni push yok. Genel lint CR-011, restore/rollback ve tam erişilebilirlik kapsam dışında.
 
 ## CR-026 — Personel ve Cihazlar ekranında gün/saat düzenleme
 

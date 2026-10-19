@@ -1,8 +1,12 @@
 # Deployment
 
-## 2026-10-19 — Personel ekranında Etkinleştir/Durdur (CR-027) hazırlığı
+## 2026-10-19 — Personel ekranında Etkinleştir/Durdur yalnız demo (CR-027)
 
-Kaynak codex/staff-summary-20261019, yalnız demo sabit ref/manuel dağıtım hazırlanıyor. Typecheck/51 test ve yerel UI geçti; Docker exit0, config274ee5d4e76e4c67ee8ca8bca6e4869d51eff94ff4ede4aa779c97ccbd7bcb74. Mevcut runtime ec5e2dc/etkin Pazartesi09:00 tek Demo Kullanıcı kuralı korunacak; main b024011/Özlüce'ye işlem yok. Model/migration/paket/anahtar/cron değişmedi. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+Kaynak codex/staff-summary-20261019, sabit6c4ee5bc4ac61ef1bf2e512a3d4ba4a840fc639f. Yalnız demo Coolify cgkadbvpctgupn7m0gjghe52 Success/02m55s, başlangıç13:32:12 UTC. Manuel/sabit ref modeli aynı. Typecheck/51 test, yerel/nihai Docker ve yerel UI başarılı; yerel config274ee5d4e76e4c67ee8ca8bca6e4869d51eff94ff4ede4aa779c97ccbd7bcb74, exit0. Model/migration/paket/anahtar/cron değişmedi; main b024011/Özlüce'ye işlem yok.
+
+Gerçek işleyici cursor13:36:05.312 UTC ile yayın tamamlandıktan sonra ilerledi; tek önceki run korundu, yeni çalışma/push yok.
+
+Canlı559px/scrollWidth559 Personel ve Cihazlar → Aidat özeti takvimi kartında mevcut etkin kural/Durdur ve gün/saat düğmeleri doğrulandı. Canlı Durdur tıklanmadı; kullanıcı bu görevde yetenek istedi, mevcut tercihi kapatmayı istemedi. Önce/sonra10 personel/17 bildirim/aynı seçili kişi ve ana cihaz, etkin Pazartesi09:00 tek Demo Kullanıcı kuralı/sahibi/tek eski run korundu; yeni kural/hesap/push yok. Etkinleştir/yenile/durdur/yenile yalnız yerel fixture ile çalıştırıldı ve0 run ile temizlendi. Kanıt output/staff-rule-state/live-rule-controls.png ve live-rule-and-person.png kaydedilip görüntülendi; guard metadata repository dışında staff-rule-state-release.json. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
 
 ## 2026-10-19 — Personel ekranında aidat takvimi yalnız demo (CR-026)
 

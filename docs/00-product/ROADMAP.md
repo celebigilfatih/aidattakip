@@ -1,6 +1,6 @@
 # Roadmap
 
-2026-10-19 CR-027: Personel ekranından Etkinleştir/Durdur uygulanıyor;51 test/typecheck ve yerel UI başarılı. Yalnız demo yayını hazırlanıyor, mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi korunacak. [CR-027](../20-execution/CHANGE_REQUESTS.md).
+2026-10-19 CR-027 tamamlandı: Personel ekranından Etkinleştir/Durdur,51 test/typecheck/Docker ve yerel UI başarılı; yalnız demo6c4ee5b Success/2m55s. Canlı kart ve mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi/veriler/geçmiş korundu. [CR-027](../20-execution/CHANGE_REQUESTS.md).
 
 2026-10-19 CR-026 tamamlandı: Personel ve Cihazlar bölümünde mevcut haftalık aidat takviminin gün/saat düzenlemesi ve tüm personel seçimlerinde güncel takvim gösterimi yalnız demo ec5e2dc ile yayımlandı. Mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi korundu;47 test/typecheck/Docker ve canlı UI doğrulandı. [CR-026](../20-execution/CHANGE_REQUESTS.md).
 
