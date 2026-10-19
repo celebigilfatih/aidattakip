@@ -17,7 +17,7 @@ ADMIN/ACCOUNTING kendi kapsamında hafta günleri, tek HH:mm Türkiye saati ve s
 
 Vade günü Europe/Istanbul içinde tamamlanmış, durum PENDING/PARTIAL/OVERDUE ve max(amount-paidAmount,0)>0 olan tüm dönem aktif/pasif sporcu borçları alınır. PAID/CANCELLED ve vade günü devam edenler dışarıda. Önizleme, worker ve güncel liste aynı hesabı kullanır. Gönderim öncesi bakiye ve güncel kullanıcı/rol/şube/alıcı/cihaz yeniden kontrol edilir; borç kalmadıysa SKIPPED/CANCELLED. Raporlamanın diğer tarih aralığı veya eski ödeme filtreleri bu işte değiştirilmedi.
 
-Kilit ekranına yalnız genel mesaj gider. Özet tıklaması /notifications/overdue açar; oturum yok/süresi dolmuşsa giriş sonrası aynı sayfaya döner. API aktif ADMIN/ACCOUNTING ve şube kapsamı ister. Güncel sayfada tablo ve toplam bulunur; push tek takip mekanizması değildir.
+Kilit ekranına yalnız genel mesaj gider. Özet tıklaması /notifications/overdue açar; oturum yok/süresi dolmuşsa giriş sonrası aynı sayfaya döner. API aktif ADMIN/ACCOUNTING ve şube kapsamı ister. Güncel sayfada mobil/tablet kartları, masaüstü tablo, kapsam toplamları ve ayrı filtre sonuçları bulunur. Ad/grup araması, durum/grup filtresi, sıralama ve20 aidat sayfalaması yalnız görüntüyü daraltır; borç hesabı ve gönderim kapsamını değiştirmez. Push tek takip mekanizması değildir.
 
 ## İşleyici ve kayıtlar
 

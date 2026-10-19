@@ -18,7 +18,7 @@ export default function AppLayout({ children }: LayoutProps) {
       <Sidebar mobileOpen={mobileOpen} onMobileClose={() => setMobileOpen(false)} />
       
       {/* Main Content Area */}
-      <div className="app-content flex-1 flex flex-col overflow-hidden">
+      <div className="app-content min-w-0 flex-1 flex flex-col overflow-hidden">
         {/* License Warning Banner */}
         <LicenseBanner />
         {/* Header */}

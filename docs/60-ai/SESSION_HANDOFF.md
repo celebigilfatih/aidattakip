@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Geciken aidat listesi UI/UX
+
+Kullanıcı gerçek otomatik bildirimin açtığı listeyi kontrol edip düzenlemeyi istedi. Product Design audit/index/get-context ve ilgili kurallar okundu; preflight kayıtlı bağlam bulmadı. Mevcut repo ekranı, benzer bileşenler ve yeni yakalanan masaüstü/mobil görüntüler esas alındı. [İnceleme](../30-quality/OVERDUE_UX_REVIEW.md), CR-022. Borç/rol/API/model/migration/retention veya yeni bağımlılık değişmedi; ADR-0007 korunur.
+
+Liste mobil/tablet kartları, masaüstü tablo; kapsam toplamı ile filtre sonucu ayrılır, Türkçe/ASCII arama, grup/aktiflik filtreleri, vade/bakiye/ad sırası,20 aidat sayfalama. Sayfa değişince liste başlığı odaklanır. Hata/yükleme/boş sonuç,401 login dönüşü ve403 geri dönüş eylemleri var. AppLayout min-width0 içerik taşmasını engeller. Typecheck ve yerel gerçek tarayıcı kontrolleri başarılı:60 aidat3 sayfa, ikinci21–40/üçüncü41–60, son sayfa Sonraki disabled, başlık odak/top81px;320/390/768/1280 main clientWidth=scrollWidth. Gerçek iPhone Safari/VoiceOver yeni görünümü henüz denenmedi.
+
+Yerel Docker adayı derleme/tip kontrolünü geçti; görsel kontrolde sonradan yalnız responsive sınıflar düzeltildi. Nihai kaynak ayrıca gerçek demo Docker build ile doğrulanacak. Canlı kurallar Pazartesi09:00/kapalı; yeniden push gönderilmeyecek. Yayın yalnız mevcut demo dalı ve sabit commit üzerinden yapılacak; main/Özlüce korunur.
+
 ## 2026-10-19 — Personel iPhone ve otomatik özet kabulü tamamlandı
 
 - Manuel test 14:35 İstanbul: cmvf6h3tg0007qq010x6b9l9i, Apple HTTP201/ACCEPTED; kullanıcı bildirimi gördüğünü ve Demo Kullanıcı personel ekranını açtığını doğruladı.
