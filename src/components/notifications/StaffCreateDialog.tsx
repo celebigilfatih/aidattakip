@@ -5,9 +5,10 @@ import { UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { staffRead, staffRequest } from './staff-http'
+import { summarySchedule } from './summary-schedule'
 
 type Branch = { id: string; name: string; groups: { id: string; name: string }[] }
-type SummaryRule = { id: string; name: string; enabled: boolean; branchId: string | null }
+type SummaryRule = { id: string; name: string; enabled: boolean; branchId: string | null; weekdays: number[]; time: string }
 const field = 'mt-1 min-h-11 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-base'
 const roles = { SECRETARY: 'Sekreter', ACCOUNTING: 'Muhasebe', TRAINER: 'Antrenör', ADMIN: 'Yönetici' }
 export default function StaffCreateDialog({ onCreated }: { onCreated: (message: string) => void }) {
@@ -43,7 +44,7 @@ export default function StaffCreateDialog({ onCreated }: { onCreated: (message: 
     try {
       const result = await staffRequest('/api/push/staff', 'POST', { name, email, password, phone, role, branchId: branchId || null, groupIds: role === 'TRAINER' ? groupIds : [], selectForNotifications: selected, summaryRuleId: wantsSummary && canReceiveSummary ? summaryRuleId : null })
       setPassword(''); setOpen(false)
-      onCreated(result.staff.summaryRule ? `${name.trim()} oluşturuldu, bildirim alıcısı seçildi ve Pazartesi 09.00 aidat özetine eklendi.${result.staff.summaryRule.enabled ? '' : ' Kural kapalı; etkinleştirilene kadar özet gönderilmez.'} Personel kendi hesabıyla cihazını kaydetmeli.` : selected ? `${name.trim()} oluşturuldu ve bildirim alıcısı seçildi. Personel kendi hesabıyla cihazını kaydetmeli.` : `${name.trim()} oluşturuldu. Bildirim alıcısı seçilmedi.`)
+      onCreated(result.staff.summaryRule ? `${name.trim()} oluşturuldu, bildirim alıcısı seçildi ve aidat özetine eklendi.${result.staff.summaryRule.enabled ? '' : ' Kural kapalı; etkinleştirilene kadar özet gönderilmez.'} Personel kendi hesabıyla cihazını kaydetmeli.` : selected ? `${name.trim()} oluşturuldu ve bildirim alıcısı seçildi. Personel kendi hesabıyla cihazını kaydetmeli.` : `${name.trim()} oluşturuldu. Bildirim alıcısı seçilmedi.`)
     } catch (e) { setError(e instanceof Error ? e.message : 'Personel oluşturulamadı.') }
     finally { setBusy(false) }
   }
@@ -63,10 +64,10 @@ export default function StaffCreateDialog({ onCreated }: { onCreated: (message: 
           {role === 'TRAINER' && branchId && <fieldset className="rounded-md border p-3 sm:col-span-2"><legend className="px-1 text-sm font-medium">Yetkili gruplar (isteğe bağlı)</legend>{branches.find(b => b.id === branchId)?.groups.map(g => <label key={g.id} className="flex min-h-11 items-center gap-3 text-sm"><input type="checkbox" checked={groupIds.includes(g.id)} onChange={e => setGroupIds(ids => e.target.checked ? [...ids, g.id] : ids.filter(id => id !== g.id))} />{g.name}</label>)}{!branches.find(b => b.id === branchId)?.groups.length && <p className="text-sm text-slate-500">Bu şubede aktif grup yok.</p>}</fieldset>}
           <label className="flex min-h-11 items-start gap-3 rounded-md border bg-slate-50 p-3 text-sm sm:col-span-2"><input type="checkbox" className="mt-1" checked={selected} onChange={e => { setSelected(e.target.checked); if (!e.target.checked) { setWantsSummary(false); setSummaryRuleId('') } }} /><span><strong>Bildirim alıcısı olarak seç</strong><span className="mt-1 block text-slate-600">Gönderim için personel kendi telefonunda bildirim izni vermeli ve cihazını kaydetmeli.</span></span></label>
           <div className="space-y-3 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm sm:col-span-2">
-            <label className="flex min-h-11 items-center gap-3 font-semibold"><input type="checkbox" disabled={!canReceiveSummary} checked={wantsSummary && canReceiveSummary} onChange={e => { setWantsSummary(e.target.checked); setSummaryRuleId(e.target.checked && eligibleRules.length === 1 ? eligibleRules[0].id : '') }} />Pazartesi 09.00 aidat özetini alsın</label>
-            <p className="text-slate-600">{!selected ? 'Önce bildirim alıcısı olarak seçin.' : role !== 'ADMIN' && role !== 'ACCOUNTING' ? 'Aidat özeti yalnız yönetici ve muhasebe rollerine açıktır.' : !eligibleRules.length ? 'Bu kapsamda mevcut bir Pazartesi 09.00 kuralı yok. Yeni kural oluşturulmaz.' : 'Türkiye saati. Seçerseniz mevcut haftalık kurala eklenir; takvim ve diğer alıcılar değişmez.'}</p>
+            <label className="flex min-h-11 items-center gap-3 font-semibold"><input type="checkbox" disabled={!canReceiveSummary} checked={wantsSummary && canReceiveSummary} onChange={e => { setWantsSummary(e.target.checked); setSummaryRuleId(e.target.checked && eligibleRules.length === 1 ? eligibleRules[0].id : '') }} />Otomatik aidat özetini alsın</label>
+            <p className="text-slate-600">{!selected ? 'Önce bildirim alıcısı olarak seçin.' : role !== 'ADMIN' && role !== 'ACCOUNTING' ? 'Aidat özeti yalnız yönetici ve muhasebe rollerine açıktır.' : !eligibleRules.length ? 'Bu kapsamda mevcut aidat özeti kuralı yok. Yeni kural oluşturulmaz.' : 'Türkiye saati. Seçerseniz mevcut haftalık kurala eklenir; takvim ve diğer alıcılar değişmez.'}</p>
             {wantsSummary && canReceiveSummary && <>
-              {eligibleRules.length > 1 ? <label className="block font-medium">Aidat özeti kuralı<select required className={field} value={summaryRuleId} onChange={e => setSummaryRuleId(e.target.value)}><option value="">Kural seçin</option>{eligibleRules.map(r => <option key={r.id} value={r.id}>{r.name} · {r.enabled ? 'Etkin' : 'Kapalı'}</option>)}</select></label> : <p>{eligibleRules[0].name} · {eligibleRules[0].enabled ? 'Etkin' : 'Kapalı'}</p>}
+              {eligibleRules.length > 1 ? <label className="block font-medium">Aidat özeti kuralı<select required className={field} value={summaryRuleId} onChange={e => setSummaryRuleId(e.target.value)}><option value="">Kural seçin</option>{eligibleRules.map(r => <option key={r.id} value={r.id}>{r.name} · {summarySchedule(r)} · {r.enabled ? 'Etkin' : 'Kapalı'}</option>)}</select></label> : <p>{eligibleRules[0].name} · {summarySchedule(eligibleRules[0])} · {eligibleRules[0].enabled ? 'Etkin' : 'Kapalı'}</p>}
               {summaryRuleId && !eligibleRules.find(r => r.id === summaryRuleId)?.enabled && <p>Kural kapalı; etkinleştirilene kadar özet gönderilmez.</p>}
             </>}
           </div>

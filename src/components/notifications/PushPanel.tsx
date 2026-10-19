@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Card,CardHeader,CardTitle,CardContent } from '@/components/ui/card'
 import StaffCreateDialog from './StaffCreateDialog'
 import StaffSummaryMembership, { type MembershipRule } from './StaffSummaryMembership'
+import StaffSummarySchedule from './StaffSummarySchedule'
+import { summarySchedule } from './summary-schedule'
 import { staffRead, staffRequest } from './staff-http'
 export { staffRead, staffRequest } from './staff-http'
 export type StaffDevice={id:string;label:string;isActive:boolean;expiresAt:string;updatedAt:string;deliveries:{status:string;statusCode:number|null;finishedAt:string|null}[]}
@@ -17,7 +19,8 @@ export default function PushPanel({onSent}:{onSent:()=>void}){
  async function load(){const [people,summary]=await Promise.all([fetch('/api/push/recipients',{cache:'no-store'}).then(staffRead),fetch('/api/push/staff-summary',{cache:'no-store'}).then(staffRead)]);setCatalog(people);setSummaryRules(summary.rules);setError('')}
  useEffect(()=>{load().catch(e=>setError(e.message))},[])
  async function toggle(id:string,recipient?:StaffRecipient){setBusy(true);setError('');try{if(recipient?.staffPushEnabled&&recipient.isActive)await staffRequest('/api/push/recipients','DELETE',{id:recipient.id});else await staffRequest('/api/push/recipients','POST',{kind:'STAFF',identityId:id,verified:true});await load();onSent()}catch(e){setError(e instanceof Error?e.message:'İşlem başarısız.')}finally{setBusy(false)}}
- async function setSummary(userId:string,name:string,ruleId:string,receive:boolean){setBusy(true);setError('');setNotice('Özet seçimi kaydediliyor…');let saved=false;try{const result=await staffRequest('/api/push/staff-summary','PATCH',{userId,ruleId,receive});saved=true;setNotice(receive?`${name} Pazartesi 09.00 aidat özetine eklendi.${result.ruleEnabled?'':' Kural kapalı; etkinleştirilene kadar gönderim yapılmaz.'}`:`${name} için bu aidat özeti kapatıldı.`);await load();onSent()}catch(e){setNotice('');setError(saved?'Seçim kaydedildi ancak liste yenilenemedi. Yenile düğmesini kullanın.':e instanceof Error?e.message:'Özet seçimi kaydedilemedi.')}finally{setBusy(false)}}
+ async function setSummary(userId:string,name:string,ruleId:string,receive:boolean){setBusy(true);setError('');setNotice('Özet seçimi kaydediliyor…');let saved=false;try{const result=await staffRequest('/api/push/staff-summary','PATCH',{userId,ruleId,receive});saved=true;setNotice(receive?`${name} aidat özetine eklendi.${result.ruleEnabled?'':' Kural kapalı; etkinleştirilene kadar gönderim yapılmaz.'}`:`${name} için bu aidat özeti kapatıldı.`);await load();onSent()}catch(e){setNotice('');setError(saved?'Seçim kaydedildi ancak liste yenilenemedi. Yenile düğmesini kullanın.':e instanceof Error?e.message:'Özet seçimi kaydedilemedi.')}finally{setBusy(false)}}
+ function scheduleSaved(rule:Pick<MembershipRule,'id'|'weekdays'|'time'>){setSummaryRules(rules=>rules.map(r=>r.id===rule.id?{...r,...rule}:r));setError('');setNotice(`Aidat özeti takvimi kaydedildi: ${summarySchedule(rule)} · Türkiye saati. Alıcı seçimleri ve kuralın durumu korundu.`);load().catch(()=>setError('Takvim kaydedildi ancak liste yenilenemedi. Yenile düğmesini kullanın.'));onSent()}
  const filtered=catalog?.staff.filter(s=>s.name.toLocaleLowerCase('tr-TR').includes(search.toLocaleLowerCase('tr-TR')))
  const roleNames:Record<string,string>={ADMIN:'Yönetici',ACCOUNTING:'Muhasebe',SECRETARY:'Sekreter',TRAINER:'Antrenör'}
  function created(message:string){setNotice(message);setSearch('');setError('');load().catch(()=>setError('Personel oluşturuldu ancak liste yenilenemedi. Yenile düğmesini kullanın.'));onSent()}
@@ -25,8 +28,9 @@ export default function PushPanel({onSent}:{onSent:()=>void}){
   <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3"><CardTitle>Personel ve Cihazlar</CardTitle>{catalog?.canManageStaff&&<StaffCreateDialog onCreated={created}/>}</CardHeader>
   <CardContent className="space-y-4">
    <p className="text-sm text-slate-600">Yeni personel ekleyin veya mevcut personeli bildirim alıcısı seçin. Personel kendi hesabıyla <a href="/recipient" className="text-blue-700 underline">cihazını kaydeder</a>.</p>
-   <p className="rounded-md bg-blue-50 p-3 text-sm text-blue-900">Yeni ve mevcut personelin Pazartesi 09.00 aidat özetini buradan seçebilirsiniz. Özet yalnız yönetici/muhasebeye açıktır. Gün ve saat değişiklikleri <strong>Otomatik Aidat Özeti</strong> bölümünden yönetilir.</p>
+   <p className="rounded-md bg-blue-50 p-3 text-sm text-blue-900">Aidat özetinin gününü, saatini ve alıcılarını buradan yönetebilirsiniz. Özet yalnız yönetici/muhasebeye açıktır.</p>
    {notice&&<p role="status" className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-900">{notice}</p>}
+   {catalog&&<section aria-label="Aidat özeti takvimi" className="space-y-3 rounded-md border bg-slate-50 p-3"><div><h3 className="font-semibold">Aidat özeti takvimi</h3><p className="mt-1 text-sm text-slate-600">Türkiye saati (Europe/Istanbul). Gün ve saat, aynı kurala bağlı tüm personel için geçerlidir.</p></div>{summaryRules.map(rule=><StaffSummarySchedule key={rule.id} rule={rule} disabled={busy} onSaved={scheduleSaved}/>)}{!summaryRules.length&&<p className="text-sm text-slate-600">Bu kapsamda aidat özeti kuralı yok. İlk kuralı Otomatik Aidat Özeti bölümünden oluşturabilirsiniz.</p>}</section>}
    <label className="block text-sm font-medium">Personel ara<input type="search" className="mt-1 min-h-11 w-full rounded-md border px-3 py-2 text-base" placeholder="Ad soyad ile ara" value={search} onChange={e=>setSearch(e.target.value)}/></label>
    {!catalog&&!error&&<p role="status">Personeller yükleniyor…</p>}
    {filtered?.map(s=>{const r=catalog!.recipients.find(r=>r.userId===s.id);return <article className="border rounded-md p-4 space-y-2" key={s.id}>

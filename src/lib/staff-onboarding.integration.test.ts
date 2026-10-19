@@ -12,7 +12,7 @@ test('notification staff onboarding uses existing staff roles and atomic recipie
   assert(['localhost', '127.0.0.1'].includes(url.hostname) && url.port === '5477' && url.pathname === '/aidat_takip', 'Local demo DB only')
   const { prisma } = await import('./prisma')
   const { GET, POST } = await import('../app/api/push/staff/route')
-  const { GET: memberships, PATCH: changeMembership } = await import('../app/api/push/staff-summary/route')
+  const { GET: memberships, PATCH: changeMembership, PUT: changeSchedule } = await import('../app/api/push/staff-summary/route')
   const prefix = 'onboarding-' + randomBytes(6).toString('hex')
   const origin = 'http://127.0.0.1:3077'
   process.env.APP_ORIGIN = origin
@@ -82,9 +82,10 @@ test('notification staff onboarding uses existing staff roles and atomic recipie
     const foreignRule = await prisma.staffSummaryRule.create({ data: { name: prefix + '-foreign', weekdays: [1], time: '09:00', branchId: b.id, createdById: globalAdmin.id } })
     const otherDay = await prisma.staffSummaryRule.create({ data: { name: prefix + '-tuesday', weekdays: [2], time: '09:00', branchId: a.id, createdById: admin.id } })
     const summaryBody = { ...body, role: 'ACCOUNTING', email: prefix + '-summary@example.invalid', summaryRuleId: rule.id }
-    await t.test('form offers Monday 09.00 rules only within manager scope', async () => {
+    await t.test('form offers all weekly schedules only within manager scope', async () => {
       const options = await (await GET(request('GET', admin.id))).json()
-      assert.deepEqual(options.summaryRules.map((r: { id: string }) => r.id), [rule.id])
+      assert.deepEqual(options.summaryRules.map((r: { id: string }) => r.id), [rule.id, otherDay.id])
+      assert.deepEqual(options.summaryRules[1].weekdays, [2]); assert.equal(options.summaryRules[1].time, '09:00')
     })
     await t.test('one save adds a financial recipient while preserving schedule, cursor and existing recipients', async () => {
       const response = await POST(request('POST', admin.id, summaryBody)); assert.equal(response.status, 201)
@@ -99,10 +100,8 @@ test('notification staff onboarding uses existing staff roles and atomic recipie
       const invalid = { ...summaryBody, email: prefix + '-invalid-summary@example.invalid' }
       for (const role of ['SECRETARY', 'TRAINER']) assert.equal((await POST(request('POST', admin.id, { ...invalid, role }))).status, 400)
       assert.equal((await POST(request('POST', admin.id, { ...invalid, selectForNotifications: false }))).status, 400)
-      for (const summaryRuleId of [foreignRule.id, otherDay.id, 'missing-rule']) assert.equal((await POST(request('POST', admin.id, { ...invalid, summaryRuleId }))).status, 409)
+      for (const summaryRuleId of [foreignRule.id, 'missing-rule']) assert.equal((await POST(request('POST', admin.id, { ...invalid, summaryRuleId }))).status, 409)
       assert.equal((await POST(request('POST', globalAdmin.id, { ...invalid, branchId: b.id }))).status, 400)
-      await prisma.staffSummaryRule.update({ where: { id: otherDay.id }, data: { weekdays: [1], time: '09:01' } })
-      assert.equal((await POST(request('POST', admin.id, { ...invalid, summaryRuleId: otherDay.id }))).status, 409)
       assert.equal(await prisma.user.count({ where: { email: invalid.email } }), 0)
     })
     await t.test('closed rule stays closed and parallel joins append without losing existing recipients', async () => {
@@ -121,11 +120,11 @@ test('notification staff onboarding uses existing staff roles and atomic recipie
       assert.equal((await changeMembership(request('PATCH', undefined, { userId: accountant.id, ruleId: rule.id, receive: false }))).status, 401)
       assert.equal((await changeMembership(request('PATCH', admin.id, { userId: accountant.id, ruleId: rule.id, receive: false }, 'https://other.invalid'))).status, 403)
       const options = await (await memberships(request('GET', accountant.id))).json()
-      assert.deepEqual(options.rules.map((r: { id: string }) => r.id), [rule.id])
+      assert.deepEqual(options.rules.map((r: { id: string }) => r.id), [rule.id, otherDay.id])
       assert(options.rules[0].recipientIds.includes(seedRecipient.id))
       assert.equal((await change(accountant.id, true, foreignRule.id)).status, 409)
       assert.equal((await change(globalAdmin.id, true)).status, 404)
-      assert.equal((await change(accountant.id, true, otherDay.id)).status, 409)
+      assert.equal((await change(accountant.id, true, 'missing-rule')).status, 409)
     })
     await t.test('accounting can toggle one existing recipient idempotently without altering rule or other members', async () => {
       const prior = await prisma.staffSummaryRecipient.findMany({ where: { ruleId: rule.id } })
@@ -165,6 +164,53 @@ test('notification staff onboarding uses existing staff roles and atomic recipie
       const saved = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: single.id }, include: { recipients: true } })
       assert.equal(saved.recipients.length, 0); assert.equal(saved.enabled, true); assert.equal(saved.lastEvaluatedAt.getTime(), cursor.getTime())
       assert.equal(await prisma.staffSummaryRun.count({ where: { ruleId: single.id } }), 0)
+    })
+    const schedule = (body: unknown, actor: string | undefined = accountant.id, requestOrigin = origin) => changeSchedule(request('PUT', actor, body, requestOrigin))
+    await t.test('schedule edits reject parent, inactive, nonfinancial, foreign scope, origin and invalid values', async () => {
+      const input = { ruleId: rule.id, weekdays: [2, 4], time: '10:30' }
+      assert.equal((await changeSchedule(request('PUT', undefined, input))).status, 401)
+      assert.equal((await schedule(input, inactive.id)).status, 401)
+      assert.equal((await schedule(input, secretary.id)).status, 403)
+      assert.equal((await schedule(input, admin.id, 'https://other.invalid')).status, 403)
+      assert.equal((await schedule({ ...input, ruleId: foreignRule.id })).status, 409)
+      for (const patch of [{ weekdays: [] }, { weekdays: [0] }, { weekdays: [8] }, { time: '24:00' }, { time: '9:00' }, { enabled: true }, { recipientIds: [] }, { createdById: accountant.id }]) {
+        assert.equal((await schedule({ ...input, ...patch })).status, 400)
+      }
+      const saved = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id } })
+      assert.equal(saved.time, '09:00'); assert.deepEqual(saved.weekdays, [1]); assert.equal(saved.lastEvaluatedAt.getTime(), cursor.getTime())
+    })
+    await t.test('time-only edit preserves members, owner, enabled state and history; no-op keeps cursor', async () => {
+      const before = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id }, include: { recipients: true, runs: true } })
+      const start = Date.now() - 1
+      const response = await schedule({ ruleId: rule.id, weekdays: [4, 2, 2], time: '10:30' })
+      assert.equal(response.status, 200); assert.deepEqual((await response.json()).rule.weekdays, [2, 4])
+      const after = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id }, include: { recipients: true, runs: true } })
+      assert.equal(after.time, '10:30'); assert.deepEqual(after.weekdays, [2, 4]); assert(after.lastEvaluatedAt.getTime() >= start)
+      assert.equal(after.enabled, before.enabled); assert.equal(after.createdById, before.createdById); assert.equal(after.branchId, before.branchId)
+      assert.deepEqual(after.recipients, before.recipients); assert.deepEqual(after.runs, before.runs)
+      assert.equal((await schedule({ ruleId: rule.id, weekdays: [2, 4], time: '10:30' })).status, 200)
+      assert.equal((await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id } })).lastEvaluatedAt.getTime(), after.lastEvaluatedAt.getTime())
+      const options = await (await GET(request('GET', admin.id))).json()
+      const option = options.summaryRules.find((r: { id: string }) => r.id === rule.id)
+      assert.deepEqual(option.weekdays, [2, 4]); assert.equal(option.time, '10:30')
+      const inline = await (await memberships(request('GET', accountant.id))).json()
+      assert.equal(inline.rules.find((r: { id: string }) => r.id === rule.id).time, '10:30')
+      const added = await POST(request('POST', admin.id, { ...summaryBody, email: prefix + '-new-time@example.invalid' }))
+      assert.equal(added.status, 201); assert.equal((await added.json()).staff.summaryRule.id, rule.id)
+      assert.equal((await change(accountant.id, false)).status, 200); assert.equal((await change(accountant.id, true)).status, 200)
+    })
+    await t.test('parallel schedule and membership writes preserve both; closed rule remains closed with no generated push', async () => {
+      const before = await prisma.staffSummaryRecipient.count({ where: { ruleId: rule.id } })
+      const results = await Promise.all([schedule({ ruleId: rule.id, weekdays: [3], time: '11:45' }), change(accountant.id, false)])
+      assert(results.every(r => r.status === 200))
+      const saved = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id }, include: { recipients: true, runs: true } })
+      assert.equal(saved.time, '11:45'); assert.deepEqual(saved.weekdays, [3]); assert.equal(saved.recipients.length, before - 1)
+      assert.equal(saved.enabled, false); assert.equal(saved.runs.length, 0)
+      // A changed schedule starts at the save cursor: past slots cannot be replayed as catch-up.
+      const { summarySlots, istanbulParts } = await import('./staff-summary-policy')
+      const p = istanbulParts(saved.lastEvaluatedAt)
+      const weekday = new Date(`${p.year}-${p.month}-${p.day}T12:00:00Z`).getUTCDay() || 7
+      assert.deepEqual(summarySlots([weekday], '00:00', saved.lastEvaluatedAt, new Date()), [])
     })
   } finally {
     await prisma.staffSummaryRule.deleteMany({ where: { createdBy: { email: { startsWith: prefix } } } })

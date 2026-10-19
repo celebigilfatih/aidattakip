@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Personel ekranından gün/saat düzenleme (CR-026)
+
+Kullanıcı haftalık takvimi ayrı sekmeye gitmeden düzenlemeyi istedi. StaffSummarySchedule dialogu mevcut kurala çoklu gün/tek saat; Türkiye saati ve tüm bağlı personel etkisini gösterir. PUT /api/push/staff-summary aktif mali yönetici/origin/şube sınırı ve aynı kural kilidiyle yalnız takvimi değiştirir. Üyeler/sahip/etkinlik/cihaz/geçmiş korunur; değişiklik cursor'ı kaydetme anına alır, no-op korur. GET ve yeni personel seçenekleri tüm haftalık kuralları güncel takvimle sunar; üyelik POST/PATCH artık Pazartesi09:00 ile kısıtlı değildir. CR-024/025'in UI kısıtı bu kullanıcı talebiyle güncellendi; ADR-0007 ve model/paket/anahtar/yetki/retention aynı, yeni ADR yok.
+
+Typecheck/47 test başarılı; DB testi yerel5477 kendi fixture'ları, dış push yok. Yerel1280px gerçek tarayıcıda Salı/Perşembe10:31 kaydet/yenile, kart ve yeni personel formunda aynı güncel saat, boş gün kaydı engeli ve Vazgeç doğrulandı. Saat alanında otomasyon fill tek başına React olayını tamamlamadı; native klavye ArrowUp ile sonlandırıldı ve DB10:31 kalıcılığı doğrulandı. Tek üyeli kapalı deneme kuralı0 run ile kaldı; kendi rule/recipient/user fixture'ı ID+prefix guard ve yerel DB kontrolüyle temizlendi. Kanıt output/staff-calendar, Git dışında. Genel lint CR-011, rollback/restore/tam erişilebilirlik ve yeni gerçek iPhone testi çalıştırılmadı.
+
+Docker37454 sürüyor; yeni demo yayını henüz yok. Mevcut runtime27bd03c,10 personel/17 bildirim/etkin Pazartesi09:00 tek Demo Kullanıcı üyeliği/tek eski run ve ana iPhone guard alındı; tercih değiştirilmeden yalnız demo dağıtılacak. Main b024011 ve Özlüce'ye işlem yok. Dosyalar: staff-summary/staff API, yeni takvim dialogu ve formatter, PushPanel/StaffSummaryMembership/StaffCreateDialog, entegrasyon testi; ürün/API/CR/kalite/rehber/CHANGELOG/boot/handoff.
+
 ## 2026-10-19 — Mevcut personelin karttan aidat özeti seçimi (CR-025)
 
 Kapanış: yalnız demo27bd03c140d92fe75b07face72f8c734825e1177, Coolify pfdbu078e4nhvndgkpegxwj2 Success/03m03s; başlangıç13:01:05 UTC. Nihai Docker build geçti, runtime pini27bd03c; branch codex/staff-summary-20261019/manuel dağıtım aynı. Main b024011, Özlüce'ye işlem yapılmadı. ADR-0007 ve model/anahtarlar korundu. API envanteri57 rota ile kaynak metotlarına eşlendi; önceki tablo53, özet55 sayıları güncellendi (eski eksik tablo satırları da dahil). Önceki hazırlık kayıtları aşağıda tarihçedir.

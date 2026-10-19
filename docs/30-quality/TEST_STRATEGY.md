@@ -1,5 +1,9 @@
 # Test Strategy
 
+## Personel ekranından gün/saat düzenleme — 2026-10-19
+
+47 test başarılı (onboarding17, diğer30). Yeni PUT yetki/origin/şube ve bozuk gün/saat/izinsiz alan reddi; sadece takvim değişimi, üyeler/sahip/şube/etkinlik/geçmiş koruması, değişiklikte cursor yenileme ve no-op cursor koruması; güncel takvimle yeni/mevcut personel katılımı, paralel üyelik/takvim düzenlemesi ve geçmiş slot dışlama sınandı. Test DB loopback5477/aidat_takip; dış push yok, kendi fixture'ları temizlenir. Typecheck geçti. Yerel gerçek tarayıcı1280px Salı/Perşembe10:31 kaydet/yenile, güncel kart/yeni personel formu, boş gün düğmesi ve Vazgeç doğrulandı; kapalı kural/tek üye/0 run fixture'ı temizlendi. Native saat girişinde otomasyon fill tek başına React olayını tamamlamadığı için klavyeyle sonlandırılıp DB kalıcılığı ayrıca okundu. Docker/demo doğrulaması sürüyor. Genel lint CR-011, rollback/restore/tam erişilebilirlik ve yeni iPhone testi bu dar değişiklikte çalıştırılmadı.
+
 ## Mevcut personelin karttan özet seçimi — 2026-10-19
 
 Toplam44 test başarılı: onboarding paketine4 senaryo eklendi; ADMIN/ACCOUNTING kendi kapsamındaki tek üyeliği açar/kapatır, tekrarlı ve paralel işlemler diğer üyeleri/cursor/saat/etkinliği korur. Veli/oturumsuz/SECRETARY/origin/yabancı şube ve eski kural reddi; pasif/rolü uygun olmayan/seçilmemiş kişi katılamaz, geçersiz eski üyelik çıkarılır. Son üye kaldırıldığında kuralın etkinliği/geçmişi korunur. Test verisi yalnız loopback5477 kendi fixture'larıdır, dış push yok. Typecheck, yerel ve nihai demo27bd03c Docker başarılı. Gerçek yerel tarayıcı1280px sentetik kart aç/yenile/kapat; canlı559px kartta yatay taşma yok, mevcut işaret ile yeni GET API üyeliği aynı. Canlı tercihi değiştirmeden10 personel/17 bildirim/ana cihaz/etkin kural/tek eski run korundu; worker yayın sonrası cursor ilerletti. Yerel fixture temizlendi. Genel lint CR-011, rollback/restore/tam erişilebilirlik ve yeni gerçek iPhone testi çalıştırılmadı.

@@ -1,5 +1,9 @@
 # Deployment
 
+## 2026-10-19 — Personel ekranında aidat takvimi (CR-026) hazırlığı
+
+Kaynak codex/staff-summary-20261019; yalnız SporManage demo sabit ref/manuel dağıtım kullanılacak. Mevcut runtime27bd03c ve etkin Pazartesi09:00 tek Demo Kullanıcı tercihi korunur; main b024011/Özlüce'ye işlem yok. Migration/model/paket/anahtar/cron değişmez. Typecheck/47 test, gerçek yerel UI kaydet/yenile/vazgeç ve Docker exit0 (config aca0c39d30b9aa7aff7ca9121e8dfbfdab8fe964ed6b46ac3d6e6ac1d15c97c1) başarılı. Canlı doğrulama/yayın henüz yapılmadı; aşağıdaki kayıtlar önceki yayınlardır. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+
 ## 2026-10-19 — Mevcut personel kartından özet seçimi yalnız demo
 
 Kaynak codex/staff-summary-20261019, sabit27bd03c140d92fe75b07face72f8c734825e1177. Coolify pfdbu078e4nhvndgkpegxwj2 Success/03m03s; başlangıç13:01:05 UTC. Nihai Docker build başarılı; yerel Docker config7b9f25d22e40ba12ce2d1717a50b2f8d69c4738e666fbf3e216859e224c0c9a0 exit0. Yalnız demo pini güncellendi; branch/manuel dağıtım modeli korundu. Yeni model/migration/paket/anahtar veya main/Özlüce işlemi yok.

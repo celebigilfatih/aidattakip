@@ -3,15 +3,15 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { notificationFailure, notificationResponse, requireManager, requireSameOrigin } from '@/lib/notification-access'
 import { NotificationError } from '@/lib/notification-policy'
-import { financialRole } from '@/lib/staff-summary-policy'
+import { financialRole, summaryRuleSchema } from '@/lib/staff-summary-policy'
 import { summaryRuleScope } from '@/lib/staff-summary-service'
 
 export async function GET(request: NextRequest) {
   try {
     const manager = await requireManager(request)
     const rules = await prisma.staffSummaryRule.findMany({
-      where: { ...summaryRuleScope(manager), weekdays: { equals: [1] }, time: '09:00' },
-      select: { id: true, name: true, enabled: true, branchId: true, recipients: { select: { recipientId: true } } },
+      where: summaryRuleScope(manager),
+      select: { id: true, name: true, enabled: true, branchId: true, weekdays: true, time: true, recipients: { select: { recipientId: true } } },
       orderBy: { createdAt: 'asc' },
     })
     return notificationResponse({ rules: rules.map(({ recipients, ...rule }) => ({ ...rule, recipientIds: recipients.map(r => r.recipientId) })) })
@@ -26,10 +26,10 @@ export async function PATCH(request: NextRequest) {
     const result = await prisma.$transaction(async tx => {
       await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.ruleId} FOR UPDATE`
       const rule = await tx.staffSummaryRule.findFirst({
-        where: { id: input.ruleId, ...summaryRuleScope(manager), weekdays: { equals: [1] }, time: '09:00' },
+        where: { id: input.ruleId, ...summaryRuleScope(manager) },
         include: { createdBy: { select: { isActive: true, role: true, branchId: true } } },
       })
-      if (!rule) throw new NotificationError(409, 'Pazartesi 09.00 kuralı artık kullanılamıyor. Listeyi yenileyin.')
+      if (!rule) throw new NotificationError(409, 'Aidat özeti kuralı artık kullanılamıyor. Listeyi yenileyin.')
       const person = await tx.user.findFirst({
         where: { id: input.userId, ...(manager.branchId ? { branchId: manager.branchId } : {}) },
         include: { notificationRecipient: { select: { id: true, kind: true, isActive: true, staffPushEnabled: true } } },
@@ -50,5 +50,28 @@ export async function PATCH(request: NextRequest) {
       return { userId: person.id, ruleId: rule.id, receive: input.receive, ruleEnabled: rule.enabled }
     })
     return notificationResponse(result)
+  } catch (error) { return notificationFailure(error) }
+}
+
+const scheduleSchema = summaryRuleSchema.pick({ weekdays: true, time: true }).extend({ ruleId: z.string().min(1).max(100) }).strict()
+
+export async function PUT(request: NextRequest) {
+  try {
+    requireSameOrigin(request)
+    const manager = await requireManager(request)
+    const input = scheduleSchema.parse(await request.json())
+    const rule = await prisma.$transaction(async tx => {
+      // Membership edits and worker evaluation use the same lock. Update only the schedule.
+      await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.ruleId} FOR UPDATE`
+      const current = await tx.staffSummaryRule.findFirst({ where: { id: input.ruleId, ...summaryRuleScope(manager) } })
+      if (!current) throw new NotificationError(409, 'Aidat özeti kuralı artık kullanılamıyor. Listeyi yenileyin.')
+      const changed = current.time !== input.time || JSON.stringify(current.weekdays) !== JSON.stringify(input.weekdays)
+      return tx.staffSummaryRule.update({
+        where: { id: current.id },
+        data: changed ? { weekdays: input.weekdays, time: input.time, lastEvaluatedAt: new Date(Date.now() - 1) } : {},
+        select: { id: true, name: true, weekdays: true, time: true, enabled: true },
+      })
+    })
+    return notificationResponse({ rule })
   } catch (error) { return notificationFailure(error) }
 }

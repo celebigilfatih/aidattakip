@@ -1,10 +1,16 @@
 # Aidat Takip — Product Specification
 
+## Personel ve Cihazlar ekranında aidat takvimi — 2026-10-19
+
+ADMIN/ACCOUNTING kendi kapsamındaki mevcut haftalık kuralın günlerini ve saatini **Aidat özeti takvimi → Gün ve saati düzenle** ile değiştirebilir. Takvim aynı kuralın tüm alıcılarına uygulanır; Türkiye saati (Europe/Istanbul) açıkça gösterilir. Yalnız gün/saat değişir; alıcılar, sahip, şube, etkinlik ve geçmiş korunur. Değişen takvim kaydetme anından sonraki slotlara uygulanır; geçmiş saatler telafi edilmez. Aynı gün/saat tekrar kaydedilirse değerlendirme imleci de korunur. Yeni kural oluşturma/etkinleştirme bu kısa forma dahil değildir. [CR-026](../20-execution/CHANGE_REQUESTS.md).
+
+Yeni personel formu ve mevcut personel kartları artık yalnız Pazartesi09:00 yerine kapsam içindeki tüm haftalık kuralları güncel gün/saatleriyle gösterir. Bu, CR-024/025'teki Pazartesi09:00 arayüz kısıtının kullanıcı talebiyle genişletilmesidir; ADR-0007'nin haftalık takvim, rol ve şube politikası değişmez.
+
 ## Bildirim ekranında personel oluşturma — 2026-10-19
 
-Mevcut personelin Pazartesi09:00 aidat özeti üyeliği de Personel ve Cihazlar kartında ADMIN/ACCOUNTING tarafından kendi kapsamında açılıp kapatılır; her değişiklik anında kaydedilir. Diğer alıcılar ve kural ayarları korunur. Genel push alıcısı seçimi ADMIN'de kalır. [CR-025](../20-execution/CHANGE_REQUESTS.md).
+Mevcut personelin aidat özeti üyeliği de Personel ve Cihazlar kartında ADMIN/ACCOUNTING tarafından kendi kapsamında açılıp kapatılır; her değişiklik anında kaydedilir. Diğer alıcılar ve kural ayarları korunur. Genel push alıcısı seçimi ADMIN'de kalır. [CR-025/026](../20-execution/CHANGE_REQUESTS.md).
 
-Kullanıcı talebiyle ADMIN, Personel ve Cihazlar bölümünden yeni giriş hesabı oluşturup aynı formdaki bildirim alıcısı kutusunu seçebilir. Yeni personel için ayrıca varsayılan kapalı **Pazartesi09:00 aidat özeti** kutusu vardır; uygun mali rol ve şubede mevcut kurala açık seçimle katılır. Mevcut personel adla aranıp ayrıca seçilebilir. Rol ve şube mali erişimi belirler; yalnız alıcı seçimi mali yetki veya haftalık kurala otomatik üyelik vermez. Personel kendi cihazında izin verir. [CR-023/024](../20-execution/CHANGE_REQUESTS.md), [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
+Kullanıcı talebiyle ADMIN, Personel ve Cihazlar bölümünden yeni giriş hesabı oluşturup aynı formdaki bildirim alıcısı kutusunu seçebilir. Yeni personel için ayrıca varsayılan kapalı **Otomatik aidat özetini alsın** kutusu vardır; uygun mali rol ve şubede mevcut kurala açık seçimle katılır. Mevcut personel adla aranıp ayrıca seçilebilir. Rol ve şube mali erişimi belirler; yalnız alıcı seçimi mali yetki veya haftalık kurala otomatik üyelik vermez. Personel kendi cihazında izin verir. [CR-023/024/026](../20-execution/CHANGE_REQUESTS.md), [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
 
 ## Güncel personel bildirim kapsamı
 

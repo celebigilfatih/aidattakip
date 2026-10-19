@@ -29,8 +29,8 @@ export async function GET(request: NextRequest) {
       orderBy: { name: 'asc' },
     })
     const summaryRules = await prisma.staffSummaryRule.findMany({
-      where: { ...summaryRuleScope(user), weekdays: { equals: [1] }, time: '09:00' },
-      select: { id: true, name: true, enabled: true, branchId: true },
+      where: summaryRuleScope(user),
+      select: { id: true, name: true, enabled: true, branchId: true, weekdays: true, time: true },
       orderBy: { createdAt: 'asc' },
     })
     return notificationResponse({ branches, fixedBranchId: user.branchId, summaryRules })
@@ -56,10 +56,10 @@ export async function POST(request: NextRequest) {
       if (input.summaryRuleId) {
         await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.summaryRuleId} FOR UPDATE`
         summaryRule = await tx.staffSummaryRule.findFirst({
-          where: { id: input.summaryRuleId, ...summaryRuleScope(manager), weekdays: { equals: [1] }, time: '09:00' },
+          where: { id: input.summaryRuleId, ...summaryRuleScope(manager) },
           include: { createdBy: { select: { isActive: true, role: true, branchId: true } } },
         })
-        if (!summaryRule) throw new NotificationError(409, 'Seçilen Pazartesi 09.00 kuralı artık kullanılamıyor. Formu kapatıp yeniden açın.')
+        if (!summaryRule) throw new NotificationError(409, 'Seçilen aidat özeti kuralı artık kullanılamıyor. Formu kapatıp yeniden açın.')
         if (summaryRule.branchId && summaryRule.branchId !== input.branchId) throw new NotificationError(400, 'Aidat özeti kuralı personelin şubesiyle eşleşmelidir.')
         const owner = summaryRule.createdBy
         if (!owner.isActive || !financialRole(owner.role) || (owner.branchId && owner.branchId !== summaryRule.branchId)) throw new NotificationError(409, 'Kural sahibinin yetkisi değişmiş. Başka bir kural seçin.')

@@ -1,5 +1,14 @@
 # Change Requests
 
+## CR-026 — Personel ve Cihazlar ekranında gün/saat düzenleme
+
+- Kullanıcı talebi (2026-10-19): Aidat özetinin gün/saat ayarı için ayrı sekmeye gitmeden mevcut personel ekranından düzenlensin.
+- Status: Implemented — yerel typecheck/47 test ve UI başarılı; Docker/demo doğrulaması sürüyor.
+- Önceki CR-024/025 ve ürün/API/rehber belgelerindeki tam Pazartesi09:00 seçim kısıtı bu taleple değişir. Mevcut haftalık kuralı düzenleyen ortak takvim kartı/dialog; en az bir gün, tek HH:mm, Europe/Istanbul ve tüm bağlı alıcılara etki açıklaması. Yeni/mevcut personel seçimleri de tüm yetkili haftalık kuralları güncel saatle gösterir.
+- PUT staff-summary aynı aktif ADMIN/ACCOUNTING, origin, şube ve kural kilidi kullanır; yalnız gün/saat değişir. Üyeler/sahip/şube/etkinlik/cihaz/geçmiş korunur. Değişiklikte cursor kaydetme anına alınır; geçmiş saatler gönderilmez. Aynı değerleri kaydetmek cursor'ı korur. Paralel üyelik değişimi kaybolmaz. Yeni kural/etkinleştirme veya push yok.
+- Yeni model/migration/paket/anahtar/retention/yetki/dağıtım kararı yok; mevcut ADR-0007 haftalık model uygulanır, yeni ADR gerekmedi. Yalnız demo yayımlanacak; mevcut etkin Pazartesi09:00 tek Demo Kullanıcı tercihi değiştirilmez. Main/Özlüce kapsam dışında.
+- Yerel kanıt:47 test (onboarding17 + mevcut30), typecheck; invalid alan/yetki/origin/şube, değişiklik/no-op cursor, üyeler/sahip koruması, yeni saatli kurala katılım ve paralel takvim/üyelik. Gerçek tarayıcı1280px Salı/Perşembe10:31 kaydet/yenile, kart/yeni personel formunda güncel takvim ve Vazgeç doğrulandı; kapalı kural/tek üyelik/0 run, kendi fixture'ları temizlendi. Saat alanı otomasyon fill sonrasında native klavye ile tamamlandı; gerçek iPhone testi yapılmadı. Kanıt output/staff-calendar (Git dışında).
+
 ## CR-025 — Mevcut personelin aidat özetini karttan değiştirme
 
 - Kullanıcı talebi (2026-10-19): Mevcut personel Pazartesi09:00 aidat özeti seçimi Personel ve Cihazlar ekranından değişsin.

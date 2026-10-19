@@ -1,5 +1,7 @@
 # Roadmap
 
+2026-10-19 CR-026: Personel ve Cihazlar bölümünde mevcut haftalık aidat takviminin gün/saat düzenlemesi ve tüm personel seçimlerinde güncel takvim gösterimi uygulanıyor. Mevcut Pazartesi09:00 demo tercihi değiştirilmeyecek. [CR-026](../20-execution/CHANGE_REQUESTS.md).
+
 ## Güncel personel bildirim kapsamı
 
 2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yalnız demo dbc329d0 dağıtımı, gerçek personel iPhone manuel/otomatik özet kabulü ve kapalı kural testi tamamlandı. 30 test/typecheck/Docker build başarılı; haftalık kural Pazartesi09:00 ve kapalı bırakıldı. [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md). Aşağıdaki ADR-0006 kayıtları tarihçedir.
