@@ -1,5 +1,9 @@
 # Architecture Overview
 
+## Güncel personel bildirim kapsamı
+
+2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yerel migration/typecheck/27 test başarılı; demo dağıtımı ve gerçek personel iPhone/takvim testi henüz bekler. [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md). Aşağıdaki ADR-0006 kayıtları tarihçedir.
+
 Last updated: 2026-10-19. Durum: Mevcut kod, yerel doğrulamalar ve onaylı yalnız demo dağıtımı eşlenmiştir. Canlı demo migration/runtime/HTTPS ve ortak PostgreSQL sürümü doğrulandı; Özlüce'de yalnız container/image/StartedAt koruma kontrolü yapıldı.
 
 ## Mevcut yapı
@@ -8,12 +12,12 @@ Tek repository içinde Next.js App Router arayüzü ve API rotaları bulunur; i�
 
 | Katman | Kaynak | Görev |
 |---|---|---|
-| Sayfalar | [src/app](../../src/app) | 18 page.tsx dosyası |
-| API | [src/app/api](../../src/app/api) | 53 route.ts dosyası |
+| Sayfalar | [src/app](../../src/app) | 19 page.tsx dosyası |
+| API | [src/app/api](../../src/app/api) | 55 route.ts dosyası |
 | UI | [components](../../src/components) | Radix tabanlı kontroller, formlar, takvim, yazdırma |
 | İstemci bağlamı | [contexts](../../src/contexts) | AuthContext ve SettingsContext |
 | Ortak işlevler | [lib](../../src/lib) | JWT, Prisma, izin, bildirim, lisans |
-| Veri | [schema.prisma](../../prisma/schema.prisma) | PostgreSQL, 25 model |
+| Veri | [schema.prisma](../../prisma/schema.prisma) | PostgreSQL, 28 model |
 | Tipler | [types](../../src/types/index.ts) | Uygulama tip ve enum tanımları |
 
 Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL. Lisans servisi `pg.Pool` ile ayrıca bağlanır. Kök layout AuthProvider ve SettingsProvider sağlar; oturum middleware ve rota kontrolleriyle işlenir. [layout](../../src/app/layout.tsx), [middleware](../../middleware.ts), [prisma](../../src/lib/prisma.ts), [license](../../src/lib/license.ts).
@@ -41,7 +45,7 @@ Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL
 | tailwindcss | `^3.4.17` | `3.4.17` |
 | eslint | `^9.36.0` | `9.36.0` |
 
-Kaynaklar: [package.json](../../package.json), [package-lock.json](../../package-lock.json); paket tablosu 2026-10-19 tarihinde yeniden eşlendi. Windows yerel ortamında Node v24.19.0 ve pnpm üzerinden npm 11.12.1 ile kilitli kurulum doğrulandı; önceki 2026-09-14 kaydı Node v24.15.0 kullanıyordu. Bunlar zorunlu Node sürümü kararı değildir. [RUNBOOK](../40-operations/RUNBOOK.md). Dockerfile Node 20 Alpine tanımlar. Son kayıtlı Coolify dağıtımı repository Dockerfile'ını kullanır; Compose production'da kullanılmaz. Canlı PostgreSQL sürümü yukarıdaki gibi TBD'dir.
+Kaynaklar: [package.json](../../package.json), [package-lock.json](../../package-lock.json); paket tablosu 2026-10-19 tarihinde yeniden eşlendi. Windows yerel ortamında Node v24.19.0 ve pnpm üzerinden npm 11.12.1 ile kilitli kurulum doğrulandı; önceki 2026-09-14 kaydı Node v24.15.0 kullanıyordu. Bunlar zorunlu Node sürümü kararı değildir. [RUNBOOK](../40-operations/RUNBOOK.md). Dockerfile Node 20 Alpine tanımlar. Son kayıtlı Coolify dağıtımı repository Dockerfile'ını kullanır; Compose production'da kullanılmaz. Canlı PostgreSQL sürümü yukarıdaki gibi 17.7 olarak doğrulandı.
 
 ## Bütünlük ve sınırlar
 

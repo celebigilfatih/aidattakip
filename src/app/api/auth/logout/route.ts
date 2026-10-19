@@ -7,7 +7,11 @@ export async function POST(request: NextRequest) {
   try {
     requireSameOrigin(request)
     const token = request.cookies.get('auth-token')?.value
-    if (token) await prisma.pushDevice.updateMany({ where: { sessionHash: hashToken(token) }, data: { isActive: false } })
+    if (token) await prisma.$transaction(async tx => {
+      const hash = hashToken(token)
+      await tx.$queryRawUnsafe('SELECT r.id FROM notification_recipients r WHERE r.id IN (SELECT d."recipientId" FROM push_devices d WHERE d."sessionHash" = $1) ORDER BY r.id FOR UPDATE', hash)
+      await tx.pushDevice.updateMany({ where: { sessionHash: hash }, data: { isActive: false } })
+    })
   } catch (error) { return notificationFailure(error) }
   const response = NextResponse.json({ message: 'Başarıyla çıkış yapıldı' })
   

@@ -36,29 +36,15 @@ export function notificationScope(user: User): Prisma.NotificationWhereInput {
   return { OR: [{ student: { branchId: user.branchId } }, { recipient: recipientScope(user) }] }
 }
 export async function pushActor(request: NextRequest) {
-  // A recipient browser session never grants staff permissions, even when a staff cookie also exists.
-  const token = request.cookies.get(recipientCookie)?.value
-  if (token) {
-    const session = await prisma.recipientSession.findUnique({ where: { tokenHash: hashToken(token) }, include: { recipient: { include: { student: true, parent: { include: { students: { where: { isActive: true }, select: { id: true }, take: 1 } } } } } } })
-    const identityActive = session?.recipient.kind === 'STUDENT' ? session.recipient.student?.isActive : !!session?.recipient.parent?.students.length
-    if (session && session.expiresAt > new Date() && session.recipient.isActive && identityActive) {
-      return { recipientId: session.recipientId, sessionHash: session.tokenHash, sessionId: session.id, staff: null }
-    }
-    throw new NotificationError(401, 'Alıcı oturumunuz sona erdi; yeni davet isteyin.')
-  }
   const user = await staffUser(request)
-  if (!user) throw new NotificationError(401, 'Alıcı veya personel girişi gerekli.')
+  if (!user) throw new NotificationError(401, 'Personel girişi gerekli.')
   const recipient = await prisma.notificationRecipient.findUnique({ where: { userId: user.id } })
-  if (recipient && !recipient.isActive) throw new NotificationError(403, 'Alıcı kaydınız pasif; kulüp yöneticisine başvurun.')
   return { recipientId: recipient?.id ?? null, sessionHash: hashToken(request.cookies.get('auth-token')!.value), sessionId: null, staff: user }
 }
 export async function ensureActorRecipient(request: NextRequest) {
   const actor = await pushActor(request)
-  if (!actor.recipientId && actor.staff) {
-    const recipient = await prisma.notificationRecipient.upsert({ where: { userId: actor.staff.id }, update: {}, create: { kind: 'STAFF', userId: actor.staff.id } })
-    actor.recipientId = recipient.id
-  }
-  if (!actor.recipientId) throw new NotificationError(401, 'Alıcı bulunamadı.')
+  const recipient = actor.recipientId ? await prisma.notificationRecipient.findUnique({ where: { id: actor.recipientId } }) : null
+  if (!recipient?.isActive || !recipient.staffPushEnabled || recipient.kind !== 'STAFF') throw new NotificationError(403, 'Bildirim alıcısı olarak yöneticiniz tarafından seçilmelisiniz.')
   return actor as typeof actor & { recipientId: string }
 }
 export function notificationResponse(data: unknown, status = 200) {

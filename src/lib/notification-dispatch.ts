@@ -1,5 +1,7 @@
 import webpush from 'web-push'
 import { prisma } from './prisma'
+import { financialRole } from './staff-summary-policy'
+import { getStaffOverdue } from './staff-overdue'
 import { hashToken, NotificationError, validatePushEndpoint } from './notification-policy'
 
 export function pushConfiguration() {
@@ -10,7 +12,7 @@ export function pushConfiguration() {
 }
 
 export async function dispatchNotification(id: string) {
-  const notification = await prisma.notification.findUnique({ where: { id }, include: { recipient: { include: { user: true, student: true, parent: { include: { students: true } } } }, targetDevice: true } })
+  const notification = await prisma.notification.findUnique({ where: { id }, include: { recipient: { include: { user: true, student: true, parent: { include: { students: true } } } }, targetDevice: true, createdBy: true } })
   if (!notification) throw new NotificationError(404, 'Bildirim bulunamadı.')
   if (notification.status !== 'PENDING') throw new NotificationError(409, 'Yalnız bekleyen bildirim gönderilebilir; tekrar gönderim için yeni kayıt oluşturun.')
   if (notification.scheduledAt && notification.scheduledAt > new Date()) throw new NotificationError(409, 'Bildirim ileri tarihe planlı; önce zamanı kaldırın veya bekleyin.')
@@ -20,10 +22,25 @@ export async function dispatchNotification(id: string) {
   if (notification.method === 'PUSH') {
     if (!config) throw new NotificationError(503, 'Web Push runtime anahtarları eksik.')
     const recipient = notification.recipient
-    const identityActive = recipient?.kind === 'STAFF' ? recipient.user?.isActive
-      : recipient?.kind === 'STUDENT' ? recipient.student?.isActive : recipient?.parent?.students.some(s => s.isActive)
-    if (!recipient?.isActive || !identityActive || !device?.isActive || device.recipientId !== recipient.id || device.expiresAt <= new Date()) {
-      throw new NotificationError(409, 'Alıcı/cihaz izni veya oturumu geçerli değil; cihazı yeniden kaydedin.')
+    const sender = notification.createdBy
+    if (!sender.isActive || !financialRole(sender.role) || recipient?.kind !== 'STAFF' || !recipient.staffPushEnabled || !recipient.isActive || !recipient.user?.isActive
+      || (sender.branchId && recipient.user.branchId !== sender.branchId)
+      || !device?.isActive || device.recipientId !== recipient.id || device.expiresAt <= new Date()) {
+      throw new NotificationError(409, 'Seçili aktif personel ve geçerli cihaz gerekli.')
+    }
+    if (!financialRole(recipient.user.role) && notification.type !== 'GENERAL_ANNOUNCEMENT') throw new NotificationError(403, 'Bu personel yalnız genel duyuru alabilir.')
+    if (notification.isFeeSummary) {
+      if (!financialRole(recipient.user.role)) throw new NotificationError(403, 'Mali özet yetkisi gerekli.')
+      if (notification.summaryRunId) {
+        const run = await prisma.staffSummaryRun.findUnique({ where: { id: notification.summaryRunId }, include: { rule: { include: { recipients: true } } } })
+        if (!run || (run.kind === 'AUTOMATIC' && !run.rule.enabled) || !run.rule.recipients.some(r => r.recipientId === recipient.id)) throw new NotificationError(409, 'Kural kapalı veya alıcı kaldırıldı.')
+      }
+      const branchId = notification.summaryBranchId
+      if ((sender.branchId && sender.branchId !== branchId) || (recipient.user.branchId && recipient.user.branchId !== branchId)) throw new NotificationError(403, 'Özet şube kapsamı değişti.')
+      if (!(await getStaffOverdue(prisma, branchId)).paymentCount) {
+        await prisma.notification.updateMany({ where: { id, status: 'PENDING' }, data: { status: 'CANCELLED' } })
+        return { id, status: 'SKIPPED', message: 'Gecikmiş açık borç kalmadı.' }
+      }
     }
     validatePushEndpoint(device.endpoint)
   }
@@ -39,8 +56,7 @@ export async function dispatchNotification(id: string) {
   try {
     const result = await webpush.sendNotification({ endpoint: device!.endpoint, keys: { p256dh: device!.p256dh, auth: device!.auth } }, JSON.stringify({
       title: 'SporManage', body: 'Yeni bir bildiriminiz var. Ayrıntıları güvenli alıcı ekranından görüntüleyin.',
-      notificationId: id,
-    // A 25-character CUID is not valid Base64url; Apple's Topic validation rejects it.
+      notificationId: id, destination: notification.isFeeSummary ? '/notifications/overdue' : '/recipient',
     }), { vapidDetails: config!, TTL: 60, timeout: 10000, urgency: 'normal', topic: hashToken(id).slice(0, 32) })
     statusCode = result.statusCode
     accepted = statusCode >= 200 && statusCode < 300

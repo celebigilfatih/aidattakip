@@ -45,12 +45,16 @@ export function middleware(request: NextRequest) {
 
   // For pages, redirect to login if not authenticated
   if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    const login = new URL('/login', request.url)
+    if (pathname === '/notifications/overdue') login.searchParams.set('next', pathname)
+    return NextResponse.redirect(login)
   }
 
   const payload = AuthService.verifyToken(token)
   if (!payload) {
-    return NextResponse.redirect(new URL('/login', request.url))
+    const login = new URL('/login', request.url)
+    if (pathname === '/notifications/overdue') login.searchParams.set('next', pathname)
+    return NextResponse.redirect(login)
   }
 
   return NextResponse.next()

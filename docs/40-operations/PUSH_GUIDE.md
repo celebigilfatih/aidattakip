@@ -1,3 +1,44 @@
+# Personel bildirimleri ve otomatik aidat özeti
+
+Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) Accepted, 2026-10-19. Uygulama/test yerelde hazır; demo ve gerçek personel cihaz kabulü bekler. Önceki veli iPhone testi bu yeni personel kabulünün yerine geçmez.
+
+## Günlük kullanım
+
+1. ADMIN /notifications → Personel ve Cihazlar bölümünde aktif personeli seçer. ADMIN/ACCOUNTING mali özet; diğer personel yalnız genel duyuru alır. Alıcı seçimi mali yetki sağlamaz.
+2. Personel kendi hesabıyla /recipient açar. iPhone: Safari → Paylaş → Ana Ekrana Ekle, simgeden aç ve personel girişi. Bu cihazda bildirimleri aç düğmesine dokunup izni kendisi verir. Davet yoktur.
+3. Eski veli aboneliği çakışırsa ekrandaki eski aboneliği sıfırla düğmesiyle tarayıcı aboneliğini kaldırıp yeniden açar. Eski sunucu cihaz sahipliği/geçmişi başka kişiye taşınmaz.
+4. İlk cihaz ana cihazdır; personel kendi kayıtlı geçerli cihazlarından ana cihazı seçebilir. Otomatik özet yalnız ana cihaza; manuel duyuru seçili tek cihaza gider.
+5. Cihaz 30 gün geçerlidir. Geçerli personel girişi + mevcut abonelik + granted izin, sayfa açılışı/öne gelmede aktif kaydı sessiz yeniler. Yeni izin sorusu otomatik açılmaz. Süresi bitmiş/pasif kayıt sessiz açılmaz; düğmeyle yeniden onay gerekir. Personel giriş süresi değişmedi.
+6. Çıkış/cihazı kapatma/alıcıyı kaldırma gönderimi durdurur. Sessiz yenileme logout ile aynı alıcı kilidini kullanır. Platform izni/kaldırma anında sunucudan bilinemez; panel yalnız kayıt/son gönderim bilgisini gösterir. 404/410 cihazı pasifleştirir.
+
+## Otomatik aidat özeti
+
+ADMIN/ACCOUNTING kendi kapsamında hafta günleri, tek HH:mm Türkiye saati ve seçili yönetici/muhasebe alıcılarını seçer. Form Pazartesi 09:00; yeni kayıt daima kapalıdır. Önizlemeden sonra Düzenle → Kural etkin → Kaydet. Durdur düğmesi yeni gönderimleri keser. Şimdi tek özet gönder kapalı kuralda da bilinçli yeni manuel çalışma üretir; hata sonrası otomatik retry yok.
+
+Vade günü Europe/Istanbul içinde tamamlanmış, durum PENDING/PARTIAL/OVERDUE ve max(amount-paidAmount,0)>0 olan tüm dönem aktif/pasif sporcu borçları alınır. PAID/CANCELLED ve vade günü devam edenler dışarıda. Önizleme, worker ve güncel liste aynı hesabı kullanır. Gönderim öncesi bakiye ve güncel kullanıcı/rol/şube/alıcı/cihaz yeniden kontrol edilir; borç kalmadıysa SKIPPED/CANCELLED. Raporlamanın diğer tarih aralığı veya eski ödeme filtreleri bu işte değiştirilmedi.
+
+Kilit ekranına yalnız genel mesaj gider. Özet tıklaması /notifications/overdue açar; oturum yok/süresi dolmuşsa giriş sonrası aynı sayfaya döner. API aktif ADMIN/ACCOUNTING ve şube kapsamı ister. Güncel sayfada tablo ve toplam bulunur; push tek takip mekanizması değildir.
+
+## İşleyici ve kayıtlar
+
+Coolify yalnız demo uygulamasında her dakika container içinde şu komutu çalıştırır:
+
+    node --import tsx /app/scripts/staff-summary-worker.ts
+
+Sunucu timezone ne olursa olsun işleyici takvimi Europe/Istanbul olarak değerlendirir. Public cron API yok. Yeni bağımlılık yok; mevcut TSX ve paylaşılan servisler runtime image'a kopyalanır. Kurallar kapalıyken işleyici bildirim üretmez.
+
+Bir saat dahil telafi yapılır; daha eski slot MISSED, birikmiş mesaj gönderilmez. Rule/slot benzersizliği ve transaction row lock çift çalışmayı engeller. Çalışmaya bağlı alıcı başına bir Notification ve tek ana cihaz delivery üretilir. PROCESSING kesintisi veya yanıt belirsizliği otomatik tekrar edilmez; geçmiş operatör tarafından incelenir. ACCEPTED yalnız servis HTTP kabulüdür. Tarihçe, başarısızlar ve eski veli kayıtları korunur; otomatik retention/purge yok.
+
+## Test ve yayın
+
+    node --import tsx --test src/lib/notification-policy.test.ts src/lib/staff-summary-policy.test.ts src/lib/notification.integration.test.ts prisma/demo.test.ts prisma/demo.integration.test.ts src/lib/reporting.test.ts
+    node node_modules/typescript/bin/tsc --noEmit --incremental false
+    docker build -t aidattakip:staff-summary-20261019 .
+
+Yalnız yerel DB entegrasyonu kendi fixture'ını temizler; gerçek push stub'dır. Ayrı dal/sabit demo commit ve yedek doğrulanmadan migration/yayın yapılmaz. Main/Özlüce korunur. Geri alma: önce kuralları durdur ve demo Scheduled Task'ı kapat. Migration veya geçmiş otomatik silinmez; eski image yeni 30 günlük cihaz politikasıyla uyumsuz olabileceği için değerlendirmeden dönülmez.
+
+## Önceki manuel Web Push rehberi — ADR-0006 tarihçesi
+
 # Manuel Web Push — ilk aşama
 
 Last updated: 2026-10-19. Karar: [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) Accepted. İlk aşama yerel ve yalnız SporManage HTTPS demo ortamında hazırdır. Güncel 5e1fd7c dağıtımı, migration ve runtime/API kontrolleri başarılı. 2026-10-19 gerçek iPhone testi: Apple HTTP201/ACCEPTED; kullanıcı bildirimin geldiğini ve dokununca Volkan Acar alıcı ekranının açıldığını doğruladı. Otomatik aidat kuralları ve scheduler etkin değildir. [DEPLOYMENT](DEPLOYMENT.md).

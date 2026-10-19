@@ -16,12 +16,15 @@ export async function GET(request: NextRequest) {
     }
     const page = number('page', 1, 100000), limit = number('limit', 10, 50)
     const where: Prisma.NotificationWhereInput = notificationScope(user)
-    if (!['ADMIN', 'ACCOUNTING'].includes(user.role)) where.recipient = { userId: user.id }
+    if (!['ADMIN', 'ACCOUNTING'].includes(user.role)) { where.recipient = { userId: user.id }; where.isFeeSummary = false; where.type = 'GENERAL_ANNOUNCEMENT' }
     for (const key of ['type', 'status', 'method', 'studentId'] as const) {
       const value = params.get(key)
       const choices = key === 'method' ? Object.values(NotificationMethod) : key === 'status' ? Object.values(NotificationStatus) : key === 'type' ? Object.values(NotificationType) : null
       if (value && value !== 'all' && choices && !(choices as string[]).includes(value)) throw new NotificationError(400, 'Geçersiz bildirim filtresi.')
-      if (value && value !== 'all') Object.assign(where, { [key]: value })
+      if (value && value !== 'all') {
+        if (key === 'type' && !['ADMIN', 'ACCOUNTING'].includes(user.role) && value !== 'GENERAL_ANNOUNCEMENT') throw new NotificationError(403, 'Yalnız genel duyurulara erişebilirsiniz.')
+        Object.assign(where, { [key]: value })
+      }
     }
     const [notifications, total] = await Promise.all([
       prisma.notification.findMany({ where, include: { student: { select: { id: true, firstName: true, lastName: true } }, createdBy: { select: { id: true, name: true } }, recipient: { select: { kind: true } }, deliveries: { select: { status: true, statusCode: true, finishedAt: true } } }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (page - 1) * limit, take: limit }),
@@ -41,6 +44,9 @@ export async function POST(request: NextRequest) {
       const recipient = await prisma.notificationRecipient.findFirst({ where: { id: input.recipientId || '', isActive: true, ...recipientScope(user) } })
       if (!recipient) throw new NotificationError(404, 'Kayıtlı alıcı bulunamadı.')
       if (input.method === 'PUSH') {
+        if (recipient.kind !== 'STAFF' || !recipient.staffPushEnabled) throw new NotificationError(400, 'Push yalnız seçili personele gönderilebilir.')
+        const target = recipient.userId ? await prisma.user.findUnique({ where: { id: recipient.userId } }) : null
+        if (!target?.isActive || (!['ADMIN', 'ACCOUNTING'].includes(target.role) && input.type !== 'GENERAL_ANNOUNCEMENT')) throw new NotificationError(403, 'Bu personel yalnız genel duyuru alabilir.')
         const device = await prisma.pushDevice.findFirst({ where: { id: input.targetDeviceId || '', recipientId: recipient.id, isActive: true, expiresAt: { gt: new Date() } } })
         if (!device) throw new NotificationError(400, 'Bu alıcıya ait tek bir aktif cihaz seçin.')
       }

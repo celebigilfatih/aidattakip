@@ -27,7 +27,8 @@ export default function LoginPage() {
     const result = await login(email, password)
 
     if (result.success) {
-      router.push('/dashboard')
+      const next = new URLSearchParams(window.location.search).get('next')
+      router.push(next && ['/recipient', '/notifications/overdue'].includes(next) ? next : '/dashboard')
     } else {
       setError(result.error || 'Giriş yapılırken hata oluştu')
     }

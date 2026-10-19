@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { SettingsProvider } from '@/contexts/SettingsContext'
 import { Toaster } from '@/components/ui/toaster'
+import StaffPushSync from '@/components/notifications/StaffPushSync'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -24,6 +25,7 @@ export default function RootLayout({
     <html lang="tr">
       <body className="font-sans">
         <AuthProvider>
+          <StaffPushSync />
           <SettingsProvider>
             {children}
             <Toaster />

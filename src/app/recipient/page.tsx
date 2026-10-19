@@ -1,112 +1,38 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
-type Session = { name: string; kind: string; devices: { id: string; label: string; expiresAt: string }[]; notifications: { id: string; title: string; message: string; sentAt: string }[] }
+import { registerStaffDevice } from '@/lib/staff-push-client'
+type Device = { id: string; label: string; isActive: boolean; expiresAt: string; thisSession: boolean }
+type Session = { name: string; selected: boolean; financial: boolean; primaryDeviceId: string | null; devices: Device[]; notifications: { id: string; title: string; message: string; isFeeSummary: boolean }[] }
 export default function RecipientPage() {
-  const [token, setToken] = useState(''), [session, setSession] = useState<Session | null>(null)
-  const [message, setMessage] = useState(''), [busy, setBusy] = useState(false)
-  const [supported, setSupported] = useState(false), [needsInstall, setNeedsInstall] = useState(false)
-  const [configured, setConfigured] = useState(false)
-  const [inviteLink, setInviteLink] = useState('')
-  async function load() {
-    const response = await fetch('/api/push/session', { cache: 'no-store' })
-    if (response.ok) setSession(await response.json())
-  }
-  useEffect(() => {
-    const fragment = new URLSearchParams(location.hash.slice(1)).get('invite')
-    if (fragment) { setToken(fragment); history.replaceState(null, '', '/recipient') }
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-    const standalone = matchMedia('(display-mode: standalone)').matches || !!(navigator as Navigator & { standalone?: boolean }).standalone
-    setNeedsInstall(ios && !standalone)
-    setSupported('serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && window.isSecureContext)
-    load().catch(() => setMessage('Bağlantı kurulamadı.'))
-    fetch('/api/push/config').then(r => r.json()).then(c => setConfigured(c.configured)).catch(() => {})
-  }, [])
-  async function action(fn: () => Promise<void>) {
-    setBusy(true); setMessage('')
-    try { await fn() } catch (error) { setMessage(error instanceof Error ? error.message : 'İşlem tamamlanamadı.') } finally { setBusy(false) }
-  }
-  async function check(response: Response) {
-    const data = await response.json()
-    if (!response.ok) throw new Error(data.error || 'İşlem tamamlanamadı.')
-    return data
-  }
-  async function activate() {
-    await check(await fetch('/api/push/activate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ token }) }))
-    setToken(''); await load(); setMessage('Alıcı kaydınız doğrulandı. Şimdi bu cihazda bildirimleri açabilirsiniz.')
-  }
-  function useInviteLink() {
-    try {
-      const url = new URL(inviteLink)
-      const invitation = new URLSearchParams(url.hash.slice(1)).get('invite')
-      if (url.origin !== location.origin || url.pathname !== '/recipient' || !invitation || !/^[A-Za-z0-9_-]{43}$/.test(invitation)) throw new Error()
-      setToken(invitation); setInviteLink(''); setMessage('')
-    } catch { setMessage('Kulübünüzün bu uygulama için verdiği kişisel davet bağlantısını eksiksiz yapıştırın.') }
-  }
-  async function subscribe() {
-    // Keep the permission request directly attached to the user's button press (iOS requirement).
-    const permission = await Notification.requestPermission()
-    if (permission !== 'granted') throw new Error('Bildirim izni verilmedi. Tarayıcı ayarlarından izin verip tekrar deneyebilirsiniz.')
-    const config = await check(await fetch('/api/push/config'))
-    if (!config.publicKey) throw new Error('Push sunucusu henüz yapılandırılmadı.')
-    await navigator.serviceWorker.register('/sw.js', { scope: '/' })
-    const registration = await navigator.serviceWorker.ready
-    let subscription = await registration.pushManager.getSubscription()
-    if (!subscription) {
-      const key = Uint8Array.from(atob(config.publicKey.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0))
-      subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: key })
-    }
-    const data = subscription.toJSON()
-    await check(await fetch('/api/push/subscription', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ endpoint: data.endpoint, keys: data.keys, label: /iPhone/.test(navigator.userAgent) ? 'iPhone' : 'Tarayıcı cihazım' }) }))
-    await load(); setMessage('Bu cihaz kaydedildi. Kulüp yöneticisi şimdi test bildirimi gönderebilir.')
-  }
-  async function disable() {
-    // Stop server dispatch first. If unsubscribe fails, the server still cannot send through this session.
-    for (const device of session?.devices ?? []) await check(await fetch('/api/push/subscription', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deviceId: device.id }) }))
-    if ('serviceWorker' in navigator) {
-      const registration = await navigator.serviceWorker.getRegistration('/')
-      await (await registration?.pushManager.getSubscription())?.unsubscribe()
-    }
-    await load(); setMessage('Bu oturumun cihaz bildirimleri kapatıldı.')
-  }
-  async function logout() {
-    await check(await fetch('/api/push/session', { method: 'DELETE' }))
-    setSession(null); setMessage('Alıcı oturumu kapatıldı; bu oturumun cihazlarına gönderim durduruldu.')
-  }
-  return <main className="max-w-xl mx-auto px-4 py-8 space-y-5">
-    <h1 className="text-2xl font-bold">SporManage Bildirimlerim</h1>
-    <p className="text-gray-600">Kulübünüzden gelen bildirimleri güvenli şekilde alın. Bu ekran yönetim paneli erişimi sağlamaz.</p>
-    {token && <Card><CardHeader><CardTitle>Kulüp daveti</CardTitle></CardHeader><CardContent className="space-y-3">
-      <p>Bu bağlantı yalnız kulübün sizin adınıza doğruladığı kayıt içindir. Size ait değilse kullanmayın. Bağlantı tek kullanımlıktır.</p>
-      <Button disabled={busy} onClick={() => action(activate)}>Daveti kabul et</Button>
-    </CardContent></Card>}
-    {!token && (!session || session.kind === 'STAFF') && <div className="space-y-3">
-      {!session && <p>Kulübünüzden kişisel davet bağlantısı isteyin. Personelseniz <a className="text-blue-700 underline" href="/login">personel girişi</a> sonrasında bu ekranı açabilirsiniz.</p>}
-      {session?.kind === 'STAFF' && <p>Personel oturumunuz açık. Veli veya sporcu davetini kabul etmek için kişisel davet bağlantısını aşağıya yapıştırın.</p>}
-      <p>iPhone ana ekranından açtığınızda oturum görünmüyorsa, kullanılmamış davet bağlantınızı buraya yapıştırıp bu uygulama içinde kabul edin.</p>
-      <label className="block" htmlFor="invite-link">Kişisel davet bağlantısı</label>
-      <input id="invite-link" type="password" autoComplete="off" spellCheck={false} value={inviteLink} onChange={event => setInviteLink(event.target.value)} className="w-full rounded border p-2" />
-      <Button disabled={busy || !inviteLink.trim()} onClick={useInviteLink}>Davet bağlantısını kullan</Button>
-    </div>}
-    {session && <Card><CardHeader><CardTitle>{session.name}</CardTitle></CardHeader><CardContent className="space-y-4">
-      <p className="font-medium">Açık oturum: {session.kind === 'PARENT' ? 'Veli' : session.kind === 'STUDENT' ? 'Sporcu' : 'Kulüp personeli'}</p>
-      {needsInstall && <div className="rounded bg-blue-50 p-3">iPhone: Safari'de Paylaş → Ana Ekrana Ekle seçin. Ardından ana ekrandaki SporManage simgesinden açıp “Bildirimleri aç” düğmesine dokunun.</div>}
-      {!configured && <p className="text-amber-800">Push gönderimi sunucuda henüz yapılandırılmadı.</p>}
-      {!supported && !needsInstall && <p>Bu tarayıcıda push desteklenmiyor veya güvenli HTTPS bağlantısı yok.</p>}
-      <p>Kilit ekranında genel bir mesaj görünür. Bildirim ayrıntıları yalnız bu oturumda açılır. Oturum süresi dolarsa kulüpten yeni davet almanız gerekir.</p>
-      <div className="flex gap-2 flex-wrap">
-        <Button disabled={busy || !!token || !supported || needsInstall || !configured} onClick={() => action(subscribe)}>Bildirimleri aç / cihazı yenile</Button>
-        <Button variant="outline" disabled={busy || !session.devices.length} onClick={() => action(disable)}>Bildirimleri kapat</Button>
-        <Button variant="outline" disabled={busy} onClick={() => action(logout)}>Alıcı oturumunu kapat</Button>
-      </div>
-      {session.devices.map(d => <p key={d.id} className="text-sm text-gray-600">{d.label} · Kayıt süresi: {new Date(d.expiresAt).toLocaleString('tr-TR')}</p>)}
-    </CardContent></Card>}
-    {message && <p role="status" className="rounded border p-3">{message}</p>}
-    {session && <section className="space-y-3"><div className="flex justify-between items-center"><h2 className="text-xl font-semibold">Bildirim geçmişi</h2><Button variant="outline" onClick={() => action(load)}>Yenile</Button></div>
-      {session.notifications.map(n => <Card key={n.id}><CardContent className="pt-5"><h3 className="font-semibold">{n.title}</h3><p className="whitespace-pre-wrap">{n.message}</p></CardContent></Card>)}
-      {!session.notifications.length && <p>Henüz bildiriminiz yok.</p>}
-    </section>}
-  </main>
+ const [session,setSession] = useState<Session|null>(null), [message,setMessage]=useState(''), [busy,setBusy]=useState(false), [needsInstall,setNeedsInstall]=useState(false), [supported,setSupported]=useState(false)
+ async function load() { const r=await fetch('/api/push/session',{cache:'no-store'});if(r.ok)setSession(await r.json());else setSession(null) }
+ useEffect(()=>{
+  history.replaceState(null,'','/recipient')
+  const ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)
+  const standalone=matchMedia('(display-mode: standalone)').matches||!!(navigator as Navigator & {standalone?:boolean}).standalone
+  setNeedsInstall(ios&&!standalone);setSupported('Notification' in window&&'serviceWorker' in navigator&&'PushManager' in window&&isSecureContext)
+  load().catch(()=>setMessage('Bağlantı kurulamadı.'))
+ },[])
+ async function action(fn:()=>Promise<void>) {setBusy(true);setMessage('');try{await fn()}catch(e){setMessage(e instanceof Error?e.message:'İşlem tamamlanamadı.')}finally{setBusy(false)}}
+ async function request(path:string,method:string,body?:unknown){const r=await fetch(path,{method,headers:{'Content-Type':'application/json'},...(body?{body:JSON.stringify(body)}:{})});const d=await r.json();if(!r.ok)throw Error(d.error||'İşlem başarısız.');return d}
+ async function subscribe(){const permission=await Notification.requestPermission();if(permission!=='granted')throw Error('Bildirim izni verilmedi. iPhone bildirim ayarlarını kontrol edin.');if(!await registerStaffDevice())throw Error('Bu tarayıcıda push desteklenmiyor.');await load();setMessage('Bu cihaz kaydedildi. Bildirim kaydı 30 gün geçerlidir.');}
+ async function disable(){for(const d of session?.devices.filter(d=>d.thisSession)??[])await request('/api/push/subscription','DELETE',{deviceId:d.id});const reg=await navigator.serviceWorker.getRegistration('/');await(await reg?.pushManager.getSubscription())?.unsubscribe();await load();setMessage('Bu oturumun cihaz bildirimleri kapatıldı.');}
+ return <main className="max-w-2xl mx-auto p-5 space-y-5">
+  <h1 className="text-2xl font-bold">Personel Bildirimlerim</h1><p>Personel hesabınızla bildirim alın. Veli/sporcu push davetleri bu sürümde kapalıdır.</p>
+  {!session?<a className="text-blue-700 underline" href="/login?next=/recipient">Personel hesabıyla giriş yap</a>:<>
+   <h2 className="text-xl font-semibold">{session.name}</h2>
+   {!session.selected?<p>Bildirim alıcısı olarak seçilmediniz. Kulüp yöneticinize başvurun.</p>:<>
+    {needsInstall&&<p className="bg-blue-50 p-3 rounded">iPhone: Safari → Paylaş → Ana Ekrana Ekle. Ardından SporManage simgesinden açıp personel hesabınızla giriş yapın.</p>}
+    <p>Cihaz kaydı 30 gün geçerlidir; uygulamayı geçerli girişle kullandığınızda yenilenir. Ayrıntı için giriş gerekir. Çıkış bildirimleri kapatır.</p>
+    <div className="flex gap-2 flex-wrap"><Button disabled={busy||needsInstall||!supported} onClick={()=>action(subscribe)}>Bu cihazda bildirimleri aç</Button><Button variant="outline" disabled={busy||!supported} onClick={()=>action(disable)}>Bu cihazda bildirimleri kapat</Button></div>
+    <Button variant="outline" disabled={busy||!supported} onClick={()=>action(async()=>{for(const d of session.devices.filter(d=>d.thisSession))await request('/api/push/subscription','DELETE',{deviceId:d.id});const reg=await navigator.serviceWorker.getRegistration('/');await(await reg?.pushManager.getSubscription())?.unsubscribe();setMessage('Tarayıcı aboneliği sıfırlandı. Şimdi bildirimleri açabilirsiniz.');})}>Eski tarayıcı aboneliğini sıfırla</Button>
+    <p className="text-sm text-gray-600">Sıfırlama eski veli/personel aboneliği çakışmasını giderir. Yeni kayıt için üstteki düğmeye dokunun.</p>
+   </>}
+   {session.devices.map(d=><div key={d.id} className="border rounded p-3 flex justify-between gap-3"><div>{d.label} {session.primaryDeviceId===d.id?'· Ana cihaz':''}<p>{!d.isActive?'Pasif':new Date(d.expiresAt)<=new Date()?'Süresi dolmuş':'Cihaz kayıtlı'} · {new Date(d.expiresAt).toLocaleString('tr-TR')}</p></div><Button variant="outline" disabled={busy||!session.selected||!d.isActive||new Date(d.expiresAt)<=new Date()} onClick={()=>action(async()=>{await request('/api/push/subscription','PATCH',{deviceId:d.id});await load()})}>Ana cihaz seç</Button></div>)}
+   {session.financial&&<a className="block text-blue-700 underline" href="/notifications/overdue">Güncel geciken aidat listesini aç</a>}
+   <h2 className="text-xl font-semibold">Bildirim geçmişi</h2>{session.notifications.map(n=><article key={n.id} className="border rounded p-3"><h3 className="font-semibold">{n.title}</h3><p>{n.message}</p>{n.isFeeSummary&&<a className="text-blue-700 underline" href="/notifications/overdue">Güncel liste</a>}</article>)}
+   <Button variant="outline" disabled={busy} onClick={()=>action(async()=>{await request('/api/auth/logout','POST');setSession(null);setMessage('Çıkış yapıldı; bu oturumun cihazlarına gönderim durduruldu.');})}>Personel oturumunu kapat</Button>
+  </>}{message&&<p role="status" className="border rounded p-3">{message}</p>}
+ </main>
 }

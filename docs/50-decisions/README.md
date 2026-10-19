@@ -12,7 +12,7 @@
 
 ## Karar dizini
 
-Altı proje ADR'si vardır. ADR-0001/0002 Proposed; ADR-0003/0005/0006 kullanıcı onayıyla Accepted. ADR-0006 ilk uygulama adımı manuel push/alıcı kaydıdır; otomasyon ve iPhone gerçek teslimi henüz tamamlanmadı. ADR-0004, ADR-0005 tarafından Superseded durumundadır.
+Yedi proje ADR'si vardır. ADR-0001/0002 Proposed; ADR-0003/0005/0006/0007 kullanıcı onayıyla Accepted. ADR-0006 ilk uygulama adımı manuel push/alıcı kaydıdır; ilk iPhone gerçek teslimi tamamlandı; personel odaklı otomasyon ADR-0007 ile ayrıca onaylandı. ADR-0004, ADR-0005 tarafından Superseded durumundadır.
 
 | ADR | Başlık | Durum | Onay kaydı | Yerine geçen karar |
 |---|---|---|---|---|
@@ -22,7 +22,8 @@ Altı proje ADR'si vardır. ADR-0001/0002 Proposed; ADR-0003/0005/0006 kullanıc
 | [ADR-0004](ADR-0004-brosur-demo-admin-hesabi.md) | Broşür demo hesabına production ADMIN yetkisi | Superseded | Kullanıcı, 2026-09-15 | [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md) |
 | [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md) | SporManage ayrı demo dağıtımı | Accepted | Kullanıcı, 2026-09-15 | ADR-0004 ve CR-017/CR-018 dağıtım kararı |
 | [ADR-0006](ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) | Web Push ve aidat hatırlatma kuralları | Accepted | Kullanıcı, 2026-10-19; önce manuel push ve alıcı kaydı. web-push 3.6.7/MPL-2.0 ve yalnız demo HTTPS dağıtımı ayrıca onaylandı; uygulama/cihaz sonucu tarihli kayıtta izlenir | N/A — yeni karar |
+| [ADR-0007](ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) | Personel bildirimleri ve otomatik aidat özeti | Accepted | Kullanıcı, 2026-10-19; beş bölümlük planı uygula talimatı | ADR-0006 alıcı/cihaz işletimi |
 
 ## Açık karar ihtiyaçları
 
-Rol/nesne erişim matrisi, para hassasiyeti ve tahsilat kuralları, yedek/retention ve yasal lisans durumu [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md) içinde açıktır. Ayrı demo dağıtımı ADR-0005 ile kabul edilmiştir; bu karar diğer dağıtım veya işletim politikalarının genel onayı değildir. Canlı PostgreSQL sürüm kanıtı CR-006 kapsamında TBD'dir. ADR-0001 Proposed kalır; login log temizliği tamamlanmış olsa da kalan AuthService/fallback/secret maddeleri açık olduğundan tüm öneri uygulanmış sayılmaz.
+Rol/nesne erişim matrisi, para hassasiyeti ve tahsilat kuralları, yedek/retention ve yasal lisans durumu [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md) içinde açıktır. Ayrı demo dağıtımı ADR-0005 ile kabul edilmiştir; bu karar diğer dağıtım veya işletim politikalarının genel onayı değildir. Canlı PostgreSQL 17.7 doğrulandı; CR-006 Compose taşınabilirliği açıktır. ADR-0001 Proposed kalır; login log temizliği tamamlanmış olsa da kalan AuthService/fallback/secret maddeleri açık olduğundan tüm öneri uygulanmış sayılmaz.

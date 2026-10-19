@@ -35,6 +35,9 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/scripts/startup.sh ./scripts/startup.sh
+COPY --from=builder /app/scripts/staff-summary-worker.ts ./scripts/staff-summary-worker.ts
+COPY --from=builder /app/src/lib ./src/lib
+COPY --from=builder /app/tsconfig.json ./tsconfig.json
 
 # Copy all node_modules needed for Prisma and startup scripts
 # This ensures all dependencies for migrations and seed are available

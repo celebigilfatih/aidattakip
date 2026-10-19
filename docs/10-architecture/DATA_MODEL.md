@@ -1,5 +1,9 @@
 # Data Model
 
+## ADR-0007 ek modeli
+
+28 model/12 migration: NotificationRecipient staffPushEnabled ve ana cihaz ilişkisi; StaffSummaryRule/Recipient/Run ile haftalık takvim, seçili mali alıcılar ve benzersiz ruleId/scheduledAt çalışması. Notification isFeeSummary/summaryBranchId/summaryRunId alanları ve run/alıcı benzersizliği eklenir. 20261019150000_staff_notifications_summary yerelde applied; eski kayıtlar silinmedi. Veli/sporcu cihazları ve kullanılmamış davetler pasifleştirildi. Bildirim/çalışma geçmişine otomatik silme yok. Demo uygulaması henüz bekler.
+
 Last updated: 2026-10-19. Durum: Mevcut şema ve yerelde uygulanan migration kaydı; canlı migration bu görevde yapılmadı.
 
 ## Asıl kaynak

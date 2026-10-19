@@ -5,105 +5,170 @@ import { loadEnvConfig } from '@next/env'
 import { NextRequest } from 'next/server'
 import jwt from 'jsonwebtoken'
 import webpush from 'web-push'
+import { hashToken } from './notification-policy'
+import { istanbulDayStart, istanbulParts, localDateTime } from './staff-summary-policy'
 loadEnvConfig(process.cwd())
 
-test('manual notifications: scope, one-use invites, device ownership, real dispatch adapter and idempotent claim', async () => {
+test('staff push and weekly summary integration', async t => {
   const url = new URL(process.env.DATABASE_URL || '')
-  assert(['localhost', '127.0.0.1'].includes(url.hostname) && url.port === '5477' && url.pathname === '/aidat_takip', 'Integration suite only runs on the local demo DB')
+  assert(['127.0.0.1', 'localhost'].includes(url.hostname) && url.port === '5477' && url.pathname === '/aidat_takip', 'Local demo DB only')
   const { prisma } = await import('./prisma')
   const { POST: enroll, DELETE: revoke } = await import('../app/api/push/recipients/route')
   const { POST: activate } = await import('../app/api/push/activate/route')
-  const { POST: subscribe } = await import('../app/api/push/subscription/route')
-  const { GET: me, DELETE: logout } = await import('../app/api/push/session/route')
-  const { POST: create, GET: list } = await import('../app/api/notifications/route')
-  const { PUT: edit } = await import('../app/api/notifications/[id]/route')
+  const { POST: subscribe, DELETE: disable, PATCH: primary } = await import('../app/api/push/subscription/route')
+  const { GET: me } = await import('../app/api/push/session/route')
+  const { POST: logout } = await import('../app/api/auth/logout/route')
+  const { POST: create } = await import('../app/api/notifications/route')
   const { POST: send } = await import('../app/api/notifications/[id]/send/route')
-  const { POST: bulk } = await import('../app/api/notifications/bulk/route')
-  const { GET: scheduled } = await import('../app/api/notifications/process-scheduled/route')
-  const prefix = 'push-test-' + randomBytes(5).toString('hex')
-  const origin = 'http://127.0.0.1:3077'
+  const { GET: overdue } = await import('../app/api/notifications/overdue-summary/route')
+  const { POST: addRule, PUT: editRule, PATCH: ruleAction } = await import('../app/api/notifications/summary-rules/route')
+  const { runStaffSummaryWorker } = await import('./staff-summary-service')
+  const { getStaffOverdue } = await import('./staff-overdue')
+  const prefix = 'staff-test-' + randomBytes(5).toString('hex'), origin = 'http://127.0.0.1:3077'
   process.env.APP_ORIGIN = origin
   const keys = webpush.generateVAPIDKeys()
   process.env.VAPID_PUBLIC_KEY = keys.publicKey; process.env.VAPID_PRIVATE_KEY = keys.privateKey; process.env.VAPID_SUBJECT = 'https://aidat.spormanage.com.tr'
   const originalSend = webpush.sendNotification
-  let sent = 0
+  let sent = 0, providerCode = 201
   webpush.sendNotification = async (_subscription, payload, options) => {
     sent++
-    assert(!String(payload).includes('Özel borç ayrıntısı'), 'Lock-screen payload is generic')
-    assert.match(options!.topic!, /^[A-Za-z0-9_-]{32}$/, 'Apple topic must use 32 Base64url characters')
-    assert.equal(Buffer.from(options!.topic!, 'base64url').length, 24, 'Topic must be fully decodable, unlike a 25-character CUID')
-    await new Promise(resolve => setTimeout(resolve, 30))
-    return { statusCode: 201, body: '', headers: {} }
+    const parsed = JSON.parse(String(payload))
+    assert.equal(parsed.title, 'SporManage'); assert(!String(payload).includes('Özel borç'))
+    assert.match(options!.topic!, /^[A-Za-z0-9_-]{32}$/)
+    assert.equal(Buffer.from(options!.topic!, 'base64url').length, 24)
+    if (providerCode !== 201) throw { statusCode: providerCode }
+    return { statusCode: 201, headers: {}, body: '' }
   }
-  const ids: string[] = [], branches: string[] = [], students: string[] = [], parents: string[] = [], groups: string[] = [], trainers: string[] = []
-  const req = (path: string, method: string, cookie = '', body?: unknown, customOrigin = origin) => new NextRequest(origin + path, { method, headers: { origin: customOrigin, cookie, 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) })
-  const token = (id: string, role = 'ADMIN') => 'auth-token=' + jwt.sign({ userId: id, email: 'test@example.invalid', role, name: 'Test' }, process.env.JWT_SECRET!, { expiresIn: '1h' })
+  const users: string[] = [], branches: string[] = [], fees: string[] = []
+  const cookie = (id: string) => 'auth-token=' + jwt.sign({ userId: id }, process.env.JWT_SECRET!, { expiresIn: '1h' })
+  const req = (path: string, method: string, auth = '', body?: unknown, customOrigin = origin) => new NextRequest(origin + path, { method, headers: { cookie: auth, origin: customOrigin, 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) })
   const context = (id: string) => ({ params: Promise.resolve({ id }) })
   try {
-    const a = await prisma.branch.create({ data: { name: prefix + '-a' } }), b = await prisma.branch.create({ data: { name: prefix + '-b' } }); branches.push(a.id, b.id)
-    const admin = await prisma.user.create({ data: { email: prefix + '@example.invalid', name: 'Test', password: 'not-a-login-password', role: 'ADMIN', branchId: a.id } }); ids.push(admin.id)
-    const trainer = await prisma.user.create({ data: { email: prefix + '-trainer@example.invalid', name: 'Test', password: 'not-a-login-password', role: 'TRAINER', branchId: a.id } }); ids.push(trainer.id)
-    const trainerProfile = await prisma.trainer.create({ data: { name: prefix, position: 'Test antrenör', experience: 0 } }); trainers.push(trainerProfile.id)
-    await prisma.user.update({ where: { id: trainer.id }, data: { trainerId: trainerProfile.id } })
-    const p = await prisma.parent.create({ data: { firstName: prefix, lastName: 'Veli', phone: '+900000000000', relationship: 'Diğer' } }); parents.push(p.id)
-    const group = await prisma.group.create({ data: { name: prefix, branchId: a.id } }); groups.push(group.id)
-    for (const [branchId, suffix] of [[a.id, 'a'], [b.id, 'b']]) {
-      const s = await prisma.student.create({ data: { firstName: prefix, lastName: suffix, createdById: admin.id, branchId, groupId: branchId === a.id ? group.id : null, parents: branchId === a.id ? { connect: { id: p.id } } : undefined } }); students.push(s.id)
-    }
-    const adminCookie = token(admin.id)
-    assert.equal((await enroll(req('/api/push/recipients', 'POST', token(trainer.id, 'TRAINER'), { kind: 'PARENT', identityId: p.id, verified: true }))).status, 403)
-    assert.equal((await enroll(req('/api/push/recipients', 'POST', adminCookie, { kind: 'STUDENT', identityId: students[1], verified: true }))).status, 404)
-    assert.equal((await enroll(req('/api/push/recipients', 'POST', adminCookie, { kind: 'PARENT', identityId: p.id, verified: true }, 'https://evil.test'))).status, 403)
-    const inviteResponse = await enroll(req('/api/push/recipients', 'POST', adminCookie, { kind: 'PARENT', identityId: p.id, verified: true }))
-    assert.equal(inviteResponse.status, 201)
-    const invite = await inviteResponse.json(), raw = new URL(invite.inviteUrl).hash.slice('#invite='.length)
-    const storedInvite = await prisma.pushInvite.findFirstOrThrow({ where: { recipientId: invite.recipientId } })
-    assert.notEqual(storedInvite.tokenHash, raw)
-    const activations = await Promise.all([activate(req('/api/push/activate', 'POST', '', { token: raw })), activate(req('/api/push/activate', 'POST', '', { token: raw }))])
-    assert.equal(activations.filter(r => r.status === 200).length, 1)
-    const recipientCookie = activations.find(r => r.status === 200)!.headers.get('set-cookie')!.split(';')[0]
-    const identity = await (await me(req('/api/push/session', 'GET', recipientCookie))).json()
-    assert.equal(identity.kind, 'PARENT')
-    assert.equal((await create(req('/api/notifications', 'POST', recipientCookie, {}))).status, 401)
-    const subscription = { endpoint: 'https://web.push.apple.com/' + prefix, keys: { p256dh: createECDH('prime256v1').generateKeys().toString('base64url'), auth: randomBytes(16).toString('base64url') }, label: 'Test iPhone' }
-    const deviceResponse = await subscribe(req('/api/push/subscription', 'POST', recipientCookie, subscription)); assert.equal(deviceResponse.status, 200)
-    const device = await deviceResponse.json()
-    assert.equal((await subscribe(req('/api/push/subscription', 'POST', recipientCookie, { ...subscription, endpoint: 'https://127.0.0.1/secret' }))).status, 400)
-    const staffAttempt = await subscribe(req('/api/push/subscription', 'POST', adminCookie, subscription)); assert.equal(staffAttempt.status, 409)
-    const base = { title: 'Test', message: 'Özel borç ayrıntısı', method: 'PUSH', type: 'GENERAL_ANNOUNCEMENT', recipientType: 'recipient', recipientId: invite.recipientId, targetDeviceId: device.id }
-    const future = await (await create(req('/api/notifications', 'POST', adminCookie, { ...base, scheduledAt: '2099-01-01T10:00:00+03:00' }))).json()
-    assert.equal((await send(req('/api/notifications/' + future.id + '/send', 'POST', adminCookie), context(future.id))).status, 409)
-    assert.equal(sent, 0)
-    const created = await create(req('/api/notifications', 'POST', adminCookie, base)); assert.equal(created.status, 201)
-    const notification = await created.json()
-    const outcomes = await Promise.all([send(req('/api/notifications/' + notification.id + '/send', 'POST', adminCookie), context(notification.id)), send(req('/api/notifications/' + notification.id + '/send', 'POST', adminCookie), context(notification.id))])
-    assert.equal(outcomes.filter(r => r.status === 200).length, 1); assert.equal(sent, 1)
-    assert.equal((await prisma.notification.findUniqueOrThrow({ where: { id: notification.id } })).status, 'ACCEPTED')
-    const inbox = await (await me(req('/api/push/session', 'GET', recipientCookie))).json(); assert.equal(inbox.notifications[0].message, base.message)
-    const email = await (await create(req('/api/notifications', 'POST', adminCookie, { ...base, method: 'EMAIL', recipientEmail: 'test@example.invalid' }))).json()
-    const batchResponse = await bulk(req('/api/notifications/bulk', 'POST', adminCookie, { notificationIds: [email.id], action: 'send' })); const batch = await batchResponse.json()
-    assert.equal(batch.failed, 1); assert.equal((await prisma.notification.findUniqueOrThrow({ where: { id: email.id } })).status, 'PENDING')
-    const inapp = { title: 'Test', message: 'Test', method: 'IN_APP', type: 'GENERAL_ANNOUNCEMENT', recipientType: 'groups', groupId: group.id, studentId: 'all', scheduledAt: '2026-12-01T10:00:00+03:00' }
-    const groupResult = await (await create(req('/api/notifications', 'POST', adminCookie, inapp))).json(); assert.equal(groupResult.count, 1)
-    assert.equal((await edit(req('/api/notifications/' + groupResult.ids[0], 'PUT', adminCookie, { ...inapp, scheduledAt: null }), context(groupResult.ids[0]))).status, 200)
-    assert.equal((await prisma.notification.findUniqueOrThrow({ where: { id: groupResult.ids[0] } })).scheduledAt, null)
-    const listing = await (await list(req('/api/notifications', 'GET', adminCookie))).json(); assert('scheduledAt' in listing.notifications[0] && 'sentAt' in listing.notifications[0])
-    const trainerResult = await (await create(req('/api/notifications', 'POST', adminCookie, { ...inapp, recipientType: 'trainers', trainerId: trainerProfile.id, scheduledAt: null }))).json()
-    assert.equal(trainerResult.count, 1)
-    const trainerMessage = await prisma.notification.findUniqueOrThrow({ where: { id: trainerResult.ids[0] }, include: { recipient: true } })
-    assert.equal(trainerMessage.studentId, null); assert.equal(trainerMessage.recipient?.userId, trainer.id)
-    assert.equal((await list(req('/api/notifications?status=invalid', 'GET', adminCookie))).status, 400)
-    assert.equal((await scheduled()).status, 405)
-    await logout(req('/api/push/session', 'DELETE', recipientCookie))
-    assert.equal((await me(req('/api/push/session', 'GET', recipientCookie))).status, 401)
-    assert.equal((await prisma.pushDevice.findUniqueOrThrow({ where: { id: device.id } })).isActive, false)
-    await revoke(req('/api/push/recipients', 'DELETE', adminCookie, { id: invite.recipientId }))
+    const a = await prisma.branch.create({ data: { name: prefix + '-a' } }); branches.push(a.id)
+    const b = await prisma.branch.create({ data: { name: prefix + '-b' } }); branches.push(b.id)
+    const admin = await prisma.user.create({ data: { name: prefix, email: prefix + '-admin@example.invalid', password: 'not-a-password', role: 'ADMIN', branchId: a.id } }); users.push(admin.id)
+    const accountant = await prisma.user.create({ data: { name: prefix, email: prefix + '-acct@example.invalid', password: 'not-a-password', role: 'ACCOUNTING', branchId: a.id } }); users.push(accountant.id)
+    const other = await prisma.user.create({ data: { name: prefix, email: prefix + '-other@example.invalid', password: 'not-a-password', role: 'ADMIN', branchId: b.id } }); users.push(other.id)
+    const staff = await prisma.user.create({ data: { name: prefix, email: prefix + '-staff@example.invalid', password: 'not-a-password', role: 'SECRETARY', branchId: a.id } }); users.push(staff.id)
+    const adminCookie = cookie(admin.id), acctCookie = cookie(accountant.id), staffCookie = cookie(staff.id)
+    const enrollBody = (identityId: string) => ({ kind: 'STAFF', identityId, verified: true })
+    const sub = { endpoint: 'https://web.push.apple.com/' + prefix, keys: { p256dh: createECDH('prime256v1').generateKeys().toString('base64url'), auth: randomBytes(16).toString('base64url') }, label: 'Test iPhone' }
+    let recipientId = '', deviceId = '', staffRecipientId = '', ruleId = ''
+    await t.test('only admin selects; parent invitation, wrong origin and cross branch fail', async () => {
+      assert.equal((await activate(req('/api/push/activate', 'POST'))).status, 410)
+      assert.equal((await subscribe(req('/api/push/subscription', 'POST', 'push-recipient-session=old-parent', sub))).status, 401)
+      assert.equal((await subscribe(req('/api/push/subscription', 'POST', acctCookie, sub))).status, 403)
+      assert.equal((await enroll(req('/api/push/recipients', 'POST', acctCookie, enrollBody(accountant.id)))).status, 403)
+      assert.equal((await enroll(req('/api/push/recipients', 'POST', adminCookie, { kind: 'PARENT', identityId: 'x', verified: true }))).status, 400)
+      assert.equal((await enroll(req('/api/push/recipients', 'POST', adminCookie, enrollBody(other.id)))).status, 404)
+      assert.equal((await enroll(req('/api/push/recipients', 'POST', adminCookie, enrollBody(accountant.id), 'https://evil.test'))).status, 403)
+      recipientId = (await (await enroll(req('/api/push/recipients', 'POST', adminCookie, enrollBody(accountant.id)))).json()).recipientId
+      staffRecipientId = (await (await enroll(req('/api/push/recipients', 'POST', adminCookie, enrollBody(staff.id)))).json()).recipientId
+    })
+    await t.test('30 day enrollment, ownership, primary and silent renewal', async () => {
+      const r = await subscribe(req('/api/push/subscription', 'POST', acctCookie, sub)); assert.equal(r.status, 200); deviceId = (await r.json()).id
+      const d = await prisma.pushDevice.findUniqueOrThrow({ where: { id: deviceId } })
+      assert(Math.abs(d.expiresAt.getTime() - Date.now() - 30 * 86400000) < 5000)
+      assert.equal((await prisma.notificationRecipient.findUniqueOrThrow({ where: { id: recipientId } })).primaryDeviceId, deviceId)
+      assert.equal((await subscribe(req('/api/push/subscription', 'POST', staffCookie, sub))).status, 409)
+      assert.equal((await primary(req('/api/push/subscription', 'PATCH', staffCookie, { deviceId }))).status, 404)
+      await prisma.pushDevice.update({ where: { id: deviceId }, data: { expiresAt: new Date(Date.now() + 86400000) } })
+      assert.equal((await subscribe(req('/api/push/subscription', 'POST', acctCookie, { ...sub, renewOnly: true }))).status, 200)
+      assert((await prisma.pushDevice.findUniqueOrThrow({ where: { id: deviceId } })).expiresAt.getTime() > Date.now() + 29 * 86400000)
+    })
+    const base = { title: 'Test', message: 'Özel borç ayrıntısı', method: 'PUSH', type: 'GENERAL_ANNOUNCEMENT', recipientType: 'recipient', recipientId, targetDeviceId: deviceId }
+    await t.test('atomic dispatch and expired target login still receives generic push', async () => {
+      const old = jwt.sign({ userId: accountant.id, iat: 1, exp: 2 }, process.env.JWT_SECRET!)
+      await prisma.pushDevice.update({ where: { id: deviceId }, data: { sessionHash: hashToken(old) } })
+      assert.equal((await me(req('/api/push/session', 'GET', 'auth-token=' + old))).status, 401)
+      const n = await (await create(req('/api/notifications', 'POST', adminCookie, base))).json(); assert(n.id)
+      const before = sent
+      const results = await Promise.all([send(req('/api/notifications/' + n.id + '/send', 'POST', adminCookie), context(n.id)), send(req('/api/notifications/' + n.id + '/send', 'POST', adminCookie), context(n.id))])
+      assert.equal(results.filter(r => r.status === 200).length, 1); assert.equal(sent - before, 1)
+      assert.equal((await create(req('/api/notifications', 'POST', adminCookie, { ...base, type: 'PAYMENT_OVERDUE', recipientId: staffRecipientId }))).status, 403)
+    })
+    const fee = await prisma.feeType.create({ data: { name: prefix, amount: 100 } }); fees.push(fee.id)
+    const due = new Date(istanbulDayStart(new Date()).getTime() - 86400000)
+    await prisma.student.createMany({ data: Array.from({ length: 200 }, (_, i) => ({ id: prefix + '-' + i, firstName: prefix, lastName: String(i), createdById: admin.id, branchId: a.id, isActive: i % 2 === 0 })) })
+    await prisma.payment.createMany({ data: Array.from({ length: 200 }, (_, i) => ({ studentId: prefix + '-' + i, feeTypeId: fee.id, amount: 100, paidAmount: i === 0 ? 25 : 0, dueDate: due, status: i === 0 ? 'PARTIAL' as const : 'PENDING' as const, createdById: admin.id })) })
+    await t.test('200 students aggregate; partial, inactive, settled and today boundary', async () => {
+      const data = await getStaffOverdue(prisma, a.id)
+      assert.equal(data.studentCount, 200); assert.equal(data.outstanding, 19975); assert.equal(data.rows.filter(r => !r.active).length, 100)
+      const extra = await prisma.payment.create({ data: { studentId: prefix + '-0', feeTypeId: fee.id, amount: 900, paidAmount: 0, dueDate: new Date(), createdById: admin.id } })
+      assert.equal((await getStaffOverdue(prisma, a.id)).paymentCount, 200)
+      for (const status of ['CANCELLED', 'PAID'] as const) {
+        await prisma.payment.update({ where: { id: extra.id }, data: { dueDate: due, status } })
+        assert.equal((await getStaffOverdue(prisma, a.id)).paymentCount, 200)
+      }
+      assert.equal((await overdue(req('/api/notifications/overdue-summary', 'GET', staffCookie))).status, 403)
+      assert.equal((await overdue(req('/api/notifications/overdue-summary?branchId=' + b.id, 'GET', acctCookie))).status, 403)
+    })
+    await subscribe(req('/api/push/subscription', 'POST', acctCookie, sub))
+    const now = new Date(), parts = istanbulParts(now), day = parts.year + '-' + parts.month + '-' + parts.day, time = parts.hour + ':' + parts.minute, slot = localDateTime(day, time), weekday = new Date(day + 'T12:00Z').getUTCDay() || 7
+    const ruleData = { name: prefix, weekdays: [weekday], time, enabled: true, recipientIds: [recipientId] }
+    await t.test('new rule disabled; nonfinancial and cross branch recipients denied', async () => {
+      assert.equal((await addRule(req('/api/notifications/summary-rules', 'POST', adminCookie, { ...ruleData, recipientIds: [staffRecipientId] }))).status, 400)
+      const r = await addRule(req('/api/notifications/summary-rules', 'POST', adminCookie, ruleData)); assert.equal(r.status, 201)
+      const rule = await r.json(); ruleId = rule.id; assert.equal(rule.enabled, false)
+      assert.equal((await editRule(req('/api/notifications/summary-rules', 'PUT', cookie(other.id), { ...ruleData, id: ruleId }))).status, 404)
+      const update = await editRule(req('/api/notifications/summary-rules', 'PUT', adminCookie, { ...ruleData, id: ruleId }))
+      assert.equal(update.status, 200); assert.equal((await update.json()).enabled, true)
+      await ruleAction(req('/api/notifications/summary-rules', 'PATCH', adminCookie, { id: ruleId, action: 'disable' }))
+    })
+    await t.test('disabled, parallel workers and restart produce one summary, not 200', async () => {
+      const before = sent; await runStaffSummaryWorker(now, [ruleId]); assert.equal(sent, before)
+      await prisma.staffSummaryRule.update({ where: { id: ruleId }, data: { enabled: true, lastEvaluatedAt: new Date(slot.getTime() - 1) } })
+      const records = await prisma.notification.count({ where: { createdById: admin.id } })
+      await Promise.all([runStaffSummaryWorker(now, [ruleId]), runStaffSummaryWorker(now, [ruleId])])
+      assert.equal(sent - before, 1); assert.equal(await prisma.notification.count({ where: { createdById: admin.id } }), records + 1)
+      await runStaffSummaryWorker(now, [ruleId]); assert.equal(sent - before, 1)
+    })
+    await t.test('one hour catch-up allowed; older slot MISSED without send', async () => {
+      for (const [lag, expected] of [[3600000, 'ACCEPTED'], [3600001, 'MISSED']] as const) {
+        const r = await prisma.staffSummaryRule.create({ data: { name: prefix, weekdays: [weekday], time, enabled: true, branchId: a.id, createdById: admin.id, lastEvaluatedAt: new Date(slot.getTime() - 1), recipients: { create: { recipientId } } } })
+        const before = sent; await runStaffSummaryWorker(new Date(slot.getTime() + lag), [r.id])
+        const run = await prisma.staffSummaryRun.findFirstOrThrow({ where: { ruleId: r.id } })
+        assert.equal(run.status, expected); assert.equal(sent - before, expected === 'ACCEPTED' ? 1 : 0)
+        await prisma.staffSummaryRule.update({ where: { id: r.id }, data: { enabled: false } })
+      }
+    })
+    await t.test('settled balance skips summary; stopping prevents next weekly slot', async () => {
+      await prisma.payment.updateMany({ where: { createdById: admin.id }, data: { status: 'PAID', paidAmount: 100 } })
+      const before = sent
+      const r = await ruleAction(req('/api/notifications/summary-rules', 'PATCH', acctCookie, { id: ruleId, action: 'send' }))
+      assert.equal(r.status, 200); assert.equal((await r.json()).status, 'SKIPPED'); assert.equal(sent, before)
+      await ruleAction(req('/api/notifications/summary-rules', 'PATCH', acctCookie, { id: ruleId, action: 'disable' }))
+      await runStaffSummaryWorker(new Date(now.getTime() + 7 * 86400000), [ruleId]); assert.equal(sent, before)
+    })
+    await t.test('410, logout, device disable and revoke cannot be silently renewed', async () => {
+      providerCode = 410
+      const n = await (await create(req('/api/notifications', 'POST', adminCookie, base))).json()
+      assert.equal((await send(req('/api/notifications/' + n.id + '/send', 'POST', adminCookie), context(n.id))).status, 502)
+      assert.equal((await prisma.pushDevice.findUniqueOrThrow({ where: { id: deviceId } })).isActive, false)
+      providerCode = 201
+      assert.equal((await subscribe(req('/api/push/subscription', 'POST', acctCookie, { ...sub, renewOnly: true }))).status, 409)
+      await subscribe(req('/api/push/subscription', 'POST', acctCookie, sub))
+      assert.equal((await logout(req('/api/auth/logout', 'POST', acctCookie))).status, 200)
+      assert.equal((await prisma.pushDevice.findUniqueOrThrow({ where: { id: deviceId } })).isActive, false)
+      assert.equal((await subscribe(req('/api/push/subscription', 'POST', acctCookie, { ...sub, renewOnly: true }))).status, 409)
+      await subscribe(req('/api/push/subscription', 'POST', acctCookie, sub))
+      await disable(req('/api/push/subscription', 'DELETE', acctCookie, { deviceId }))
+      assert.equal((await prisma.pushDevice.findUniqueOrThrow({ where: { id: deviceId } })).isActive, false)
+      await revoke(req('/api/push/recipients', 'DELETE', adminCookie, { id: recipientId }))
+      assert.equal((await subscribe(req('/api/push/subscription', 'POST', acctCookie, sub))).status, 403)
+    })
   } finally {
     webpush.sendNotification = originalSend
-    await prisma.notification.deleteMany({ where: { createdById: { in: ids } } })
-    await prisma.notificationRecipient.deleteMany({ where: { OR: [{ userId: { in: ids } }, { parentId: { in: parents } }, { studentId: { in: students } }] } })
-    await prisma.student.deleteMany({ where: { id: { in: students } } }); await prisma.parent.deleteMany({ where: { id: { in: parents } } })
-    await prisma.group.deleteMany({ where: { id: { in: groups } } }); await prisma.user.deleteMany({ where: { id: { in: ids } } }); await prisma.trainer.deleteMany({ where: { id: { in: trainers } } }); await prisma.branch.deleteMany({ where: { id: { in: branches } } })
+    await prisma.notification.deleteMany({ where: { createdById: { in: users } } })
+    await prisma.staffSummaryRun.deleteMany({ where: { rule: { createdById: { in: users } } } })
+    await prisma.staffSummaryRule.deleteMany({ where: { createdById: { in: users } } })
+    await prisma.notificationRecipient.updateMany({ where: { userId: { in: users } }, data: { primaryDeviceId: null } })
+    await prisma.notificationRecipient.deleteMany({ where: { userId: { in: users } } })
+    await prisma.payment.deleteMany({ where: { createdById: { in: users } } })
+    await prisma.student.deleteMany({ where: { createdById: { in: users } } })
+    await prisma.feeType.deleteMany({ where: { id: { in: fees } } })
+    await prisma.user.deleteMany({ where: { id: { in: users } } })
+    await prisma.branch.deleteMany({ where: { id: { in: branches } } })
     await prisma.$disconnect()
   }
 })

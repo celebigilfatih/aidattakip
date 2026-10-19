@@ -1,5 +1,7 @@
 # ADR-0006 — Web Push ve aidat hatırlatma kuralları
 
+> 2026-10-19 güncellemesi: Veli/sporcu push işletimi ve personelin giriş süresine bağlı cihaz kaydı [ADR-0007](ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) ile değiştirildi. Yeni onay yalnız seçili personel, 30 gün ve haftalık aidat özeti içerir. Bu belgenin ilk uygulama/test/onay tarihçesi korunur; Web Push sağlayıcısı ve genel kilit ekranı ilkesi sürer.
+
 - Status: Accepted
 - Date: 2026-10-19
 - Author: Codex

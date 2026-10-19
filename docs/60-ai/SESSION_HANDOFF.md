@@ -1,5 +1,20 @@
 # AI Session Handoff
 
+## 2026-10-19 — Personel özeti demo yayın ön kontrolü
+
+Demo 7605b37de3a9 / 5e1fd7c runtime başlangıcı: 10 kullanıcı, 60 sporcu, 60 veli, 300 ödeme, 15 bildirim, 2 alıcı/2 cihaz. Runtime VAPID fingerprint 5ca9f29071797f80 valid; yeni key yok. Özlüce ID/image/StartedAt önceki guard ile aynı. Demo auto deploy Manual deployments only. Yerel yeni dal codex/staff-summary-20261019; main değişmez.
+
+Yalnız demo custom backup: /data/coolify/backups/aidattakip-manual-push/spormanage-before-staff-summary-20261019.dump, 98.228 byte, izin600, SHA-256 7dbd76b56b5eba71358fe461bce2edc23edef93214a3b79c67517d6c99f2ca63. PostgreSQL container pg_restore --list başarılı; restore tatbikatı/retention seçimi değildir. Yeni migration ve kaynak dağıtımı sonraki adım.
+
+
+## Session — 2026-10-19 — Onaylı personel bildirimleri ve otomatik aidat özeti
+
+2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yerel migration/typecheck/27 test başarılı; demo dağıtımı ve gerçek personel iPhone/takvim testi henüz bekler.
+
+Kullanıcının önceki plan tercihleri ve son uygulama talimatı ADR-0007 Accepted olarak kaydedildi; ADR-0006 alıcı/cihaz maddelerinin yerine geçer, CR-021 izler. Constitution ve genel mali/rol/para politikaları değiştirilmedi. Yerel mevcut 60 sporcu/300 ödeme korundu; migration 20261019150000 applied, SystemSetting farkı yok. Geliştirme terminali 24013, loopback:3077; önceki 12714 Prisma DLL kilidi nedeniyle kapatılıp istemci üretildi. Secret/runtime değerleri ve paket/lock değişmedi. Yeni dış servis yok.
+
+Typecheck ve 27 test başarılı; DB fixture kendi ruleId/kişi/verisine daraltılır, 200 sentetik sporcu temizlenir ve dış gönderici stub kullanır. Nihai Docker production build başarılı: image config sha256:55f51b4d50164142289856d25b5d1646f94300ad2e9cf268d46e974d7e95781e. Ağsız image smoke worker/shared modül importunu, runtime dosyalarını ve .env/dump dışlamasını doğruladı. Son typecheck/27 test tekrar geçti; uygulama kaynağı bundan sonra donduruldu. Yerel gerçek tarayıcıda üç sekme, Pazartesi 09:00/kapalı varsayılan ve gönderimsiz önizleme doğrulandı: mevcut demo 42 sporcu/60 aidat/59.250 açık bakiye. output/staff-summary-local.png kaynak dışı kanıt. Önceki veli cihazının iPhone teslimi yeni personel akışının kabulü sayılmadı. Demo dağıtımı için aynı hedef/anahtarlar, ayrı dal/sabit commit ve yeni demo yedeği hazırlanacak; ardından personel iPhone, planlı tek gönderim ve durdurma testi.
+
 ## Güncel kapanış — 2026-10-19 — iPhone gerçek push kabulü tamamlandı
 
 Yalnız SporManage demo `5e1fd7c5164f58043537c56e1f70a6d5dea47c08` dağıtıldı: Coolify `jvjrrs7wqdpzdiai7nzxywje` Success/Finished, 2m44s; rolling update 10:34:53 UTC. Container `7605b37de3a9`, image aynı commit etiketi. Runtime UID1001, VAPID fingerprint/format, migration applied ve image ortam/dump dışlaması doğrulandı. 10 kullanıcı/60 sporcu/60 veli/300 ödeme korundu; iki başarısız testten sonra bildirim sayısı 14, başarılı testle 15 oldu. Özlüce container ID/image/StartedAt değişmedi; main değişmedi, demo auto deploy manuel ve kaynak sabit kaldı.

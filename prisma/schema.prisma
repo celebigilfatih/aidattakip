@@ -31,6 +31,7 @@ model User {
   groupPermissions  UserGroupPermission[]
   notificationRecipient NotificationRecipient? @relation("StaffRecipient")
   issuedPushInvites PushInvite[]
+  summaryRules StaffSummaryRule[]
 
   @@map("users")
 }
@@ -286,6 +287,11 @@ model Notification {
   recipient      NotificationRecipient? @relation(fields: [recipientId], references: [id], onDelete: SetNull)
   targetDevice   PushDevice? @relation(fields: [targetDeviceId], references: [id], onDelete: SetNull)
   deliveries     PushDelivery[]
+  isFeeSummary Boolean @default(false)
+  summaryBranchId String?
+  summaryRunId String?
+  summaryRun StaffSummaryRun? @relation(fields: [summaryRunId], references: [id], onDelete: Restrict)
+  @@unique([summaryRunId, recipientId])
 
   @@index([method, status, createdAt])
   @@index([createdAt])
@@ -533,6 +539,10 @@ enum RecipientKind {
 model NotificationRecipient {
   id String @id @default(cuid())
   kind RecipientKind
+  staffPushEnabled Boolean @default(false)
+  primaryDeviceId String? @unique
+  primaryDevice PushDevice? @relation("PrimaryPushDevice", fields: [primaryDeviceId], references: [id], onDelete: SetNull)
+  summaryRules StaffSummaryRecipient[]
   userId String? @unique
   parentId String? @unique
   studentId String? @unique
@@ -586,6 +596,7 @@ model PushDevice {
   updatedAt DateTime @updatedAt
   recipient NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   notifications Notification[]
+  primaryFor NotificationRecipient? @relation("PrimaryPushDevice")
   deliveries PushDelivery[]
   @@index([recipientId, isActive])
   @@index([sessionHash])
@@ -625,4 +636,46 @@ model SystemSetting {
   updatedAt          DateTime @updatedAt
 
   @@map("system_settings")
+}
+
+model StaffSummaryRule {
+  id String @id @default(cuid())
+  name String
+  weekdays Int[]
+  time String @default("09:00")
+  enabled Boolean @default(false)
+  branchId String?
+  createdById String
+  createdBy User @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  lastEvaluatedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  recipients StaffSummaryRecipient[]
+  runs StaffSummaryRun[]
+  @@map("staff_summary_rules")
+}
+model StaffSummaryRecipient {
+  ruleId String
+  recipientId String
+  rule StaffSummaryRule @relation(fields: [ruleId], references: [id], onDelete: Cascade)
+  recipient NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  @@id([ruleId, recipientId])
+  @@map("staff_summary_recipients")
+}
+model StaffSummaryRun {
+  id String @id @default(cuid())
+  ruleId String
+  scheduledAt DateTime
+  kind String @default("AUTOMATIC")
+  status String @default("PROCESSING")
+  accepted Int @default(0)
+  failed Int @default(0)
+  skipped Int @default(0)
+  createdAt DateTime @default(now())
+  finishedAt DateTime?
+  rule StaffSummaryRule @relation(fields: [ruleId], references: [id], onDelete: Restrict)
+  notifications Notification[]
+  @@unique([ruleId, scheduledAt])
+  @@index([createdAt])
+  @@map("staff_summary_runs")
 }

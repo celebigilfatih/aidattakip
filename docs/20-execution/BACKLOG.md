@@ -1,5 +1,7 @@
 # Backlog
 
+Güncel onaylı iş B-010 / CR-021 / ADR-0007: personel seçimi, 30 gün/ana cihaz ve haftalık mali özet. Yerel kod/migration/27 test hazır; yalnız demo dağıtımı ve personel iPhone/takvim kabulü sürüyor. B-009 ilk manuel aşaması tarihçedir.
+
 Last updated: 2026-10-19. Durum: Repository kaynakları ve tarihli uygulama/doğrulama kayıtları birlikte izlenir.
 
 Bu liste önerilen çalışma sırasıdır; uygulama veya kritik karar onayı değildir. Kaynak: [CHANGE_REQUESTS](CHANGE_REQUESTS.md).

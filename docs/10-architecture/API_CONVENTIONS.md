@@ -1,5 +1,13 @@
 # API Conventions
 
+## ADR-0007 personel ve özet sözleşmesi
+
+- POST /api/push/recipients yalnız ADMIN, kind STAFF ve kendi şubesinin aktif personeli; DELETE seçimi/cihazları kapatır. GET tüm kapsam içi personelin seçim, ana cihaz, süre ve son delivery durumunu döndürür; endpoint/key yok.
+- POST /api/push/activate 410; veli alıcı çerezi personel yetkisi değildir. POST subscription yalnız seçili aktif personel; 30 gün. renewOnly true yalnız halen aktif/süresi geçerli sahipli aboneliği yeniler. PATCH subscription sahipli geçerli cihazı ana cihaz yapar.
+- GET /api/notifications/overdue-summary aktif ADMIN/ACCOUNTING ve şube sınırı; güncel toplam/ayrıntı. GET/POST/PUT/PATCH summary-rules aynı mali sınır, yeni kural kapalı, hafta günleri 1..7/saat HH:mm/seçili mali alıcılar. PATCH action disable veya bilinçli send yeni manuel çalışma.
+- Finansal olmayan personel yalnız kendi genel duyurusunu okur/alır. Manuel/toplu/otomatik PUSH ortak dispatch içinde seçili aktif STAFF, güncel sender/alıcı rol/şube ve cihaz kontrolünden geçer. Servis kabulü görüntülenme değildir.
+- Worker public HTTP API değildir; container içi komut kullanılır. 55 rota, 19 sayfa. Ayrıntı [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
+
 Last updated: 2026-10-19. Durum: Repository kaynakları ve tarihli yerel doğrulamalar birlikte belgelenmiştir.
 
 ## Mevcut sözleşme

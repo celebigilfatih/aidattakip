@@ -1,5 +1,9 @@
 # Test Strategy
 
+## ADR-0007 personel ve özet testleri
+
+Typecheck ve toplam 27 test geçti: bildirim politika, İstanbul zaman/sözleşme, DB entegrasyonu, mevcut demo/rapor regresyonları. DB testi yalnız loopback:5477/aidat_takip ve kendi fixture kural/kişi/verisinde çalışır; gönderici stub, dış push yok. 200 aktif/pasif sporcu, kısmi/tam/iptal/vade günü, mali rol/şube, 30 gün, logout/iptal/410, paralel claim, restart, kapalı kural ve tam 1 saat telafi sınırı kapsanır. Gerçek personel iPhone, takvim/durdurma ve demo container işleyici kabulü ayrıca kaydedilecek. Genel lint CR-011 nedeniyle ayrı kapı değildir.
+
 Last updated: 2026-10-19. Kaynak envanteri ile tarihli çalışma zamanı doğrulamaları aşağıda ayrı tutulur.
 
 ## Mevcut envanter

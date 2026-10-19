@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.8
+- Document version: 0.4.9
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -24,6 +24,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Explicit non-goals: TBD — kullanıcı tarafından belirlenmedi.
 
 ## 2. Current Status
+
+- Güncel görev: 2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yerel migration/typecheck/27 test başarılı; demo dağıtımı ve gerçek personel iPhone/takvim testi henüz bekler. [ADR-0007](docs/50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md), [CR-021](docs/20-execution/CHANGE_REQUESTS.md). Aşağıdaki kayıtlar tarihçedir.
 
 - Güncel iPhone kabulü (2026-10-19): Yalnız demo sabit 5e1fd7c, Coolify Success/2m44s. Apple Topic hatası düzeltildi; normal API testi HTTP201/ACCEPTED. Kullanıcı bildirimin geldiğini ve dokununca Volkan Acar ekranı açıldığını doğruladı. Typecheck, dört ilgili test, Docker build başarılı; demo verisi ve Özlüce korundu. Otomasyon kapalı. Aşağıdaki eski durumlar tarihçedir. [PUSH_GUIDE](docs/40-operations/PUSH_GUIDE.md).
 
@@ -71,7 +73,7 @@ Diğer bağlam kaynakları: [GLOSSARY](docs/00-product/GLOSSARY.md), [PERSONAS](
 - Layers: React arayüzü → Next API → Prisma → PostgreSQL; [OVERVIEW](docs/10-architecture/OVERVIEW.md).
 - Main integrations: PostgreSQL ve lisans bağlantısı; demo dağıtımında uygulama ile lisans tablosu aynı mantıksal demo DB'dedir. Manuel Web Push adaptörü demo runtime ortamında hazır; ilk gerçek iPhone servis/ekran kabulü tamamlandı. E-posta/SMS sağlayıcıları henüz bağlı değil; aktif gönderim yolları sahte başarı üretmez.
 - AI components: N/A — incelenen kaynakta ürün içi AI bileşeni bulunmadı.
-- Data and storage: 25 Prisma modeli ve 11 migration; yeni alıcı/push migration'ı yerel ve onaylı demo DB'sinde uygulandı. Lisans verisi SQL/pg bağlantısından okunur. Yerelde ayrı license_db; son kayıtlı Coolify demosunda aynı demo DB'sindeki lisans tablosu kullanılır. Canlı PostgreSQL 17.7 ve yerel 15.19 doğrulandı.
+- Data and storage: 28 Prisma modeli ve 12 migration; yeni alıcı/push migration'ı yerel ve onaylı demo DB'sinde uygulandı. Lisans verisi SQL/pg bağlantısından okunur. Yerelde ayrı license_db; son kayıtlı Coolify demosunda aynı demo DB'sindeki lisans tablosu kullanılır. Canlı PostgreSQL 17.7 ve yerel 15.19 doğrulandı.
 - Deployment model: Özlüce production ve SporManage demo için iki ayrı Coolify uygulaması; Özlüce GitHub `main` webhook'u ve demo için onaylı ayrı sabit ref/manuel dağıtım, repository Dockerfile/Next standalone ve aynı fiziksel PostgreSQL kaynağında ayrı mantıksal DB/roller. Compose production’da kullanılmaz. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 - Ayrıntılar: [OVERVIEW](docs/10-architecture/OVERVIEW.md), [DATA_MODEL](docs/10-architecture/DATA_MODEL.md), [INTEGRATIONS](docs/10-architecture/INTEGRATIONS.md), [AI_ARCHITECTURE](docs/10-architecture/AI_ARCHITECTURE.md), [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 
@@ -86,6 +88,7 @@ Diğer bağlam kaynakları: [GLOSSARY](docs/00-product/GLOSSARY.md), [PERSONAS](
 | Rapor XLSX, tarayıcı PDF ve export yetkisi | Accepted; uygulandı | [ADR-0003](docs/50-decisions/ADR-0003-rapor-disa-aktarim-ve-yetki.md) |
 | Broşür demo hesabı production ADMIN rolü | Superseded | [ADR-0004](docs/50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) |
 | SporManage ayrı demo uygulaması ve mantıksal DB | Accepted; uygulandı | [ADR-0005](docs/50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) |
+| Personel bildirimi ve haftalık aidat özeti | Accepted; yerel uygulama ve 27 test hazır, demo/cihaz kabulü sürüyor | [ADR-0007](docs/50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) |
 | Web Push ve periyodik aidat hatırlatma | Accepted; manuel ilk aşama demoda, iPhone kabulü tamam, otomasyon sonraki aşama | [ADR-0006](docs/50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) |
 
 Karar gerekçeleri burada kopyalanmaz; asıl belgeye bağlantı verilir.
@@ -178,3 +181,4 @@ Bu sıra öneridir; uygulama onayı değildir.
 | 0.4.6 | 2026-10-19 | Somut web-push/MPL-2.0 ve yalnız demo dağıtımı onaylandı; ayrı dal/yedek/runtime hazırlığı. |
 | 0.4.7 | 2026-10-19 | Yalnız demo 6b1e1c2 dağıtımı, migration ve HTTPS/runtime kanıtı; iPhone davet/cihaz adımının doğrulanması bekleniyor. |
 | 0.4.8 | 2026-10-19 | Demo davet ekranı/Apple Topic düzeltmesi; gerçek iPhone servis, görünüm ve doğru ekran açılış kabulü. |
+| 0.4.9 | 2026-10-19 | ADR-0007 onaylı personel/30 gün/haftalık özet uygulaması; yerel test ve demo yayın hazırlığı. |

@@ -1,5 +1,7 @@
 # Milestones
 
+ADR-0007 personel bildirimi + haftalık özet milestone: yerel migration, typecheck, 27 test ve Docker production build başarılı; demo/personel iPhone/takvim/durdurma kabulü bekler. Önceki veli testi yeni personel kabulünün yerine geçmez.
+
 Last updated: 2026-10-19. Durum: Tarihli tamamlanan işler ile açık ürün kabulü ayrılmıştır.
 
 | Milestone | Çıkış ölçütü | Durum | Tarih |
