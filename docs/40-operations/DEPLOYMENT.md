@@ -2,6 +2,12 @@
 
 ## 2026-10-19 — Mevcut kuralı personel formundan düzenleme (CR-029)
 
+Yalnız demo6f11cf162b79935d1cf14ff9b457c5d676675072; Coolify kqujvbkdflazvphrjv5m7970 Success/03m08s, başlangıç14:13:50 UTC, bitiş14:16:58 UTC. Nihai demo Docker başarılı, manuel/sabit ref ve branch codex/staff-summary-20261019 korunur. Main b024011/Özlüce'ye işlem yok.
+
+Canlı559px/scrollWidth559,512px dialogda güncel kural adı/Pazartesi09:00/işaretli Demo Kullanıcı/ana cihaz ve Değişiklikleri kaydet doğrulandı; Vazgeç ile kapatıldı, canlı tercih değiştirilmedi. Önce/sonra guard:10 personel/17 bildirim, aynı alıcı/ana iPhone/aktiflik/geçerlilik, etkin Pazartesi09:00 tek alıcılı kural/sahibi ve tek eski run aynı. Worker14:17:05.206 UTC ile yayın sonrasında ilerledi; yeni run/push yok. Kanıt output/staff-rule-edit/live-edit-form.png ve live-edit-actions.png (Git dışında), secret/oturum içermeyen metadata repository dışında staff-rule-edit-release.json.
+
+Aşağıdaki yerel hazırlık kaydı tarihçedir.
+
 Yerel typecheck/55 test ve Docker exit0/config832fda71898a5e86605bad0d62df05b82698a435117201487c2fa897bb80acab başarılı. Kaynak codex/staff-summary-20261019; yalnız demo sabit ref yayını hazırlanıyor. Model/migration/paket/anahtar/cron/dağıtım modeli değişmez. Canlı etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone/geçmiş için önce guard alındı; canlı tercihe kayıt yapılmayacak. Main b024011/Özlüce kapsam dışında. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
 
 ## 2026-10-19 — Personel ekranında yeni aidat kuralı yalnız demo (CR-028)

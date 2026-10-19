@@ -1,6 +1,6 @@
 # Roadmap
 
-2026-10-19 CR-029 uygulanıyor: Mevcut kuralı aynı personel formundan ad/gün/saat/alıcılarla düzenleme; typecheck/55 test ve yerel Docker başarılı. Yerel UI kaydet/yenile/uygunsuz alıcı/409 doğrulandı; yalnız demo yayını bekliyor. [CR-029](../20-execution/CHANGE_REQUESTS.md).
+2026-10-19 CR-029 tamamlandı: Mevcut kuralı aynı personel formundan ad/gün/saat/alıcılarla düzenleme; typecheck/55 test ve yerel Docker başarılı. Yerel UI kaydet/yenile/uygunsuz alıcı/409 doğrulandı; yalnız demo6f11cf1 Success/3m08s. Canlı form ve mevcut etkin Pazartesi09:00/Demo Kullanıcı/veriler/geçmiş korundu. [CR-029](../20-execution/CHANGE_REQUESTS.md).
 
 2026-10-19 CR-028 tamamlandı: Personel ekranında gün/saat/alıcılarla yeni kapalı kural oluşturma; typecheck/51 test, yerel UI oluştur/yenile/iptal ve Docker başarılı. Yalnız demo3b7ebcc Success/3m12s; canlı form ve mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi/veriler/geçmiş korundu. [CR-028](../20-execution/CHANGE_REQUESTS.md).
 

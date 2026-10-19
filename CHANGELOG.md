@@ -7,7 +7,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 ### Changed — 2026-10-19 — Mevcut aidat kuralını tek formdan düzenleme
 
 - Personel ve Cihazlar kartında Düzenle; yeni kayıtla ortak formda mevcut ad/gün/saat/alıcılar, açık geçersiz alıcı kaldırma ve kayıt sonrası kart/üyelik yenileme.
-- Additive tam PUT/expected baseline atomik kaydı ve409 koruması; mevcut mali rol/şube, sahip/etkinlik/geçmiş ve eski API biçimleri korunur. ADR-0007 geçerli, model/paket/anahtar değişmedi. Typecheck/55 test, yerel UI ve Docker geçti; yalnız demo yayını bekliyor (CR-029).
+- Additive tam PUT/expected baseline atomik kaydı ve409 koruması; mevcut mali rol/şube, sahip/etkinlik/geçmiş ve eski API biçimleri korunur. ADR-0007 geçerli, model/paket/anahtar değişmedi. Typecheck/55 test, yerel UI ve yerel/nihai Docker geçti; yalnız demo6f11cf1 Success/3m08s. Canlı form/iptal ve mevcut etkin Pazartesi09:00/Demo Kullanıcı/personel/bildirim/ana cihaz/geçmiş koruması doğrulandı; CR-029 kapalı.
 
 ### Added — 2026-10-19 — Personel ekranında yeni aidat özeti kuralı
 
