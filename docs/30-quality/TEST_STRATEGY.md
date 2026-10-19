@@ -2,7 +2,7 @@
 
 ## Mevcut personelin karttan özet seçimi — 2026-10-19
 
-Toplam44 test başarılı: onboarding paketine4 senaryo eklendi; ADMIN/ACCOUNTING kendi kapsamındaki tek üyeliği açar/kapatır, tekrarlı ve paralel işlemler diğer üyeleri/cursor/saat/etkinliği korur. Veli/oturumsuz/SECRETARY/origin/yabancı şube ve eski kural reddi; pasif/rolü uygun olmayan/seçilmemiş kişi katılamaz, geçersiz eski üyelik çıkarılır. Son üye kaldırıldığında kuralın etkinliği/geçmişi korunur. Test verisi yalnız loopback5477 kendi fixture'larıdır, dış push yok. Typecheck ve gerçek yerel tarayıcı sentetik kart aç/yenile/kapat başarılı. Docker/demo yayını handoff'ta izlenir.
+Toplam44 test başarılı: onboarding paketine4 senaryo eklendi; ADMIN/ACCOUNTING kendi kapsamındaki tek üyeliği açar/kapatır, tekrarlı ve paralel işlemler diğer üyeleri/cursor/saat/etkinliği korur. Veli/oturumsuz/SECRETARY/origin/yabancı şube ve eski kural reddi; pasif/rolü uygun olmayan/seçilmemiş kişi katılamaz, geçersiz eski üyelik çıkarılır. Son üye kaldırıldığında kuralın etkinliği/geçmişi korunur. Test verisi yalnız loopback5477 kendi fixture'larıdır, dış push yok. Typecheck, yerel ve nihai demo27bd03c Docker başarılı. Gerçek yerel tarayıcı1280px sentetik kart aç/yenile/kapat; canlı559px kartta yatay taşma yok, mevcut işaret ile yeni GET API üyeliği aynı. Canlı tercihi değiştirmeden10 personel/17 bildirim/ana cihaz/etkin kural/tek eski run korundu; worker yayın sonrası cursor ilerletti. Yerel fixture temizlendi. Genel lint CR-011, rollback/restore/tam erişilebilirlik ve yeni gerçek iPhone testi çalıştırılmadı.
 
 ## Personel formundan özet kuralına katılım — 2026-10-19
 

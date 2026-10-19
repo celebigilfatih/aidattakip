@@ -25,7 +25,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 
 ## 2. Current Status
 
-- Güncel iş (CR-025): Mevcut personelin Pazartesi09:00 aidat özeti üyeliği aynı kartta değiştiriliyor; ADMIN/ACCOUNTING ve mevcut şube/finans sınırı. Tek üyeyi atomik değiştiren API, diğer üyeler/takvim/cihaz/cursor korunur. Typecheck/44 test ve yerel UI aç/yenile/kapat başarılı; Docker/yalnız demo yayını [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md) içinde izlenir. ADR-0007/model değişmedi; aşağıdaki kayıtlar tarihçedir.
+- Güncel yayın (CR-025 kapalı): Mevcut personelin Pazartesi09:00 aidat özeti üyeliği aynı kartta değiştirilir; ADMIN/ACCOUNTING ve mevcut şube/finans sınırı. Typecheck/44 test, yerel ve nihai Docker başarılı; yalnız demo27bd03c Success/3m03s. Yerel kart aç/yenile/kapat, canlı mevcut işaret ve API doğrulandı;10 personel/17 bildirim/ana iPhone/etkin Demo Kullanıcı kuralı ve geçmiş korundu. ADR-0007/model değişmedi;57 API rota. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
 
 - Güncel yayın (CR-024 kapalı): Yeni personelin Pazartesi09:00 aidat özeti aynı formda seçilir. İsteğe bağlı kutu ve mevcut kurala atomik katılım; yeni kural/açma yok, mali rol ve kapsam korunur. Typecheck/40 test, yerel ve nihai Docker başarılı; yalnız demo fed6e33 Success/3m03s, canlı form ve verilerin korunması doğrulandı. Mevcut10 personel/17 bildirim/ana iPhone/etkin Pazartesi09:00 Demo Kullanıcı kuralı aynı. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki yayın kayıtları tarihçedir.
 
@@ -170,6 +170,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
+| 0.4.14 | 2026-10-19 | Mevcut personel kartından Pazartesi09:00 özet seçimi;44 test/Docker ve yalnız demo27bd03c kabulü. |
 | 0.4.13 | 2026-10-19 | Personel formunda Pazartesi09:00 özetine katılım;40 test/Docker ve yalnız demo fed6e33 kabulü. |
 | 0.4.12 | 2026-10-19 | Bildirim ekranından personel ve alıcı ekleme;36 test, Docker ve yalnız demo48d55af canlı kabulü. |
 | 0.1.0 | 2026-09-14 | CDSK iskeleti; projeye özel alanlar TBD. |

@@ -7,7 +7,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 ### Added — 2026-10-19 — Mevcut personelin karttan özet seçimi
 
 - Personel ve Cihazlar kartlarında Pazartesi09:00 aidat özeti kutuları; seçimler anında kaydedilir, mevcut/kapalı kural ve uygun olmayan rol açıklamaları.
-- Yeni staff-summary GET/PATCH, mevcut mali yönetici/şube sınırı; tek üye değişimi, idempotency ve kural kilidi. Kural saati/etkinliği/cursor/diğer üyeler/cihaz/geçmiş değişmez. Yeni model/migration/paket/anahtar/ADR yok. Typecheck/44 test ve yerel kart aç/yenile/kapat başarılı; yalnız demo yayını izleniyor.
+- Yeni staff-summary GET/PATCH, mevcut mali yönetici/şube sınırı; tek üye değişimi, idempotency ve kural kilidi. Kural saati/etkinliği/cursor/diğer üyeler/cihaz/geçmiş değişmez. Yeni model/migration/paket/anahtar/ADR yok. Typecheck/44 test, yerel ve nihai Docker başarılı; yalnız demo27bd03c Success/3m03s. Yerel aç/yenile/kapat, canlı kart ve korunmuş mevcut seçim doğrulandı; CR-025 kapalı. API envanteri57 rota ve güncel metotlarla eşlendi.
 
 ### Added — 2026-10-19 — Personel formunda aidat özeti seçimi
 

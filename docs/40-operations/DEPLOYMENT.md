@@ -1,5 +1,11 @@
 # Deployment
 
+## 2026-10-19 — Mevcut personel kartından özet seçimi yalnız demo
+
+Kaynak codex/staff-summary-20261019, sabit27bd03c140d92fe75b07face72f8c734825e1177. Coolify pfdbu078e4nhvndgkpegxwj2 Success/03m03s; başlangıç13:01:05 UTC. Nihai Docker build başarılı; yerel Docker config7b9f25d22e40ba12ce2d1717a50b2f8d69c4738e666fbf3e216859e224c0c9a0 exit0. Yalnız demo pini güncellendi; branch/manuel dağıtım modeli korundu. Yeni model/migration/paket/anahtar veya main/Özlüce işlemi yok.
+
+Canlı Personel ve Cihazlar→Demo aramasında mevcut Pazartesi09:00 kutusu işaretli ve düzenlenebilir; yeni GET endpoint üyeliği aynı. Canlı tercihi değiştirmeden öncesi/sonrası10 personel/17 bildirim, aynı ana iPhone, tek Demo Kullanıcı alıcılı etkin Pazartesi09:00 kuralı/tek eski run korundu. Worker cursor13:05:07.881 UTC ile yeni container sonrası ilerledi; yeni push yok. Yerelde sentetik kart aç/yenile/kapat testi yapıldı ve fixture temizlendi. Kanıt output/existing-staff-summary/live-demo-card.png;559px scrollWidth559. CR-025 kapalı. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+
 ## 2026-10-19 — Personel formunda Pazartesi09:00 özet seçimi yalnız demo
 
 Kaynak codex/staff-summary-20261019, sabit fed6e335ae17497a6069d541f9ed0d9f7cd9b1f4. Coolify lxbzx3wb5myozldlmekoab6i Success,03m03s; başlangıç12:46:43 UTC. Nihai Docker build geçti; yerel image config d53848d6c58d0fb1eaf3d9d92a38c7b37d4b7e871923853e6055f6ebdee8b49b, exit0. Demo pin güncellendi, branch/manuel dağıtım modeli korundu; main/Özlüce'ye işlem yok. Migration/model/paket/anahtar değişmedi.

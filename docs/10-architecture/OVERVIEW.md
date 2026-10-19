@@ -13,7 +13,7 @@ Tek repository içinde Next.js App Router arayüzü ve API rotaları bulunur; i�
 | Katman | Kaynak | Görev |
 |---|---|---|
 | Sayfalar | [src/app](../../src/app) | 19 page.tsx dosyası |
-| API | [src/app/api](../../src/app/api) | 55 route.ts dosyası |
+| API | [src/app/api](../../src/app/api) | 57 route.ts dosyası |
 | UI | [components](../../src/components) | Radix tabanlı kontroller, formlar, takvim, yazdırma |
 | İstemci bağlamı | [contexts](../../src/contexts) | AuthContext ve SettingsContext |
 | Ortak işlevler | [lib](../../src/lib) | JWT, Prisma, izin, bildirim, lisans |

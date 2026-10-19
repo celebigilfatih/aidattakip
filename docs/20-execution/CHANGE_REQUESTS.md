@@ -3,10 +3,10 @@
 ## CR-025 — Mevcut personelin aidat özetini karttan değiştirme
 
 - Kullanıcı talebi (2026-10-19): Mevcut personel Pazartesi09:00 aidat özeti seçimi Personel ve Cihazlar ekranından değişsin.
-- Status: Uygulandı; yalnız demo yayın/kabulü sürüyor.
+- Status: Closed — yalnız demo27bd03c Success/3m03s; canlı kart ve koruma kontrolleri başarılı.
 - Her kartta uygun mevcut Pazartesi09:00 kuralları/üyelikleri, anında kaydeden kutu ve kapalı/uygun olmayan personel açıklaması. Takvim yönetiminin mevcut ADMIN/ACCOUNTING ve şube sınırı geçerli; genel bildirim alıcısı seçimi hâlâ yalnız ADMIN.
 - Ayrı GET/PATCH staff-summary API tek kişinin tek kural üyeliğini idempotent değiştirir. Kural row lock; gün/saat/kapsam/aktif mali personel/seçili alıcı/owner tekrar kontrol edilir. Geçersizleşmiş seçim kaldırılabilir. Diğer üyeler, saat, etkinlik, cursor, cihaz ve geçmiş değişmez; son üye çıkınca kural silinmez/otomatik kapanmaz, alıcı olmadığı için push yok.
-- Kanıt: Typecheck/44 test; yerel gerçek tarayıcıda sentetik personelde aç/yenile/kapat başarılı. Schema/migration/paket/anahtar/yetki değişikliği yok, ADR-0007 geçerli. Nihai yayın handoff'ta izlenir.
+- Kanıt: Typecheck/44 test, yerel ve nihai demo Docker başarılı. Yerel gerçek tarayıcıda sentetik personelde aç/yenile/kapat; canlı kartta Demo Kullanıcı mevcut işareti ve API üyeliği doğrulandı.10 personel/17 bildirim/aynı ana iPhone/etkin Pazartesi09:00 tek alıcılı kural/tek eski run korundu; canlı seçim değiştirilmedi. Schema/migration/paket/anahtar/yetki değişikliği yok, ADR-0007 geçerli. API envanteri57 rotaya güncellendi.
 
 ## CR-024 — Personel formunda Pazartesi09:00 aidat özeti seçimi
 

@@ -12,7 +12,7 @@
 - POST /api/push/activate 410; veli alıcı çerezi personel yetkisi değildir. POST subscription yalnız seçili aktif personel; 30 gün. renewOnly true yalnız halen aktif/süresi geçerli sahipli aboneliği yeniler. PATCH subscription sahipli geçerli cihazı ana cihaz yapar.
 - GET /api/notifications/overdue-summary aktif ADMIN/ACCOUNTING ve şube sınırı; güncel toplam/ayrıntı. GET/POST/PUT/PATCH summary-rules aynı mali sınır, yeni kural kapalı, hafta günleri 1..7/saat HH:mm/seçili mali alıcılar. PATCH action disable veya bilinçli send yeni manuel çalışma.
 - Finansal olmayan personel yalnız kendi genel duyurusunu okur/alır. Manuel/toplu/otomatik PUSH ortak dispatch içinde seçili aktif STAFF, güncel sender/alıcı rol/şube ve cihaz kontrolünden geçer. Servis kabulü görüntülenme değildir.
-- Worker public HTTP API değildir; container içi komut kullanılır. 55 rota, 19 sayfa. Ayrıntı [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
+- Worker public HTTP API değildir; container içi komut kullanılır. 57 rota, 19 sayfa. Ayrıntı [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
 
 Last updated: 2026-10-19. Durum: Repository kaynakları ve tarihli yerel doğrulamalar birlikte belgelenmiştir.
 
@@ -44,7 +44,7 @@ Liste `scheduledAt`, `sentAt`, alıcı bilgileri ve pagination döndürür. Öğ
 
 Push config yalnız public key/yapılandırma durumunu verir. Activate tek kullanımlı daveti tüketir; session kendi cihazlarını ve bildirimlerini döndürür. Subscription endpoint/anahtarları yönetim listelerine veya hata yanıtlarına açılmaz. Davet/oturum anahtarlarının yalnız hash'i DB'dedir. Ayrıntılı kullanım ve sınırlar [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md) içindedir.
 
-## Rota envanteri — 53 dosya
+## Rota envanteri — 57 dosya
 
 | Rota | Metotlar | Kaynak |
 |---|---|---|
@@ -72,9 +72,11 @@ Push config yalnız public key/yapılandırma durumunu verir. Activate tek kulla
 | `/api/notifications/[id]` | GET, PUT, DELETE | [kaynak](../../src/app/api/notifications/[id]/route.ts) |
 | `/api/notifications/[id]/send` | POST | [kaynak](../../src/app/api/notifications/[id]/send/route.ts) |
 | `/api/notifications/bulk` | POST | [kaynak](../../src/app/api/notifications/bulk/route.ts) |
+| `/api/notifications/overdue-summary` | GET | [kaynak](../../src/app/api/notifications/overdue-summary/route.ts) |
 | `/api/notifications/process-scheduled` | GET | [kaynak](../../src/app/api/notifications/process-scheduled/route.ts) |
 | `/api/notifications` | GET, POST | [kaynak](../../src/app/api/notifications/route.ts) |
 | `/api/notifications/send` | POST | [kaynak](../../src/app/api/notifications/send/route.ts) |
+| `/api/notifications/summary-rules` | GET, POST, PUT, PATCH | [kaynak](../../src/app/api/notifications/summary-rules/route.ts) |
 | `/api/payments/[id]` | PATCH, PUT, DELETE | [kaynak](../../src/app/api/payments/[id]/route.ts) |
 | `/api/payments/bulk` | POST | [kaynak](../../src/app/api/payments/bulk/route.ts) |
 | `/api/payments` | GET, POST, DELETE | [kaynak](../../src/app/api/payments/route.ts) |
@@ -82,7 +84,9 @@ Push config yalnız public key/yapılandırma durumunu verir. Activate tek kulla
 | `/api/push/config` | GET | [kaynak](../../src/app/api/push/config/route.ts) |
 | `/api/push/recipients` | GET, POST, DELETE | [kaynak](../../src/app/api/push/recipients/route.ts) |
 | `/api/push/session` | GET, DELETE | [kaynak](../../src/app/api/push/session/route.ts) |
-| `/api/push/subscription` | POST, DELETE | [kaynak](../../src/app/api/push/subscription/route.ts) |
+| `/api/push/staff-summary` | GET, PATCH | [kaynak](../../src/app/api/push/staff-summary/route.ts) |
+| `/api/push/staff` | GET, POST | [kaynak](../../src/app/api/push/staff/route.ts) |
+| `/api/push/subscription` | POST, DELETE, PATCH | [kaynak](../../src/app/api/push/subscription/route.ts) |
 | `/api/reports/export` | GET | [kaynak](../../src/app/api/reports/export/route.ts) |
 | `/api/reports/overview` | GET | [kaynak](../../src/app/api/reports/overview/route.ts) |
 | `/api/search` | GET | [kaynak](../../src/app/api/search/route.ts) |
