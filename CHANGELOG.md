@@ -7,7 +7,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 ### Added — 2026-10-19 — Personel formunda aidat özeti seçimi
 
 - Yeni personel formunda varsayılan kapalı Pazartesi09:00 aidat özeti kutusu; yalnız mali rol, seçili alıcı ve uygun mevcut kural. Çoklu kural seçimi, kapalı/kural yok açıklamaları; masaüstünde iki kolonlu alanlar.
-- Hesap+alıcı+üyelik atomik, kural row lock ve güncel yetki/şube/takvim kontrolü. Diğer alıcılar, kuralın etkinliği/cursor'ı ve takvim korunur. Şema/migration/paket/anahtar yok; ADR-0007 geçerli. Typecheck/40 test geçti; yalnız demo yayını izleniyor.
+- Hesap+alıcı+üyelik atomik, kural row lock ve güncel yetki/şube/takvim kontrolü. Diğer alıcılar, kuralın etkinliği/cursor'ı ve takvim korunur. Şema/migration/paket/anahtar yok; ADR-0007 geçerli. Typecheck/40 test, yerel ve demo Docker başarılı. Yalnız demo fed6e33 Success/3m03s; canlı form doğrulandı,10 personel/17 bildirim/ana cihaz ve mevcut etkin kural korundu. CR-024 kapalı.
 
 ### Added — 2026-10-19 — Bildirim ekranından personel ekleme
 

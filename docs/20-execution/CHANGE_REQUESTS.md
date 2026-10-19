@@ -3,10 +3,10 @@
 ## CR-024 — Personel formunda Pazartesi09:00 aidat özeti seçimi
 
 - Kullanıcı talebi (2026-10-19): Yeni personelin Pazartesi09:00 aidat özetini alıp almayacağı aynı formdan seçilsin; ayrı sekmeye gidilmesin.
-- Status: Uygulandı; yalnız demo yayın/kabulü sürüyor.
+- Status: Closed — yalnız demo fed6e33 Success/3m03s; canlı form ve koruma kontrolleri başarılı.
 - Önceki CR-023 akışında mali özet için ayrıca kural düzenleniyordu. Yeni isteğe bağlı kutu varsayılan kapalı; yalnız bildirim alıcısı ve ADMIN/ACCOUNTING rolü ile mevcut, yetkili kapsamda tam Pazartesi09:00 kuralı seçilebilir. Birden çok uygun kural varsa seçim zorunlu; hiç yoksa açıklama gösterilir. Yeni kural oluşturulmaz/etkinleştirilmez.
 - Hesap, alıcı ve kural üyeliği tek transaction; kural row lock ile yeniden doğrulanır. Diğer alıcılar, zaman, etkinlik ve worker cursor değişmez. Rol/şube/alıcı seçimi değişince kutu temizlenir. Yetki/model/retention/dağıtım kararı değişmedi; ADR-0007 geçerli.
-- Kanıt: Typecheck ve40 test geçti; yerel kural yok durumu formda doğrulandı. Nihai Docker/demo sonucu handoff'ta izlenir.
+- Kanıt: Typecheck/40 test, yerel ve nihai demo Docker build başarılı. Yerel kural yok/çoklu kapalı kural/seçim zorunluluğu/rol temizliği; canlı tek etkin kural/alıcı ve şube temizliği doğrulandı. İki geçici yerel UI kuralı temizlendi; demoya deneme personeli veya kuralı eklenmedi. Mevcut10 personel/17 bildirim/ana cihaz/etkin kural ve tek eski run korundu.
 
 ## CR-023 — Bildirim ekranından personel ekleme
 
