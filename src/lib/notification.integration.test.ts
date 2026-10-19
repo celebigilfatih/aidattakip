@@ -27,9 +27,11 @@ test('manual notifications: scope, one-use invites, device ownership, real dispa
   process.env.VAPID_PUBLIC_KEY = keys.publicKey; process.env.VAPID_PRIVATE_KEY = keys.privateKey; process.env.VAPID_SUBJECT = 'https://aidat.spormanage.com.tr'
   const originalSend = webpush.sendNotification
   let sent = 0
-  webpush.sendNotification = async (_subscription, payload) => {
+  webpush.sendNotification = async (_subscription, payload, options) => {
     sent++
     assert(!String(payload).includes('Özel borç ayrıntısı'), 'Lock-screen payload is generic')
+    assert.match(options!.topic!, /^[A-Za-z0-9_-]{32}$/, 'Apple topic must use 32 Base64url characters')
+    assert.equal(Buffer.from(options!.topic!, 'base64url').length, 24, 'Topic must be fully decodable, unlike a 25-character CUID')
     await new Promise(resolve => setTimeout(resolve, 30))
     return { statusCode: 201, body: '', headers: {} }
   }

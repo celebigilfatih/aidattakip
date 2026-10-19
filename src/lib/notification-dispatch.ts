@@ -1,6 +1,6 @@
 import webpush from 'web-push'
 import { prisma } from './prisma'
-import { NotificationError, validatePushEndpoint } from './notification-policy'
+import { hashToken, NotificationError, validatePushEndpoint } from './notification-policy'
 
 export function pushConfiguration() {
   const publicKey = process.env.VAPID_PUBLIC_KEY
@@ -40,7 +40,8 @@ export async function dispatchNotification(id: string) {
     const result = await webpush.sendNotification({ endpoint: device!.endpoint, keys: { p256dh: device!.p256dh, auth: device!.auth } }, JSON.stringify({
       title: 'SporManage', body: 'Yeni bir bildiriminiz var. Ayrıntıları güvenli alıcı ekranından görüntüleyin.',
       notificationId: id,
-    }), { vapidDetails: config!, TTL: 60, timeout: 10000, urgency: 'normal', topic: id.slice(-32) })
+    // A 25-character CUID is not valid Base64url; Apple's Topic validation rejects it.
+    }), { vapidDetails: config!, TTL: 60, timeout: 10000, urgency: 'normal', topic: hashToken(id).slice(0, 32) })
     statusCode = result.statusCode
     accepted = statusCode >= 200 && statusCode < 300
   } catch (error) {
