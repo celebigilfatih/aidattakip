@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.6
+- Document version: 0.4.7
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -24,6 +24,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Explicit non-goals: TBD — kullanıcı tarafından belirlenmedi.
 
 ## 2. Current Status
+
+- Güncel dağıtım (2026-10-19): Yalnız SporManage demo için `codex/manual-push-demo-20261019` / sabit `6b1e1c2` dağıtıldı. Coolify `19les87jazptcvfqxsroietk` **Success**, süre 4m15s; yeni migration applied, runtime VAPID valid, HTTPS/API kontrolleri başarılı. 60 sporcu/300 ödeme ve Özlüce container ID/image/StartedAt korundu. iPhone için sentetik veli daveti oluşturuldu; cihaz izni/gerçek teslim kabulü henüz bekliyor. Önceki onay/hazırlık satırları tarihçedir. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md), [PUSH_GUIDE](docs/40-operations/PUSH_GUIDE.md).
 
 - Demo push dağıtım onayı (2026-10-19): Kullanıcı `web-push` 3.6.7/MPL-2.0 ve yalnız SporManage demo HTTPS dağıtımı/iPhone gerçek testini onayladı. Ayrı `codex/manual-push-demo-20261019` ref'i hazırlanıyor; mevcut yerel image/test kanıtları korunur. Dağıtım ve cihaz kabulü henüz tamamlanmadı. Aşağıdaki önceki onay bekleme satırları tarihsel uygulama oturumuna aittir; güncel onay [ADR-0006](docs/50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) içindedir.
 
@@ -171,3 +173,5 @@ Bu sıra öneridir; uygulama onayı değildir.
 | 0.4.3 | 2026-10-19 | CR-019 belge eşlemesi; kısmi login düzeltmesi, son kayıtlı dağıtım ve açık sürüm kanıtı ayrımı. |
 | 0.4.4 | 2026-10-19 | Push ve tekrarlı aidat bildirimi incelemesi; Proposed ADR-0006, CR-020 ve doğrulanmış alıcı hedefi. |
 | 0.4.5 | 2026-10-19 | ADR-0006 Accepted; manuel push/alıcı ilk aşaması, yerel additive migration ve testler; iPhone/HTTPS kabulü açık. |
+| 0.4.6 | 2026-10-19 | Somut web-push/MPL-2.0 ve yalnız demo dağıtımı onaylandı; ayrı dal/yedek/runtime hazırlığı. |
+| 0.4.7 | 2026-10-19 | Yalnız demo 6b1e1c2 dağıtımı, migration ve HTTPS/runtime kanıtı; iPhone davet/cihaz adımının doğrulanması bekleniyor. |

@@ -87,6 +87,8 @@ Alıcı kapsamı kullanıcı tarafından doğrulandı. Eksikler: veli/sporcu gir
 
 ## Sources and decision history
 
+- 2026-10-19 uygulama kanıtı: Onaylı paket ve yalnız demo runtime/VAPID kurulumu tamamlandı. Ayrı dal/sabit 6b1e1c2, Coolify 19les87jazptcvfqxsroietk Success; migration applied, HTTPS/API/anahtar doğrulaması ve veri koruması başarılı. Özlüce container/image/StartedAt ve uzak main korundu. Sentetik veli test daveti kullanıcıya verildi; iPhone izin/gerçek bildirim görünümü hâlâ bekliyor. Otomasyon kapalı. [DEPLOYMENT](../40-operations/DEPLOYMENT.md).
+
 - 2026-10-19 son onay: Somut web-push/MPL-2.0 paket ve yalnız SporManage demo dağıtımı kullanıcı tarafından açıkça onaylandı. Aşağıdaki önceki onay bekleme kaydı tarihsel durumdur. Dağıtım ve gerçek cihaz teslimi ancak çalıştırılıp ayrı kanıtlandığında tamamlanmış sayılır.
 
 - Mevcut kaynaklar: [bildirim ekranı](../../src/app/notifications/page.tsx), [liste/oluşturma API](../../src/app/api/notifications/route.ts), [şema](../../prisma/schema.prisma), [CR-004/020](../20-execution/CHANGE_REQUESTS.md).

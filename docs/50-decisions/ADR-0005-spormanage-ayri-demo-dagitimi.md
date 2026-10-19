@@ -26,6 +26,8 @@ Belge eşleme notu (2026-10-19): Eski OVERVIEW metnindeki 17 Alpine ifadesiyle s
 
 ## Consequences
 
+2026-10-19 dar test uygulaması: Kullanıcının ADR-0006 kapsamındaki yalnız demo dağıtım onayıyla demo uygulaması `codex/manual-push-demo-20261019` dalı ve sabit 6b1e1c2 commit'ine alındı; auto deploy manuel. Bu, yukarıdaki demo `main` seçiminin manuel push testi için tarihli istisnasıdır. Aynı hostta ayrı DB/rol/uygulama ve canonical domain kararı korunur; Özlüce kaynağı/DB'si değiştirilmedi. Sonraki otomatik main geçişi veya iki uygulamaya dağıtım onaylanmadı.
+
 - Broşür kullanıcısının ADMIN işlemleri yalnız sentetik demo verisini etkiler; Özlüce kayıtlarına erişemez.
 - Uygulamalar aynı fiziksel PostgreSQL servisinin erişilebilirliği ve kaynak kapasitesini paylaşır. Mantıksal veritabanı ve rol izolasyonu servis seviyesindeki arızaya karşı izolasyon sağlamaz.
 - Demo ADMIN sentetik veriyi değiştirebilir. Otomatik sıfırlama, zamanlanmış yedek, RPO/RTO ve parola rotasyon tarihi bu kararın kapsamında değildir.

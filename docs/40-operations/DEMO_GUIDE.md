@@ -66,7 +66,11 @@ npx tsc --noEmit --incremental false
 
 Referans tarih ilk `demo-v1-branch-merkez` kaydında korunur; tekrar seed tarihçeyi ileri taşımaz. Genel `db:seed` bu ortam için kullanılmaz; SHA-256/bcrypt uyuşmazlığı CR-015 altında açıktır.
 
-## Bilinen sınırlar
+## 2026-10-19 manuel push güncellemesi
+
+Kullanıcı ADR-0006, web-push 3.6.7/MPL-2.0 ve yalnız bu demo uygulamasına dağıtımı onayladı. Ayrı alıcı/davet/cihaz ekranları ve gerçek Web Push adaptörü hazırlanmıştır; güncel dağıtım ve iPhone kabul durumu [PUSH_GUIDE](PUSH_GUIDE.md) ile [DEPLOYMENT](DEPLOYMENT.md) içinde tutulur. Otomatik aidat kuralları kapalıdır. Aşağıdaki sınırlar 2026-09-15 kurulum gözlemidir; push için güncel kayıt bu ek bölümdür.
+
+## Bilinen sınırlar — 2026-09-15 kurulum kaydı
 
 - Dashboard’un bazı özet kartlarında mevcut `-` yer tutucuları ve sabit sistem/aktivite metinleri vardır.
 - Ücret listesi tarife adını/periyodunu/grubunu gösterir; tutarı listelemeyebilir. Tutarlar FeeType ve Payment kayıtlarında tanımlıdır.

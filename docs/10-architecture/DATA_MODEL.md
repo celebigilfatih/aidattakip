@@ -25,7 +25,7 @@ Student grup/aktiflik, şube/aktiflik ve ad indeksleri; Payment sporcu/durum ve 
 
 ## Migration ve operasyon
 
-[migrations](../../prisma/migrations) içinde 11 tarihli `migration.sql` ve ayrıca `remove_location.sql` bulunur. `20261019120000_add_manual_web_push` kullanıcı onayıyla yalnız yerel aidat_takip DB'sine uygulandı; eski kayıtlar korundu. Standalone SQL dosyası çalıştırılmadı. Canlı DB'de yeni migration henüz uygulanmadı. [startup](../../scripts/startup.sh) `prisma migrate deploy` çalıştırır. İlgisiz SystemSetting.updatedAt default farkı bu migration'a dahil edilmedi.
+[migrations](../../prisma/migrations) içinde 11 tarihli `migration.sql` ve ayrıca `remove_location.sql` bulunur. `20261019120000_add_manual_web_push` kullanıcı onayıyla yerel aidat_takip ve yalnız SporManage spormanage_aidat_demo DB'sine uygulandı; mevcut kayıtlar korundu. Demo öncesi yedek alındı, migration applied ve 60 sporcu/300 ödeme sonrasında doğrulandı. Özlüce DB'sine uygulanmadı. Standalone SQL dosyası çalıştırılmadı. [startup](../../scripts/startup.sh) `prisma migrate deploy` çalıştırır. İlgisiz SystemSetting.updatedAt default farkı bu migration'a dahil edilmedi.
 
 ## Açık kararlar
 

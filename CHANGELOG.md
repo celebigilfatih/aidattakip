@@ -4,6 +4,11 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Deployed — 2026-10-19 — Yalnız SporManage demo manuel push
+
+- Ayrı demo dalı ve sabit 6b1e1c2 commit'i Coolify'da 4m15s içinde Success ile dağıtıldı; additive migration yalnız demo DB'sine uygulandı. Runtime UID/anahtar/HTTPS/API kontrolleri geçti; 60 sporcu ve 300 ödeme korundu. Özlüce container ID/image/StartedAt ve uzak main değişmedi.
+- Sentetik veli için kişisel test daveti kullanıcıya verildi; iPhone Ana Ekran/izin/gerçek teslimi bekliyor. Otomatik aidat kuralları/scheduler kapalı. Dağıtım, yedek ve doğrulama ayrıntıları DEPLOYMENT/PUSH_GUIDE/SESSION_HANDOFF içinde; token/secret değerleri repository'ye yazılmadı.
+
 ### Deployment preparation — 2026-10-19 — Yalnız demo push onayı
 
 - Kullanıcı `web-push` 3.6.7/MPL-2.0 paket seçimini ve yalnız SporManage demo ortamına dağıtıp iPhone testi yapmayı açıkça onayladı; ADR-0006 ve PUSH_GUIDE onay kaydı güncellendi. Ayrı demo ref'i hazırlanır; `main`/Özlüce kapsam dışıdır. Bu kayıt dağıtımın veya gerçek cihaz tesliminin tamamlandığı iddiası değildir.

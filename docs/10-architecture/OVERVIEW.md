@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 2026-10-19. Durum: Mevcut kod, tarihli yerel doğrulamalar ve son kayıtlı deployment topolojisi eşlenmiştir. Canlı ortam bu belge güncellemesinde yeniden doğrulanmadı.
+Last updated: 2026-10-19. Durum: Mevcut kod, yerel doğrulamalar ve onaylı yalnız demo dağıtımı eşlenmiştir. Canlı demo migration/runtime/HTTPS ve ortak PostgreSQL sürümü doğrulandı; Özlüce'de yalnız container/image/StartedAt koruma kontrolü yapıldı.
 
 ## Mevcut yapı
 
@@ -19,6 +19,8 @@ Tek repository içinde Next.js App Router arayüzü ve API rotaları bulunur; i�
 Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL. Lisans servisi `pg.Pool` ile ayrıca bağlanır. Kök layout AuthProvider ve SettingsProvider sağlar; oturum middleware ve rota kontrolleriyle işlenir. [layout](../../src/app/layout.tsx), [middleware](../../middleware.ts), [prisma](../../src/lib/prisma.ts), [license](../../src/lib/license.ts).
 
 ## Dağıtım topolojisi
+
+2026-10-19 manuel push güncellemesi: Demo ayrı `codex/manual-push-demo-20261019` dalı ve sabit 6b1e1c2 ile dağıtıldı; auto deploy manuel, yeni migration yalnız demo DB'sinde applied. Özlüce aynı container/image ile çalışmayı sürdürür. ADR-0005'in demo main kaydı için tarihli istisna ADR-0006 onayındadır; otomatik aidat kuralları kurulmadı.
 
 2026-09-15 tarihli son dağıtım kaydına göre Özlüce production ve SporManage demo iki ayrı Coolify uygulamasıdır. Aynı fiziksel PostgreSQL kaynağını paylaşırlar; `ozlucepay` ile `spormanage_aidat_demo` ayrı mantıksal veritabanları ve ayrı uygulama rolleri kullanır. Demo lisans tablosu kullanıcı kararıyla demo DB içinde tutulur. Alan adı ve veri izolasyonu [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md), işletim ayrıntısı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içindedir.
 

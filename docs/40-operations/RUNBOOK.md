@@ -22,6 +22,8 @@ Güncelleme — manuel push ilk aşaması: Yeni migration yerelde uygulandı (to
 
 ## Coolify demo işletimi
 
+2026-10-19 güncellemesi: Yalnız demo uygulaması `codex/manual-push-demo-20261019` dalına/sabit 6b1e1c2 commit'ine alındı; auto deploy **Manual deployments only**. Runtime APP_ORIGIN/VAPID_* demo için yapılandırıldı, buildtime kapalı; PostgreSQL 17.7 ve yeni migration applied doğrulandı. Sonraki belge push'u runtime'ı değiştirmez. Yeni demo kodu için commit sabiti bilinçli güncellenip yalnız demo Deploy seçilir; main/Özlüce dağıtımı bu kapsamda değildir. Test daveti kullanıcının iPhone Ana Ekran uygulamasında kabul edilmelidir. Bildirim izni verildi beyanı tek başına cihaz kaydı veya teslim kanıtı sayılmaz; alıcı devices ve delivery sonucu ayrı kontrol edilir. [PUSH_GUIDE](PUSH_GUIDE.md), [DEPLOYMENT](DEPLOYMENT.md).
+
 Bu bölüm ADR-0005 ve 2026-09-15 tarihli son dağıtım kaydını esas alır; 2026-10-19 belge eşlemesinde canlı ortam yeniden sorgulanmadı. Coolify PostgreSQL sürümü TBD; yerel 15.19 doğrulaması canlı sunucuya aktarılmaz. [DEPLOYMENT](DEPLOYMENT.md).
 
 - Canonical demo: [https://aidat.spormanage.com.tr](https://aidat.spormanage.com.tr); uygulama `spormanage-aidat-demo`, DB `spormanage_aidat_demo`.

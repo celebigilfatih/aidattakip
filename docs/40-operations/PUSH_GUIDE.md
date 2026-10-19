@@ -1,6 +1,6 @@
 # Manuel Web Push — ilk aşama
 
-Last updated: 2026-10-19. Karar: [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) Accepted. Yerel ilk aşama uygulanmıştır; iPhone/HTTPS ortamında gerçek teslim henüz doğrulanmadı. Otomatik aidat kuralları ve scheduler etkin değildir.
+Last updated: 2026-10-19. Karar: [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) Accepted. İlk aşama yerel ve yalnız SporManage HTTPS demo ortamında hazırdır; Coolify 6b1e1c2 dağıtımı, migration ve runtime/API kontrolleri başarılı. Gerçek iPhone teslimi henüz doğrulanmadı. Otomatik aidat kuralları ve scheduler etkin değildir. [DEPLOYMENT](DEPLOYMENT.md).
 
 ## Ekranlar ve kişiler
 
@@ -16,9 +16,9 @@ Last updated: 2026-10-19. Karar: [ADR-0006](../50-decisions/ADR-0006-web-push-ve
 
 Runtime değişkenleri: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (operatöre ait HTTPS URL veya mailto), `APP_ORIGIN` (tarayıcıdaki tam origin). Yerelde APP_ORIGIN `http://127.0.0.1:3077`; `localhost` farklı origin sayılır. Anahtar yenilenirse eski cihaz abonelikleri yeniden kaydedilmelidir. Yeni alıcı/push uçları mevcut JWT secret'ı olmadan personel oturumunu kabul etmez; genel AuthService fallback politikası bu işle değiştirilmedi.
 
-Migration `20261019120000_add_manual_web_push` yerel DB'ye uygulandı. Beş yeni tablo (notification_recipients, push_invites, recipient_sessions, push_devices, push_deliveries), yeni enum değerleri ve Notification alıcı/cihaz ilişkileri ekler. Eski kayıtları silmez/dönüştürmez. Migration üretiminde fark edilen SystemSetting.updatedAt default farkı bu migration'a alınmadı. Genel seed/reset çalıştırılmaz.
+Migration `20261019120000_add_manual_web_push` yerel ve kullanıcı onaylı SporManage demo DB'sine uygulandı. Beş yeni tablo (notification_recipients, push_invites, recipient_sessions, push_devices, push_deliveries), yeni enum değerleri ve Notification alıcı/cihaz ilişkileri ekler. Eski kayıtları silmez/dönüştürmez. Demo dağıtım öncesi yedeği ve sonrasında 60 sporcu/300 ödeme koruması doğrulandı. Migration üretiminde fark edilen SystemSetting.updatedAt default farkı bu migration'a alınmadı. Genel seed/reset çalıştırılmaz.
 
-## iPhone test adımları — dağıtım ve cihaz izni bekliyor
+## iPhone test adımları — dağıtım hazır, cihaz izni bekliyor
 
 1. Onaylı HTTPS test ortamında bu kaynak, migration ve o ortama özel VAPID runtime değerleri hazırlanır. Yerel loopback adresine iPhone'dan bağlanılamaz. Yerel anahtarlar veya abonelikler production ile paylaşılmaz.
 2. Yönetici `Alıcılar ve Cihazlar` bölümünde test alıcısını doğrulayıp kişisel davet oluşturur. Gerçek kişinin yerine sentetik test alıcısı seçilecekse bağlantıyı sadece test cihazını kullanan kişi alır.

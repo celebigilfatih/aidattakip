@@ -1,5 +1,21 @@
 # Deployment
 
+## 2026-10-19 — Manuel push yalnız demo dağıtımı başarılı
+
+| Alan | Doğrulanan sonuç |
+|---|---|
+| Kaynak | `codex/manual-push-demo-20261019`, sabit `6b1e1c285867658eeb516242cf9dac918c6f2920` |
+| Coolify deployment | `19les87jazptcvfqxsroietk`, Success/Finished, 4m15s; rolling update 10:03:57 UTC tamamlandı |
+| Demo container/image | `8f6f6b2a8d64`, `oibkjai6tfoeur5gxnx3ekxt:6b1e1c285867658eeb516242cf9dac918c6f2920` |
+| Runtime | UID 1001; demo VAPID validate başarılı, public key özeti `5ca9f29071797f80`; origin/subject canonical HTTPS; RUN_SEED true değil |
+| Migration/veri | `20261019120000_add_manual_web_push` applied; 10 kullanıcı/60 sporcu/60 veli/300 ödeme/12 bildirim korunmuş |
+| HTTPS/API | recipient, manifest, SW, ikon, config 200; public key demo ile eşleşiyor, private key dönmüyor. ADMIN notifications/recipients 200; scheduled GET 405; oturumsuz recipient session 401; yanlış origin POST 403 |
+| Özlüce koruma | Önceki aynı container ID, image ve StartedAt doğrulandı; main uzak SHA hâlâ b024011, production dağıtımı tetiklenmedi |
+
+Chrome'da eski geçerli JWT'nin kullanıcı bağlamı API'de reddedildi; mevcut belgelenmiş demo yöneticisiyle normal giriş yenilendi ve yeni panel/test alıcısı doğrulandı. Parola/rol değiştirilmedi. Sentetik Volkan Acar veli kaydı için bir test daveti oluşturuldu; token yalnız kullanıcıya verildi ve repository'ye yazılmadı. İlk postflight'ta cihaz 0; iPhone Ana Ekran/davet/izin adımı ve gerçek push kabulü henüz bekler. Dağıtım başarısı cihazda bildirim görüldüğü anlamına gelmez. Otomatik kurallar/scheduler kapalıdır.
+
+Demo kaynak commit'i sabit, auto deploy manuel kalır. Sonraki belge commit'leri runtime'ı kendiliğinden değiştirmez. Yeni kod dağıtımı için demo commit sabiti bilinçli güncellenmelidir; `main` üzerine birleşim veya Özlüce'ye dağıtım bu onayın kapsamında değildir. Geri dönüş için önceki image mevcut, additive migration otomatik geri alınmaz; gerçek rollback denenmedi. Aşağıdaki hazırlık/önceki durumlar tarihsel kayıt olarak korunur.
+
 ## 2026-10-19 — Demo push dağıtım ön hazırlığı
 
 Kullanıcı paket/yalnız demo dağıtımını ve ayrıca tarayıcı üzerinden demo VAPID runtime kaydını onayladı. Coolify v4.4.6 paneli `https://coolify.webmahsul.com.tr`; demo projesi `rtm2rg3oq1r0gzynacainabz`, environment `pznrtz0nys4vptuwt3wqkbsj`, uygulama `oibkjai6tfoeur5gxnx3ekxt`. Demo auto deploy **Manual deployments only**, branch `codex/manual-push-demo-20261019` olarak kaydedildi. Bu dar test için ADR-0005'in demo `main` kaydının yerine ADR-0006 onaylı ayrı ref kullanılır; Özlüce source/config değişmez.
