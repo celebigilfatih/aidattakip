@@ -1,18 +1,21 @@
 # Roadmap
 
-Last updated: 2026-09-14. Durum: Repository kaynaklarından statik olarak belgelenen mevcut durum; çalışma zamanı doğrulaması değildir. Öneriler ayrıca işaretlenmiştir.
+Last updated: 2026-10-19. Durum: Kullanıcı hedefleri, tarihli tamamlanan işler ve açık kabul/karar adımları ayrılmıştır.
 
 ## Mevcut odak
 
-Kullanıcının ilk hedefi sporcu ve aidat takibi. Mevcut uygulamanın CDSK bağlamı kaynaklarla belgeleniyor.
+Kullanıcının ilk hedefi sporcu ve aidat takibi. CDSK bağlamı belgelenmiş, demo/rapor çalışmaları ve dağıtım yapılmıştır; ayrıntılı MVP kabulü hâlâ açıktır.
 
 | Aşama | Durum | Tarih / kabul |
 |---|---|---|
 | CDSK iskeleti | Tamamlandı | 2026-09-14; CHANGELOG ve handoff kaydı mevcut |
 | Repository’den bağlam doldurma | Belgelendi | 2026-09-14; uygulama kabulü değildir |
+| Rapor dışa aktarımı ve demo dağıtımı | Tamamlandı; ADR-0003/0005 Accepted, ADR-0004 Superseded | 2026-09-15 tarihli [DEPLOYMENT](../40-operations/DEPLOYMENT.md) ve [DEMO_VALIDATION](../30-quality/DEMO_VALIDATION.md); genel MVP kabulü değildir |
+| Windows yerel demo ve CDSK belge eşlemesi | Yerel kurulum doğrulandı; CR-019 belge kapsamı kapalı | 2026-10-19; [RUNBOOK](../40-operations/RUNBOOK.md), [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md) |
+| Manuel push ve ayrı alıcı kaydı | ADR-0006 Accepted; yerel ilk aşama/test hazır. Somut paket ve yalnız demo HTTPS dağıtımı onaylandı; iPhone gerçek testi bekliyor | 2026-10-19; [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md). Otomatik kurallar sonraki aşama |
 | MVP ayrıntıları ve kritik kararların netleşmesi | Önerilen sonraki adım | TBD; kullanıcı kararları gerekli |
-| Sporcu/aidat akışlarının çalışma zamanı doğrulaması | Öneri | TBD; izole veri ve ortam gerekli |
-| Öncelikli düzeltmeler ve yayın hazırlığı | Öneri | TBD; bulgu ve onaylara bağlı |
+| Sporcu/aidat ürün kabul senaryoları | Demo/test/smoke kanıtı var; kesin iş kuralı ve kapsamlı kabul açık | TBD; [TEST_STRATEGY](../30-quality/TEST_STRATEGY.md) |
+| Kalan düzeltmeler ve sonraki yayın hazırlığı | Öneri; mevcut dağıtımın yapılmadığı anlamına gelmez | TBD; açık bulgu ve onaylara bağlı |
 
 Aşamalar teslim tarihi veya ek kapsam taahhüdü değildir. Kaynaklar: [SCOPE](SCOPE.md), [BACKLOG](../20-execution/BACKLOG.md), [CHANGELOG](../../CHANGELOG.md).
 

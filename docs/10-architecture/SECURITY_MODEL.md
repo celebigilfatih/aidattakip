@@ -1,6 +1,6 @@
 # Security Model
 
-Last updated: 2026-09-14. Durum: Repository kaynaklarından statik olarak belgelenen mevcut durum; çalışma zamanı doğrulaması değildir. Öneriler ayrıca işaretlenmiştir.
+Last updated: 2026-10-19. Durum: Mevcut kaynak ve tarihli düzeltme kayıtları eşlenmiştir; kapsamlı çalışma zamanı güvenlik doğrulaması değildir.
 
 Bu belge mevcut kaynak davranışını kaydeder; kapsamlı güvenlik denetimi veya güvenli olduğuna dair onay değildir.
 
@@ -16,7 +16,8 @@ Sporcu/veli kimlik-iletişim bilgileri, doğum tarihi, kullanıcı parola hash�
 
 ## Kaynakta görülen riskler
 
-- Login kodu girilen parolayı debug loguna geçiriyor; AuthService secret’ın bir kısmını logluyor ve sabit yedek değer kullanıyor. Üretim console ayarı error/warn loglarını kaldırmıyor. Değerler bu belgeye kopyalanmadı.
+- Login API'sindeki e-posta/parola/hash debug logları ve hassas debug yanıtları 2026-09-15 tarihinde kaldırıldı; mevcut kod yalnız genel hata mesajını logluyor. Bu tamamlanan düzeltme [CHANGELOG](../../CHANGELOG.md) içinde kayıtlıdır.
+- AuthService kaynakta secret'ın bir kısmını ve doğrulanan kullanıcının e-postasını `console.log` ile logluyor; sabit secret fallback'i de duruyor. Next production derlemesinde log çağrıları kaldırılacak şekilde yapılandırılmış, error/warn korunuyor. Development veya farklı çalıştırma biçimleri için bu derleme ayarı kalıcı secret/log politikası yerine geçmez. Değerler bu belgeye kopyalanmadı.
 - `.env`, `.npmrc` ve yerel SQL dökümü Git tarafından takip ediliyor; gitignore girdileri mevcut takibi kaldırmaz. İçerikler bu bağlam görevinde açılmadı; gerçek hassas veri/erişim kapsamı TBD.
 - [Compose](../../docker-compose.yml) içine kimlik bilgisi/anahtar değerleri yazılmış. Bunların canlı kullanımı TBD; değerlere burada yer verilmedi.
 - [Yedek API](../../src/app/api/settings/backup/route.ts) users kayıtlarını alan kısıtlaması olmadan JSON’a dahil ediyor. Yedek erişimi/koruması ayrıca karar gerektirir.
@@ -24,4 +25,8 @@ Sporcu/veli kimlik-iletişim bilgileri, doğum tarihi, kullanıcı parola hash�
 
 ## Karar durumu
 
-[ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) Proposed: secret ve kimlik doğrulama logları için dar kapsamlı öneri. Henüz uygulanmadı veya kabul edilmedi. Rol matrisi, oturum süresi, retention ve veri saklama ayrı açık kararlar; [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md).
+ADR-0006 manuel push ilk aşaması: Aktif ADMIN alıcı kimliğini doğrulayarak 24 saatlik tek kullanımlı davet oluşturur; alıcı 7 günlük ayrı HttpOnly/SameSite=Strict oturumla yalnız `/recipient` ekranına erişir. Personel token'ı yerine kullanılamaz. Bildirim yönetimi aktif ADMIN/ACCOUNTING ve şube kapsamıyla sınırlıdır; cihaz kaydı kendi alıcı oturumuna bağlıdır. Mutasyonlarda tam origin doğrulanır. Push için yalnız desteklenen tarayıcı servislerinin HTTPS hostları kabul edilir; arbitrary endpoint/redirect izlenmez. Kilit ekranı yükü genel tutulur. Çıkış/erişim iptali cihazı pasifleştirir; yeni alıcı uçları JWT_SECRET yoksa personel doğrulamasını reddeder. [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
+
+VAPID sırları repository dışında yerel runtime dosyasında tutulur; production için ortama özel sırlar gereklidir. `.dockerignore` ortam varyantlarını, kök SQL dökümünü, dump'ları ve çıktı klasörünü build bağlamından çıkarır. Bu, Git'te takip edilen eski dosyalar/anahtar rotasyonu veya genel AuthService sorununun kapatılması değildir. Otomatik retention/purge eklenmedi. web-push 3.6.7/MPL-2.0 ve yalnız demo HTTPS dağıtımı kullanıcı tarafından 2026-10-19 tarihinde onaylandı; gerçek iPhone teslimi henüz bekler.
+
+[ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) Proposed kalır. Login temizliği önerinin bir kısmıyla örtüşen tamamlanmış ayrı düzeltmedir; AuthService logları, fallback, ortam envanteri ve rotasyon açık kalır. ADR'nin tamamı kabul edilmiş veya uygulanmış değildir. 2026-10-19 yerel başlatıcısının `[Auth]` çıktı filtresi de kaynak düzeltmesi değildir. Rol matrisi, oturum süresi, retention ve veri saklama ayrı açık kararlar; [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md).

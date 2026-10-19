@@ -1,6 +1,6 @@
 # Architecture Overview
 
-Last updated: 2026-09-15. Durum: Repository kaynakları ve tarihli deployment doğrulaması birlikte belgelenmiştir. Öneriler ayrıca işaretlenmiştir.
+Last updated: 2026-10-19. Durum: Mevcut kod, tarihli yerel doğrulamalar ve son kayıtlı deployment topolojisi eşlenmiştir. Canlı ortam bu belge güncellemesinde yeniden doğrulanmadı.
 
 ## Mevcut yapı
 
@@ -8,19 +8,25 @@ Tek repository içinde Next.js App Router arayüzü ve API rotaları bulunur; i�
 
 | Katman | Kaynak | Görev |
 |---|---|---|
-| Sayfalar | [src/app](../../src/app) | 17 page.tsx dosyası |
-| API | [src/app/api](../../src/app/api) | 48 route.ts dosyası |
+| Sayfalar | [src/app](../../src/app) | 18 page.tsx dosyası |
+| API | [src/app/api](../../src/app/api) | 53 route.ts dosyası |
 | UI | [components](../../src/components) | Radix tabanlı kontroller, formlar, takvim, yazdırma |
 | İstemci bağlamı | [contexts](../../src/contexts) | AuthContext ve SettingsContext |
 | Ortak işlevler | [lib](../../src/lib) | JWT, Prisma, izin, bildirim, lisans |
-| Veri | [schema.prisma](../../prisma/schema.prisma) | PostgreSQL, 20 model |
+| Veri | [schema.prisma](../../prisma/schema.prisma) | PostgreSQL, 25 model |
 | Tipler | [types](../../src/types/index.ts) | Uygulama tip ve enum tanımları |
 
 Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL. Lisans servisi `pg.Pool` ile ayrıca bağlanır. Kök layout AuthProvider ve SettingsProvider sağlar; oturum middleware ve rota kontrolleriyle işlenir. [layout](../../src/app/layout.tsx), [middleware](../../middleware.ts), [prisma](../../src/lib/prisma.ts), [license](../../src/lib/license.ts).
 
 ## Dağıtım topolojisi
 
-Özlüce production ve SporManage demo iki ayrı Coolify uygulamasıdır. İkisi aynı fiziksel PostgreSQL 15 kaynağını paylaşır; `ozlucepay` ile `spormanage_aidat_demo` ayrı mantıksal veritabanları ve ayrı uygulama rolleri kullanır. Demo lisans tablosu kullanıcı kararıyla demo DB içinde tutulur. Alan adı ve veri izolasyonu [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md), işletim ayrıntısı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içindedir.
+2026-09-15 tarihli son dağıtım kaydına göre Özlüce production ve SporManage demo iki ayrı Coolify uygulamasıdır. Aynı fiziksel PostgreSQL kaynağını paylaşırlar; `ozlucepay` ile `spormanage_aidat_demo` ayrı mantıksal veritabanları ve ayrı uygulama rolleri kullanır. Demo lisans tablosu kullanıcı kararıyla demo DB içinde tutulur. Alan adı ve veri izolasyonu [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md), işletim ayrıntısı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içindedir.
+
+| Ortam | PostgreSQL sürüm kanıtı | Veri/lisans yerleşimi |
+|---|---|---|
+| Windows yerel demo | 2026-10-19 salt okunur `current_setting('server_version')`: **15.19**; imaj `postgres:15-alpine` | Loopback:5477 üzerinde `aidat_takip` ve `license_db` |
+| Repository Compose tanımı | `postgres:15-alpine`; çalışan Coolify servisini kanıtlamaz | Dosya modeli; [CR-006](../20-execution/CHANGE_REQUESTS.md) açık |
+| Coolify ortak PostgreSQL kaynağı | **TBD** — eski belgelerde 15/17 çelişkisi var; sunucu sürümü bu görevde sorgulanmadı | Son kayıtlı topoloji ADR-0005; sürüm doğrulama takibi CR-006 |
 
 ## Sürümler
 
@@ -33,9 +39,11 @@ Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL
 | tailwindcss | `^3.4.17` | `3.4.17` |
 | eslint | `^9.36.0` | `9.36.0` |
 
-Kaynaklar: [package.json](../../package.json), [package-lock.json](../../package-lock.json). İlk statik incelemede node_modules yoktu. Yerel çalıştırma oturumunda Node v24.15.0/npm 11.12.1 doğrulandı ve kilit dosyasından bağımlılıklar kuruldu; [RUNBOOK](../40-operations/RUNBOOK.md). Docker Node 20 Alpine tanımlar. 2026-09-15 production kurulumu Coolify üzerinde repository Dockerfile’ı ve mevcut özel PostgreSQL 17 Alpine kaynağını kullanır; Compose production’da kullanılmaz. [DEPLOYMENT](../40-operations/DEPLOYMENT.md).
+Kaynaklar: [package.json](../../package.json), [package-lock.json](../../package-lock.json); paket tablosu 2026-10-19 tarihinde yeniden eşlendi. Windows yerel ortamında Node v24.19.0 ve pnpm üzerinden npm 11.12.1 ile kilitli kurulum doğrulandı; önceki 2026-09-14 kaydı Node v24.15.0 kullanıyordu. Bunlar zorunlu Node sürümü kararı değildir. [RUNBOOK](../40-operations/RUNBOOK.md). Dockerfile Node 20 Alpine tanımlar. Son kayıtlı Coolify dağıtımı repository Dockerfile'ını kullanır; Compose production'da kullanılmaz. Canlı PostgreSQL sürümü yukarıdaki gibi TBD'dir.
 
 ## Bütünlük ve sınırlar
+
+2026-10-19 ADR-0006 ilk aşaması: `/recipient` ayrı alıcı oturumu, `/api/push/*` alıcı/davet/cihaz API'leri ve standart Web Push adaptörü eklendi. Personel JWT'si ile alıcı oturumu ayrıdır. Manuel/toplu gönderim ortak servisten geçer; yeni push teslimi ACCEPTED, uygulama içi yayın SENT olur. PWA manifesti ve ağdan okuyan, veri cache'lemeyen service worker kullanılır. Otomatik aidat kuralları/işleyici etkin değildir. [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
 
 Merkezi repository/service katmanı veya bağımsız backend paketi görünmüyor. Bazı sayfalarda UI ve veri çağrıları birlikte; bazı auth yardımcıları route’larda tekrar ediyor. Refactor kararı alınmadı. `next-auth` bağımlılığı mevcut olsa da incelenen giriş akışı özel JWT kullanıyor.
 

@@ -1,6 +1,6 @@
 # API Conventions
 
-Last updated: 2026-09-15. Durum: Repository kaynakları ve tarihli yerel doğrulamalar birlikte belgelenmiştir.
+Last updated: 2026-10-19. Durum: Repository kaynakları ve tarihli yerel doğrulamalar birlikte belgelenmiştir.
 
 ## Mevcut sözleşme
 
@@ -22,7 +22,15 @@ Bu dar rapor kararı diğer uçlardaki Bearer/çerez tutarsızlığını veya ge
 
 GET’in yan etkisiz olduğu varsayılmamalı: [settings GET](../../src/app/api/settings/route.ts) kayıt yoksa ayar kaydı oluşturur. Salt okunur incelemede API çağrısı yapılmadı.
 
-## Rota envanteri — 48 dosya
+## Bildirim ve alıcı sözleşmesi — ADR-0006 ilk aşama
+
+Bildirim yönetimi aktif ADMIN/ACCOUNTING ve güncel şube kapsamını gerektirir; alıcı daveti/iptali yalnız ADMIN'dir. Yazma istekleri aynı origin kontrolünden geçer. Veli/sporcu `push-recipient-session` HttpOnly çereziyle ayrı alıcı oturumu kullanır; bu çerez personel API erişimi sağlamaz.
+
+Liste `scheduledAt`, `sentAt`, alıcı bilgileri ve pagination döndürür. Öğrenci/tümü ve gruplar aktif öğrencilere; antrenörler bağlı aktif TRAINER hesabına açılır. Tarih ISO offset/UTC olmalıdır; `null` zamanlamayı kaldırır. PUSH tek kayıtlı alıcı/cihaz seçer. Tekil, bulk ve uyumlu send aynı adaptörü kullanır; IN_APP → SENT, başarılı push servis cevabı → ACCEPTED. ACCEPTED cihazda görüntülenme/okunma değildir. EMAIL/SMS gerçek sağlayıcısı olmadığı için 409 verir. Gelecek zamanlı kayıt erken gönderilmez; PROCESSING/terminal kayıt yeniden gönderilmez. GET process-scheduled 405 döndürür; otomatik işleyici kapalıdır.
+
+Push config yalnız public key/yapılandırma durumunu verir. Activate tek kullanımlı daveti tüketir; session kendi cihazlarını ve bildirimlerini döndürür. Subscription endpoint/anahtarları yönetim listelerine veya hata yanıtlarına açılmaz. Davet/oturum anahtarlarının yalnız hash'i DB'dedir. Ayrıntılı kullanım ve sınırlar [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md) içindedir.
+
+## Rota envanteri — 53 dosya
 
 | Rota | Metotlar | Kaynak |
 |---|---|---|
@@ -56,6 +64,11 @@ GET’in yan etkisiz olduğu varsayılmamalı: [settings GET](../../src/app/api/
 | `/api/payments/[id]` | PATCH, PUT, DELETE | [kaynak](../../src/app/api/payments/[id]/route.ts) |
 | `/api/payments/bulk` | POST | [kaynak](../../src/app/api/payments/bulk/route.ts) |
 | `/api/payments` | GET, POST, DELETE | [kaynak](../../src/app/api/payments/route.ts) |
+| `/api/push/activate` | POST | [kaynak](../../src/app/api/push/activate/route.ts) |
+| `/api/push/config` | GET | [kaynak](../../src/app/api/push/config/route.ts) |
+| `/api/push/recipients` | GET, POST, DELETE | [kaynak](../../src/app/api/push/recipients/route.ts) |
+| `/api/push/session` | GET, DELETE | [kaynak](../../src/app/api/push/session/route.ts) |
+| `/api/push/subscription` | POST, DELETE | [kaynak](../../src/app/api/push/subscription/route.ts) |
 | `/api/reports/export` | GET | [kaynak](../../src/app/api/reports/export/route.ts) |
 | `/api/reports/overview` | GET | [kaynak](../../src/app/api/reports/overview/route.ts) |
 | `/api/search` | GET | [kaynak](../../src/app/api/search/route.ts) |

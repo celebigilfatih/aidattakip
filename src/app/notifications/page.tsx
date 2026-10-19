@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import PushPanel from '@/components/notifications/PushPanel';
 import AppLayout from '@/components/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -82,6 +83,9 @@ export default function NotificationsPage() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [trainers, setTrainers] = useState<Trainer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
+  const [requestError, setRequestError] = useState('');
   const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [editingNotification, setEditingNotification] = useState<Notification | null>(null);
@@ -118,11 +122,11 @@ export default function NotificationsPage() {
     fetchStudents();
     fetchGroups();
     fetchTrainers();
-  }, [filters]);
+  }, [filters, page]);
 
   const fetchNotifications = async () => {
     try {
-      const params = new URLSearchParams();
+      const params = new URLSearchParams({ page: String(page) });
       Object.entries(filters).forEach(([key, value]) => {
         if (value && value !== 'all') params.append(key, value);
       });
@@ -132,6 +136,10 @@ export default function NotificationsPage() {
       
       if (response.ok) {
         setNotifications(data.notifications);
+        setPages(data.pagination?.pages || 1);
+        setRequestError('');
+      } else {
+        setRequestError(data.error || 'Bildirim listesi yüklenemedi.');
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
@@ -191,13 +199,13 @@ export default function NotificationsPage() {
       const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, scheduledAt: formData.scheduledAt ? new Date(formData.scheduledAt).toISOString() : null })
       });
 
       if (response.ok) {
         toast({
           title: '✅ Başarılı!',
-          description: editingNotification ? 'Bildirim güncellendi' : 'Bildirim oluşturuldu'
+          description: editingNotification ? 'Bildirim güncellendi' : 'Bildirim kayıtları oluşturuldu. Henüz gönderilmedi.'
         });
         setShowCreateDialog(false);
         setEditingNotification(null);
@@ -280,7 +288,7 @@ export default function NotificationsPage() {
       studentId: notification.student?.id || 'all',
       groupId: 'all',
       trainerId: 'all',
-      scheduledAt: notification.scheduledAt ? new Date(notification.scheduledAt).toISOString().slice(0, 16) : '',
+      scheduledAt: notification.scheduledAt ? new Date(new Date(notification.scheduledAt).getTime() - new Date(notification.scheduledAt).getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '',
       recipientEmail: notification.recipientEmail || '',
       recipientPhone: notification.recipientPhone || ''
     });
@@ -324,12 +332,16 @@ export default function NotificationsPage() {
   const getStatusBadge = (status: string) => {
     const variants: { [key: string]: 'default' | 'secondary' | 'destructive' | 'outline' } = {
       PENDING: 'outline',
+      PROCESSING: 'secondary',
+      ACCEPTED: 'default',
       SENT: 'default',
       FAILED: 'destructive',
       CANCELLED: 'secondary'
     };
 
     const icons: { [key: string]: React.ReactElement } = {
+      PROCESSING: <Clock className="w-3 h-3" />,
+      ACCEPTED: <CheckCircle className="w-3 h-3" />,
       PENDING: <Clock className="w-3 h-3" />,
       SENT: <CheckCircle className="w-3 h-3" />,
       FAILED: <XCircle className="w-3 h-3" />,
@@ -339,7 +351,7 @@ export default function NotificationsPage() {
     return (
       <Badge variant={variants[status]} className="flex items-center gap-1">
         {icons[status]}
-        {status}
+        {({ PENDING: 'Bekliyor', SENT: 'Yayınlandı', FAILED: 'Başarısız', CANCELLED: 'İptal', PROCESSING: 'İşleniyor', ACCEPTED: 'Push servisi kabul etti' } as Record<string, string>)[status] || status}
       </Badge>
     );
   };
@@ -348,6 +360,7 @@ export default function NotificationsPage() {
     const icons: { [key: string]: React.ReactElement } = {
       EMAIL: <Mail className="w-4 h-4" />,
       SMS: <Smartphone className="w-4 h-4" />,
+      PUSH: <Smartphone className="w-4 h-4" />,
       IN_APP: <Bell className="w-4 h-4" />
     };
     return icons[method] || <MessageSquare className="w-4 h-4" />;
@@ -427,7 +440,7 @@ export default function NotificationsPage() {
                 </div>
                 <div>
                   <label className="text-sm font-medium">Alıcı Tipi</label>
-                  <Select value={formData.recipientType} onValueChange={(value) => setFormData({ ...formData, recipientType: value })}>
+                  <Select disabled={!!editingNotification} value={formData.recipientType} onValueChange={(value) => setFormData({ ...formData, recipientType: value })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Alıcı tipi seçin" />
                     </SelectTrigger>
@@ -444,7 +457,7 @@ export default function NotificationsPage() {
               {formData.recipientType === 'students' && (
                 <div>
                   <label className="text-sm font-medium">Öğrenci Seçin</label>
-                  <Select value={formData.studentId} onValueChange={(value) => setFormData({ ...formData, studentId: value })}>
+                  <Select disabled={!!editingNotification} value={formData.studentId} onValueChange={(value) => setFormData({ ...formData, studentId: value })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Öğrenci seçin" />
                     </SelectTrigger>
@@ -463,7 +476,7 @@ export default function NotificationsPage() {
               {formData.recipientType === 'groups' && (
                 <div>
                   <label className="text-sm font-medium">Grup Seçin</label>
-                  <Select value={formData.groupId} onValueChange={(value) => setFormData({ ...formData, groupId: value })}>
+                  <Select disabled={!!editingNotification} value={formData.groupId} onValueChange={(value) => setFormData({ ...formData, groupId: value })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Grup seçin" />
                     </SelectTrigger>
@@ -482,7 +495,7 @@ export default function NotificationsPage() {
               {formData.recipientType === 'trainers' && (
                 <div>
                   <label className="text-sm font-medium">Antrenör Seçin</label>
-                  <Select value={formData.trainerId} onValueChange={(value) => setFormData({ ...formData, trainerId: value })}>
+                  <Select disabled={!!editingNotification} value={formData.trainerId} onValueChange={(value) => setFormData({ ...formData, trainerId: value })}>
                     <SelectTrigger>
                       <SelectValue placeholder="Antrenör seçin" />
                     </SelectTrigger>
@@ -526,19 +539,19 @@ export default function NotificationsPage() {
                 </div>
                 <div>
                   <label className="text-sm font-medium">Yöntem</label>
-                  <Select value={formData.method} onValueChange={(value) => setFormData({ ...formData, method: value })}>
+                  <Select disabled={!!editingNotification} value={formData.method} onValueChange={(value) => setFormData({ ...formData, method: value })}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="EMAIL">E-posta</SelectItem>
-                      <SelectItem value="SMS">SMS</SelectItem>
+                      <SelectItem value="SMS">SMS (sağlayıcı henüz bağlı değil)</SelectItem>
                       <SelectItem value="IN_APP">Uygulama İçi</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Zamanlama (Opsiyonel)</label>
+                  <label className="text-sm font-medium">Zamanlama (cihaz saat dilimi)</label>
                   <Input
                     type="datetime-local"
                     value={formData.scheduledAt}
@@ -591,7 +604,7 @@ export default function NotificationsPage() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-4">
-            <Select value={filters.type} onValueChange={(value) => setFilters({ ...filters, type: value })}>
+            <Select value={filters.type} onValueChange={(value) => { setPage(1); setFilters({ ...filters, type: value }); }}>
               <SelectTrigger>
                 <SelectValue placeholder="Tip" />
               </SelectTrigger>
@@ -605,32 +618,33 @@ export default function NotificationsPage() {
               </SelectContent>
             </Select>
 
-            <Select value={filters.status} onValueChange={(value) => setFilters({ ...filters, status: value })}>
+            <Select value={filters.status} onValueChange={(value) => { setPage(1); setFilters({ ...filters, status: value }); }}>
               <SelectTrigger>
                 <SelectValue placeholder="Durum" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tüm durumlar</SelectItem>
                 <SelectItem value="PENDING">Beklemede</SelectItem>
-                <SelectItem value="SENT">Gönderildi</SelectItem>
+                <SelectItem value="SENT">Uygulama içinde yayınlandı</SelectItem><SelectItem value="ACCEPTED">Push servisi kabul etti</SelectItem><SelectItem value="PROCESSING">İşleniyor</SelectItem>
                 <SelectItem value="FAILED">Başarısız</SelectItem>
                 <SelectItem value="CANCELLED">İptal Edildi</SelectItem>
               </SelectContent>
             </Select>
 
-            <Select value={filters.method} onValueChange={(value) => setFilters({ ...filters, method: value })}>
+            <Select value={filters.method} onValueChange={(value) => { setPage(1); setFilters({ ...filters, method: value }); }}>
               <SelectTrigger>
                 <SelectValue placeholder="Yöntem" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tüm yöntemler</SelectItem>
+                <SelectItem value="PUSH">Telefon Push</SelectItem>
                 <SelectItem value="EMAIL">E-posta</SelectItem>
-                <SelectItem value="SMS">SMS</SelectItem>
+                <SelectItem value="SMS">SMS (sağlayıcı henüz bağlı değil)</SelectItem>
                 <SelectItem value="IN_APP">Uygulama İçi</SelectItem>
               </SelectContent>
             </Select>
 
-            <Select value={filters.studentId} onValueChange={(value) => setFilters({ ...filters, studentId: value })}>
+            <Select value={filters.studentId} onValueChange={(value) => { setPage(1); setFilters({ ...filters, studentId: value }); }}>
               <SelectTrigger>
                 <SelectValue placeholder="Öğrenci" />
               </SelectTrigger>
@@ -672,6 +686,13 @@ export default function NotificationsPage() {
         </Card>
       )}
 
+      <PushPanel onSent={fetchNotifications} />
+      {requestError && <p role="alert" className="text-red-700">{requestError}</p>}
+      <div className="flex items-center gap-3">
+        <Button variant="outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>Önceki</Button>
+        <span>Sayfa {page} / {pages}</span>
+        <Button variant="outline" disabled={page >= pages} onClick={() => setPage(page + 1)}>Sonraki</Button>
+      </div>
       {/* Notifications List */}
       <div className="space-y-4">
         {notifications.map((notification) => (

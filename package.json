@@ -27,7 +27,10 @@
     "demo:check": "tsx prisma/demo-check.ts",
     "demo:test": "node --import tsx --test prisma/demo.test.ts",
     "demo:test:db": "node --import tsx --test prisma/demo.integration.test.ts",
-    "report:test": "node --import tsx --test src/lib/reporting.test.ts"
+    "report:test": "node --import tsx --test src/lib/reporting.test.ts",
+    "notification:test": "node --import tsx --test src/lib/notification-policy.test.ts",
+    "notification:test:db": "node --import tsx --test src/lib/notification.integration.test.ts",
+    "push:runtime:local": "node scripts/setup-push-runtime.cjs"
   },
   "description": "SporManage - athlete fee and attendance tracking",
   "dependencies": {
@@ -71,6 +74,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
+    "web-push": "3.6.7",
     "xlsx": "^0.18.5",
     "zod": "^4.1.11"
   },
@@ -78,6 +82,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
-    "@types/pg": "^8.20.0"
+    "@types/pg": "^8.20.0",
+    "@types/web-push": "3.6.4"
   }
 }

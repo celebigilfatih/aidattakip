@@ -1,190 +1,74 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { AuthService } from '@/lib/auth';
-
-// Get current user from token
-async function getCurrentUser(request: NextRequest) {
-  const token = request.cookies.get('auth-token')?.value
-  if (!token) return null
-  
-  const payload = AuthService.verifyToken(token)
-  if (!payload) return null
-  
-  return await prisma.user.findUnique({
-    where: { id: payload.userId }
-  })
-}
+import { NextRequest } from 'next/server'
+import { Prisma, NotificationMethod, NotificationStatus, NotificationType } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
+import { notificationFailure, notificationResponse, notificationScope, recipientScope, requireManager, requireSameOrigin, staffUser, studentScope } from '@/lib/notification-access'
+import { messageSchema, NotificationError, parseSchedule } from '@/lib/notification-policy'
 
 export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser(request);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const user = await staffUser(request)
+    if (!user) throw new NotificationError(401, 'Giriş yapmalısınız.')
+    const params = request.nextUrl.searchParams
+    const number = (key: string, fallback: number, max: number) => {
+      const raw = params.get(key), value = raw ? Number(raw) : fallback
+      if (!Number.isInteger(value) || value < 1 || value > max) throw new NotificationError(400, 'Geçersiz sayfalama.')
+      return value
     }
-
-    const { searchParams } = new URL(request.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = Math.min(parseInt(searchParams.get('limit') || '10'), 50); // Cap at 50
-    const type = searchParams.get('type');
-    const status = searchParams.get('status');
-    const method = searchParams.get('method');
-    const studentId = searchParams.get('studentId');
-
-    const skip = (page - 1) * limit;
-
-    const where: any = {};
-    
-    if (type && type !== 'all') {
-      where.type = type;
+    const page = number('page', 1, 100000), limit = number('limit', 10, 50)
+    const where: Prisma.NotificationWhereInput = notificationScope(user)
+    if (!['ADMIN', 'ACCOUNTING'].includes(user.role)) where.recipient = { userId: user.id }
+    for (const key of ['type', 'status', 'method', 'studentId'] as const) {
+      const value = params.get(key)
+      const choices = key === 'method' ? Object.values(NotificationMethod) : key === 'status' ? Object.values(NotificationStatus) : key === 'type' ? Object.values(NotificationType) : null
+      if (value && value !== 'all' && choices && !(choices as string[]).includes(value)) throw new NotificationError(400, 'Geçersiz bildirim filtresi.')
+      if (value && value !== 'all') Object.assign(where, { [key]: value })
     }
-    
-    if (status && status !== 'all') {
-      where.status = status;
-    }
-    
-    if (method && method !== 'all') {
-      where.method = method;
-    }
-    
-    if (studentId && studentId !== 'all') {
-      where.studentId = studentId;
-    }
-
-    // Optimize: Only fetch count if needed (for pagination UI)
-    // Use Promise.all for parallel execution
     const [notifications, total] = await Promise.all([
-      prisma.notification.findMany({
-        where,
-        select: {
-          id: true,
-          title: true,
-          message: true,
-          type: true,
-          method: true,
-          status: true,
-          createdAt: true,
-          studentId: true,
-          student: studentId && studentId !== 'all' ? false : {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true
-            }
-          },
-          createdById: true
-        },
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take: limit
-      }),
-      // Only count if we need pagination info
-      limit < 50 ? prisma.notification.count({ where }) : Promise.resolve(-1)
-    ]);
-
-    return NextResponse.json({
-      notifications,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: total > 0 ? Math.ceil(total / limit) : -1
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+      prisma.notification.findMany({ where, include: { student: { select: { id: true, firstName: true, lastName: true } }, createdBy: { select: { id: true, name: true } }, recipient: { select: { kind: true } }, deliveries: { select: { status: true, statusCode: true, finishedAt: true } } }, orderBy: [{ createdAt: 'desc' }, { id: 'desc' }], skip: (page - 1) * limit, take: limit }),
+      prisma.notification.count({ where }),
+    ])
+    return notificationResponse({ notifications, pagination: { page, limit, total, pages: Math.ceil(total / limit) } })
+  } catch (error) { return notificationFailure(error) }
 }
-
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser(request);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    requireSameOrigin(request)
+    const user = await requireManager(request)
+    const input = messageSchema.parse(await request.json())
+    const scheduledAt = parseSchedule(input.scheduledAt)
+    const base = { title: input.title, message: input.message, type: input.type, method: input.method, scheduledAt, recipientEmail: input.recipientEmail || null, recipientPhone: input.recipientPhone || null, createdById: user.id }
+    if (input.recipientType === 'recipient') {
+      const recipient = await prisma.notificationRecipient.findFirst({ where: { id: input.recipientId || '', isActive: true, ...recipientScope(user) } })
+      if (!recipient) throw new NotificationError(404, 'Kayıtlı alıcı bulunamadı.')
+      if (input.method === 'PUSH') {
+        const device = await prisma.pushDevice.findFirst({ where: { id: input.targetDeviceId || '', recipientId: recipient.id, isActive: true, expiresAt: { gt: new Date() } } })
+        if (!device) throw new NotificationError(400, 'Bu alıcıya ait tek bir aktif cihaz seçin.')
+      }
+      return notificationResponse(await prisma.notification.create({ data: { ...base, recipientId: recipient.id, targetDeviceId: input.method === 'PUSH' ? input.targetDeviceId : null } }), 201)
     }
-
-    const body = await request.json();
-    const {
-      title,
-      message,
-      type,
-      method,
-      studentId,
-      scheduledAt,
-      recipientEmail,
-      recipientPhone
-    } = body;
-
-    // Validation
-    if (!title || !message || !type || !method) {
-      return NextResponse.json(
-        { error: 'Title, message, type, and method are required' },
-        { status: 400 }
-      );
-    }
-
-    // If studentId is provided, validate it exists
-    if (studentId) {
-      const student = await prisma.student.findUnique({
-        where: { id: studentId },
-        include: {
-          parents: {
-            where: { isPrimary: true },
-            select: { email: true, phone: true }
-          }
+    if (input.method === 'PUSH') throw new NotificationError(400, 'Push için kayıtlı alıcı ve cihaz seçin.')
+    if (input.recipientType === 'trainers') {
+      const staff = await prisma.user.findMany({ where: { role: 'TRAINER', isActive: true, trainerId: input.trainerId && input.trainerId !== 'all' ? input.trainerId : { not: null }, ...(user.branchId ? { branchId: user.branchId } : {}) }, take: 501 })
+      if (!staff.length) throw new NotificationError(404, 'Seçilen kapsamda aktif antrenör hesabı bulunamadı.')
+      if (staff.length > 500) throw new NotificationError(400, 'Daha dar bir alıcı kapsamı seçin.')
+      const notifications = await prisma.$transaction(async tx => {
+        const records = []
+        for (const person of staff) {
+          const recipient = await tx.notificationRecipient.upsert({ where: { userId: person.id }, create: { kind: 'STAFF', userId: person.id }, update: {} })
+          if (!recipient.isActive) continue
+          records.push(await tx.notification.create({ data: { ...base, recipientId: recipient.id, recipientEmail: input.recipientEmail || person.email, recipientPhone: input.recipientPhone || person.phone } }))
         }
-      });
-
-      if (!student) {
-        return NextResponse.json(
-          { error: 'Student not found' },
-          { status: 404 }
-        );
-      }
-
-      // Auto-fill recipient info from student's primary parent if not provided
-      if (!recipientEmail && student.parents[0]?.email) {
-        body.recipientEmail = student.parents[0].email;
-      }
-      if (!recipientPhone && student.parents[0]?.phone) {
-        body.recipientPhone = student.parents[0].phone;
-      }
+        return records
+      })
+      return notificationResponse({ count: notifications.length, ids: notifications.map(n => n.id) }, 201)
     }
-
-    const notification = await prisma.notification.create({
-      data: {
-        title,
-        message,
-        type,
-        method,
-        studentId: studentId || null,
-        scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
-        recipientEmail: body.recipientEmail || null,
-        recipientPhone: body.recipientPhone || null,
-        createdById: user.id
-      },
-      include: {
-        student: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            phone: true
-          }
-        },
-        createdBy: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        }
-      }
-    });
-
-    return NextResponse.json(notification, { status: 201 });
-  } catch (error) {
-    console.error('Error creating notification:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+    const where: Prisma.StudentWhereInput = { ...studentScope(user), isActive: true }
+    if (input.recipientType === 'students' && input.studentId && input.studentId !== 'all') where.id = input.studentId
+    if (input.recipientType === 'groups' && input.groupId && input.groupId !== 'all') where.groupId = input.groupId
+    const students = await prisma.student.findMany({ where, select: { id: true, parents: { where: { isPrimary: true }, select: { email: true, phone: true }, take: 1 } }, take: 501 })
+    if (!students.length) throw new NotificationError(404, 'Seçilen kapsamda aktif sporcu bulunamadı.')
+    if (students.length > 500) throw new NotificationError(400, 'En fazla 500 sporcu seçebilirsiniz; grup filtresi kullanın.')
+    const notifications = await prisma.$transaction(students.map(s => prisma.notification.create({ data: { ...base, studentId: s.id, recipientEmail: input.recipientEmail || s.parents[0]?.email || null, recipientPhone: input.recipientPhone || s.parents[0]?.phone || null } })))
+    return notificationResponse({ count: notifications.length, ids: notifications.map(n => n.id) }, 201)
+  } catch (error) { return notificationFailure(error) }
 }

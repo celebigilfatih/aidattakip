@@ -5,6 +5,10 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('auth-token')?.value
   const { pathname } = request.nextUrl
 
+  // Each push API authenticates its own staff/recipient context; these paths do not grant staff access.
+  const pushPublicResources = ['/recipient', '/sw.js', '/manifest.webmanifest', '/push-icon.png', '/push-icon-512.png']
+  if (pushPublicResources.includes(pathname) || pathname.startsWith('/api/push/')) return NextResponse.next()
+
   // Public routes that don't require authentication
   const publicRoutes = ['/login', '/api/auth/login', '/api/auth/logout']
   

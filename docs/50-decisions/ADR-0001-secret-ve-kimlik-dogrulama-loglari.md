@@ -1,16 +1,18 @@
 # ADR-0001 — Secret ve kimlik doğrulama logları
 
-Last updated: 2026-09-14. Durum: Repository kaynaklarından statik olarak belgelenen mevcut durum; çalışma zamanı doğrulaması değildir. Öneriler ayrıca işaretlenmiştir.
+Last updated: 2026-10-19. Durum: Proposed karar korunmuştur; mevcut kod ve tamamlanan dar düzeltme ayrıca kaydedilmiştir.
 
 - Status: Proposed
 - Date: 2026-09-14
 - Approval required: Evet — güvenlik ve secret yönetimi kararı.
 - Approved by / approval date / evidence: TBD
-- Uygulama: Yapılmadı.
+- Uygulama: Login log temizliği ayrı düzeltme olarak tamamlandı; önerinin bütünü uygulanmadı ve Accepted değildir.
 
 ## Context
 
-[CR-007](../20-execution/CHANGE_REQUESTS.md) ve [SECURITY_MODEL](../10-architecture/SECURITY_MODEL.md): login parolayı logluyor, AuthService secret parçasını logluyor ve sabit fallback kullanıyor; Compose içine kimlik değerleri yazılı. Takip edilen ortam/döküm dosyaları var; gerçek içerik ve kullanım envanteri bu görevde incelenmedi. Değerler burada tekrar edilmez.
+İlk gözlem (2026-09-14): Login parolayı logluyordu; AuthService secret parçasını logluyor ve sabit fallback kullanıyordu. Compose içine kimlik değerleri yazılıydı; takip edilen ortam/döküm dosyaları vardı. Bu tarihsel bağlam [CR-007](../20-execution/CHANGE_REQUESTS.md) ve [SECURITY_MODEL](../10-architecture/SECURITY_MODEL.md) ile izlenir. Değerler burada tekrar edilmez.
+
+Mevcut durum (2026-10-19): `d6db67c` düzeltmesiyle login API'sindeki e-posta/parola/hash debug logları ve hassas debug yanıtları kaldırılmıştır; [login kodu](../../src/app/api/auth/login/route.ts) yalnız genel hata mesajını loglar. AuthService kaynak logları, sabit fallback ve takip edilen ortam/döküm dosyaları devam eder. Login düzeltmesi aşağıdaki 1. maddenin yalnız bir kısmını karşılar; ADR'nin tamamı için onay kaydı oluşturmaz. Yerel çıktı filtresi kalıcı kod düzeltmesi değildir.
 
 ## Proposed decision
 
@@ -37,3 +39,6 @@ Sentetik kimlik bilgileriyle logların içerik kontrolü; secret yokken beklenen
 ## Open questions and history
 
 Canlı ortamlar, secret kaynakları/sahipleri, mevcut anahtarların kullanımı ve geçiş penceresi TBD. 2026-09-14: yalnızca öneri hazırlandı; Accepted değil.
+
+- 2026-09-15: Login API log/debug temizliği ayrı düzeltme olarak yapıldı; CHANGELOG ve `d6db67c` kaydı mevcut.
+- 2026-10-19: Uygulama durumu kodla eşlendi; kalan öneriler ve onay sınırı korunarak Status Proposed bırakıldı. Yeni güvenlik kararı veya rotasyon yapılmadı.

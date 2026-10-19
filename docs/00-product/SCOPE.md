@@ -22,10 +22,12 @@ Kaynak: [mimari envanter](../10-architecture/OVERVIEW.md). Hiçbir mevcut modül
 
 TBD — Kullanıcı kalıcı non-goal listesi tanımlamadı. İlk hedef dışında kalan bir özellik otomatik olarak kalıcı non-goal sayılmaz.
 
-## Bu bağlam doldurma görevinin sınırı
+## 2026-09-14 bağlam doldurma görevinin tarihsel sınırı
 
 Belge güncellemesi, kaynak eşleştirmesi, çelişki/risk kaydı ve Proposed ADR hazırlanması. Kod, şema, migration, bağımlılık, altyapı ve Constitution değişikliği yok.
 
 ## Onay kapıları
+
+2026-10-19 kapsam onayı: [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) ile önce bildirim ekranı/API düzeltmesi, doğrulanmış veli/sporcu alıcı kaydı ve tek cihazda manuel push uygulanması istendi. Yerel uygulama/test hazır; iPhone gerçek testi HTTPS ortamında tamamlanacak. Otomatik aidat kuralları/scheduler bu ilk adımda etkinleştirilmez. Bu onay mevcut diğer modüllerin tümünün MVP kabulü değildir.
 
 MVP genişletme, non-goal, rol, veri modeli, dağıtım ve entegrasyon değişiklikleri açık onay gerektirir. [AGENTS](../../AGENTS.md).

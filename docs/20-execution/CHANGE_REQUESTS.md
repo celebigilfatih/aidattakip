@@ -1,10 +1,10 @@
 # Change Requests
 
-Last updated: 2026-09-15. Durum: Repository kaynakları ve tarihli uygulama/doğrulama kayıtları birlikte izlenir.
+Last updated: 2026-10-19. Durum: Repository kaynakları ve tarihli uygulama/doğrulama kayıtları birlikte izlenir.
 
 ## Kayıt ilkesi
 
-Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça gösterir. Öneriler kabul edilmiş karar değildir. Kod/veri/dağıtım değişikliği yapılmadı. Öncelikler öneridir; kullanıcı adına sprint veya yayın kapsamı seçilmedi.
+Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça gösterir. Öneriler kabul edilmiş karar değildir. İlk bağlam doldurma görevi kod/veri/dağıtım değiştirmedi; sonraki onaylı uygulamalar kendi tarihli çözüm kayıtlarında belirtilir. Öncelikler öneridir; kullanıcı adına sprint veya yayın kapsamı seçilmedi.
 
 ## CR-001 — Kurulum ve dokümantasyon çelişkileri
 
@@ -33,6 +33,8 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 - Gözlem/çelişki: Gönderim yollarında simülasyon veya sağlayıcı çağrısı olmadan başarı sonucu var; README çok kanallı bildirim özelliği sunuyor.
 - Etki ve öneri: SENT gerçek teslim kanıtı sayılmamalı. MVP ilişkisi ve sağlayıcı kararı netleşmeli.
 - Durum/onay: Açık; sağlayıcı ekleme, maliyet ve veri aktarımı için açık onay gerekir.
+- 2026-10-19 incelemesi: Kullanıcı geciken aidatlar ve belirli gün/haftalarda hem veli/sporcuya hem personele push istiyor. Push kanalı/abonelik/PWA altyapısı yok; toplu send yalnız SENT işaretliyor, otomatik aidat hatırlatma işlevi taslak ve repository'de periyodik işleyici çağrısı bulunmadı. [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) Proposed; gönderim yapılmadı. Ekran/API sözleşmesi CR-020'de ayrıca izlenir.
+- Sonraki uygulama (2026-10-19): Kullanıcı ADR-0006'yı ve ilk manuel push/alıcı kaydı adımını onayladı. Yeni route'lar gerçek tekil/toplu ortak gönderim servisini kullanır; e-posta/SMS sağlayıcısı yokken gönderimi reddeder. Web Push/PWA adaptörü ve yerel runtime anahtarları hazır, testte dış servis kontrollü adaptörle değiştirildi. CR-004 açık kalır: e-posta/SMS sağlayıcısı, gerçek iPhone/HTTPS teslim kanıtı, otomatik kurallar/scheduler sonraki işlerdir. Somut MPL-2.0 paket/dağıtım onayı beklenir.
 
 ## CR-005 — Yedekleme kapsamı ve geri yükleme
 
@@ -44,16 +46,19 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 ## CR-006 — Dağıtım referansları
 
 - Kaynaklar: [Compose](../../docker-compose.yml), [Dockerfile](../../Dockerfile), [gitignore](../../.gitignore).
-- Gözlem/çelişki: Compose init.sql bağlaması tanımlı fakat dosya yok. Dockerfile .npmrc kopyalıyor. Ortam kurulumu ve taşınabilirlik doğrulanmadı.
-- Etki ve öneri: Temiz ortamda build/migration incelemesi önerilir; hiçbir deployment çalıştırılmadı.
+- İlk gözlem (2026-09-14): Compose init.sql bağlaması tanımlı fakat dosya yok. Dockerfile .npmrc kopyalıyor; ortam kurulumu ve taşınabilirlik o görevde doğrulanmamıştı.
+- Mevcut kanıt: 2026-09-15 Docker build/Coolify dağıtımı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içinde kayıtlı; 2026-10-19 Windows yerel kurulumunda 10 migration uygulandı. Bunlar eksik init.sql ile Compose'un uçtan uca çalıştığını kanıtlamaz.
+- Kalan takip: Compose eksikleri ve taşınabilirliği incelenmeli. CR-019 eşlemesinde canlı PostgreSQL sürümünün eski 15/17 kayıtlarıyla doğrulanamadığı görüldü; yetkili ortamdan yalnız sunucu sürümü okunup buraya tarihli kanıt eklenmeli. Doğrulanana kadar Coolify sürümü TBD; yerel salt okunur sorgu 2026-10-19 tarihinde 15.19 döndürdü.
 - Durum/onay: Açık; ortam/topoloji değişikliği açık onay gerektirir.
 
 ## CR-007 — Secret ve kimlik doğrulama logları
 
 - Kaynaklar: [login](../../src/app/api/auth/login/route.ts), [auth](../../src/lib/auth.ts), [Compose](../../docker-compose.yml).
-- Gözlem/çelişki: Parola/secret parçası loglama, sabit secret fallback ve Compose’a yazılı değerler var. .env/.npmrc/SQL dökümü git ls-files içinde takip ediliyor; hassas içerikleri açılmadı. 2026-09-15 Coolify build logu secret nitelikli environment değerlerinin build argümanı olarak sunulduğu konusunda ayrıca uyardı.
+- İlk gözlem (2026-09-14): Login parola/debug logları, AuthService secret parçası logu, sabit secret fallback ve Compose'a yazılı değerler bulundu.
+- Tamamlanan dar düzeltme: 2026-09-15 `d6db67c` login API e-posta/parola/hash loglarını ve hassas debug yanıtlarını kaldırdı. 2026-10-19 mevcut kodla eşlendi; bu, ADR-0001'in tümünün kabulü/uygulaması değildir.
+- Kalan durum: AuthService kaynakta secret parçası/e-posta loglar ve fallback kullanır. `.env`/`.npmrc`/SQL dökümü `git ls-files` içinde hâlâ takip ediliyor; içeriklerin gerçek canlı kullanımı/rotasyon envanteri TBD. 2026-09-15 Özlüce Coolify build logu secret nitelikli environment değerlerinin build argümanı olarak sunulduğu konusunda uyardı. Demo runtime ayarı ADR-0005 kaydındadır; Özlüce riskini kendiliğinden kapatmaz.
 - Etki ve öneri: Öncelikli değerlendirme önerilir; değerler belgelere taşınmadı. Ayrı ortam envanteri olmadan rotasyon yapılmamalı.
-- Durum/onay: [ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) Proposed; uygulama/rotasyon onayı yok.
+- Durum/onay: Açık; [ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md) Proposed. Login düzeltmesi tamamlandı; kalan politika/uygulama ve rotasyon onayı TBD.
 
 ## CR-008 — Altı aylık aidat aralığı
 
@@ -133,3 +138,32 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 - İlk gözlem/çelişki: Broşür bağlantıları ve QR kodları `https://aidat.spormanage.com.tr` hedefini kullanırken doğrulanmış canlı Coolify domain’i `https://aidat.ozlucespor.com` adresiydi. Broşür domain’i ilk kontrolde güvenilir TLS/DNS bağlantısı kurmadı.
 - Etki: Dağıtılan broşürü kullanan ziyaretçi giriş ekranına ulaşamayabilir; doğru hesap oluşturulmuş olsa da erişim akışı tamamlanmazdı.
 - Çözüm/durum: İlk geçici çözüm domain'i Özlüce uygulamasına ekledi. Kullanıcının sonraki açık kararıyla [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) uygulanarak domain yeni `SporManage Aidat Demo` uygulamasına taşındı. Geçerli TLS, `/login` HTTP 200 ve yeni demo DB ile ADMIN dashboard doğrulandı. `aidat.ozlucespor.com` yalnız eski uygulamada korunur; `www` varyantı iki uygulamada da yoktur. Kapalı.
+
+## CR-019 — CDSK belgelerinin güncel durumla eşlenmesi — Kapalı (belge kapsamı)
+
+- Kaynaklar: [OVERVIEW](../10-architecture/OVERVIEW.md), [ADR-0001](../50-decisions/ADR-0001-secret-ve-kimlik-dogrulama-loglari.md), [OBSERVABILITY](../40-operations/OBSERVABILITY.md), [RELEASE_PLAN](RELEASE_PLAN.md), [RUNBOOK](../40-operations/RUNBOOK.md), [DEPLOYMENT](../40-operations/DEPLOYMENT.md), [login kodu](../../src/app/api/auth/login/route.ts) ve [CHANGELOG](../../CHANGELOG.md).
+- İlk gözlem/çelişki (2026-10-19): OVERVIEW aynı fiziksel PostgreSQL kaynağını bir bölümde 15, diğerinde 17 Alpine olarak tanımlıyordu. Login debug logları kodda kaldırılmış ve CHANGELOG'a kaydedilmiş olmasına rağmen OBSERVABILITY hâlâ üretildiğini, ADR-0001 ise uygulamanın yapılmadığını söylüyordu. Bu dar düzeltme tüm ADR'nin kabul edildiği veya kalan secret risklerinin kapandığı anlamına gelmez.
+- İlk güncellik bulgusu: RELEASE_PLAN üretim dağıtımının doğrulanmadığını ve DEPLOYMENT'ın yalnız dosyaları tarif ettiğini söylüyordu; 2026-09-15 tarihli dağıtım kayıtları mevcuttu. RUNBOOK'un eski broşür alt bölümü aynı uygulama/production ADMIN tarifini güncel demo işletimiyle birlikte sunuyordu; ADR-0005 bunların yerine ayrı demo uygulamasını kaydediyordu.
+- Etki ve öneri: Sonraki çalışma yanlış işletim bağlamıyla başlayabilir. Tarihsel kayıtları açıkça ayırmak, güncel açıklamaları kabul edilmiş ADR-0005 ve mevcut kodla eşlemek; gerçek PostgreSQL sürümünü yetkili ortamdan doğrulayana kadar kesin sürüm iddiasını çözülmüş saymamak önerilir.
+- İlk kontrol durumu: Yalnız bulgu kaydı açılmıştı; uygulama/politika değişikliği yapılmamıştı.
+- Çözüm (2026-10-19): Kullanıcının belge eşleme talebiyle aşağıdaki düzeltmeler yapıldı. Uygulama, veri modeli, altyapı veya kabul edilmiş kararların kapsamı değiştirilmedi.
+
+| Bulgu | Belgedeki çözüm / kanıt | Kalan iş |
+|---|---|---|
+| PostgreSQL 15/17 | OVERVIEW ve DEPLOYMENT ortamları ayırır; yerel salt okunur sorgu 15.19, Coolify sürümü TBD. ADR-0005 ilk sürüm ifadesini tarihsel bağlam olarak korur | Canlı sunucu sürüm kanıtı CR-006 altında açık |
+| Login logları / ADR-0001 | Login kodu ve `d6db67c` ile tamamlanan temizlik SECURITY_MODEL, OBSERVABILITY, ADR-0001, CR-007 ve özetlere işlendi | AuthService log/fallback/secret işleri CR-007 ve Proposed ADR-0001 altında açık |
+| Dağıtım / kabul | RELEASE_PLAN, ROADMAP ve MILESTONES tarihli dağıtım/yerel test kanıtlarını ürün kabulünden ayırır | Kesin ürün kabulü, lint, backup/restore konuları mevcut kayıtlarda açık |
+| Eski ortak uygulama / ADMIN | RUNBOOK ve DEPLOYMENT güncel başvuru olarak ADR-0005'i gösterir; önceki ortak domain/production ADMIN kayıtları tarihsel olarak etiketlendi | Yeni topoloji kararı yok; canlı durum bu görevde yeniden kontrol edilmedi |
+
+- Doğrulama: Paket/lock, 17 sayfa/48 rota/20 model, login/AuthService/Next config ve startup kaynakları eşlendi. Yerel PostgreSQL sürümü READ ONLY transaction ile okundu. Belge bağlantıları, metadata, biçim ve dosya bütünlüğü kapanışta kontrol edildi; ayrıntılar [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+- Durum/onay: Kapalı — belge çelişkileri giderildi ve doğrulanmayan canlı sürüm iddiası kaldırıldı; gerçek canlı sürümün çözüldüğü veya açık güvenlik/ürün kararlarının kabul edildiği iddia edilmez. Yeni ADR kabulü yok.
+
+## CR-020 — Bildirim alıcı ve zamanlama sözleşmesi — Kapalı (ilk aşama)
+
+- Kaynaklar: [ekran](../../src/app/notifications/page.tsx), [liste/oluşturma API](../../src/app/api/notifications/route.ts), [bulk](../../src/app/api/notifications/bulk/route.ts), [scheduled processor](../../src/app/api/notifications/process-scheduled/route.ts), [middleware](../../middleware.ts).
+- Gözlem (2026-10-19): Form öğrenci/grup/antrenör ve tümü seçenekleri gönderiyor; POST yalnız studentId çözüyor. Varsayılan `all` öğrenci kimliği gibi aranarak 404'e gider; grup/antrenör parametreleri hedef kitleye açılmıyor. GET liste seçimi scheduledAt/sentAt/alıcı iletişim alanlarını içermediğinden form/liste beklediği bilgileri alamıyor.
+- Zamanlama: UI tek `datetime-local` alanı içeriyor; haftalık/aylık tekrar modeli ve net timezone sözleşmesi yok. Düzenlemede UTC `toISOString()` ile yerel giriş alanı dolduruluyor. Process-scheduled GET mutasyon yapıyor; middleware personel oturumu gerektirdiği için bu uç korunmadan cron'a açılmamalı. Toplu send sağlayıcı çağrısı yapmadan SENT işaretliyor (CR-004).
+- Etki/öneri: Gerçek push eklenmeden önce alıcı önizlemesi ve sözleşme eşlenmeli; manuel/toplu/otomatik yollar ortak gerçek gönderim katmanına bağlanmalı. Europe/Istanbul iş kuralları, rol/nesne sınırları ve cihaz sahipliği [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) içinde Proposed.
+- Durum/onay: Açık; bu görev statik kod + salt inceleme UI doğrulamasıdır. Hatalı POST veya gönderim uçları çalıştırılmadı; uygulama düzeltmesi ve yeni veri/yetki/işletim kararları uygulanmadı.
+- Çözüm/onay (sonraki görev, 2026-10-19): ADR-0006 açık kullanıcı onayıyla Accepted. POST tümü/grup seçimlerini sporculara, antrenör seçimini antrenörün personel alıcı hesabına açar; GET gerekli alanlar ve kararlı sayfalama döndürür. Zamanlama offset içeren ISO ile gönderilir, yerel alanda doğru düzenlenir ve temizlenebilir. Yanıltıcı toplu SENT kaldırıldı; ortak gönderim servisi gerçek kanal sonucunu kaydeder. Gelecek tarih erken gönderilemez; scheduled GET mutasyon yapmadan 405 döndürür. Otomatik işleyici bu ilk aşamada kapalıdır.
+- Kanıt: Typecheck, 15 test (kaynak regresyonları + DB'li davet/yetki/tek cihaz/çift gönderim) ve production build başarılı. Yerel HTTP ve tarayıcıda panel, zamanlama alanları/sayfalama görüldü. iPhone gerçek teslimi bu sözleşme kapatmasının kanıtı değildir; CR-004/ADR-0006 altında açık. [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).

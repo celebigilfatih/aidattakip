@@ -1,6 +1,6 @@
 # Test Strategy
 
-Last updated: 2026-09-15. Kaynak envanteri ile tarihli çalışma zamanı doğrulamaları aşağıda ayrı tutulur.
+Last updated: 2026-10-19. Kaynak envanteri ile tarihli çalışma zamanı doğrulamaları aşağıda ayrı tutulur.
 
 ## Mevcut envanter
 
@@ -16,7 +16,7 @@ Last updated: 2026-09-15. Kaynak envanteri ile tarihli çalışma zamanı doğru
 | Kısmi/tam tahsilat, iptal, sıfır/negatif/fazla tutar | REQ-002, WF-003 | Hedef iş kuralları netleşmeli |
 | Tekrar gönderim ve eşzamanlı tahsilat | CR-009 | İdempotency/tutarlılık hedefi netleşmeli |
 | Yetkisiz kullanıcı, yanlış grup/şube ve devre dışı kullanıcı | CR-002/003 | Rol/nesne matrisi ve güvenlik kararı gerekli |
-| Temiz DB migration ve ilişkilerle restore | CR-005/006 | İzole test ortamı, kapsam ve onay gerekli |
+| Temiz DB migration ve ilişkilerle restore | CR-005/006 | Yerel 10 migration ve ilk demo snapshot aktarımı kayıtlı; zamanlanmış yedek/olağanüstü durum restore tatbikatı açık |
 
 Kaynaklar: [CORE_WORKFLOWS](../00-product/CORE_WORKFLOWS.md), [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md).
 
@@ -43,3 +43,17 @@ Kullanıcı onayıyla yeni yerel PostgreSQL kuruldu, 10 mevcut migration ve yere
 ## Rapor ve sunum doğrulaması — 2026-09-15
 
 `report:test` toplam/aktif sporcu ayrımına temel olan filtre ayrıştırmasını, kısmi tahsilatı, geciken kalan tutarı, iptal hariç tutmayı, `(PRESENT + EXCUSED) / kayıt` devam oranını ve XLSX imza/sayfa/hücrelerini kapsar. Gerçek API smoke kontrolü 401/403/400/410/200 senaryolarını ve ADMIN/ACCOUNTING erişimini doğruladı. `npm run build` temiz `.next` sonrasında geçti. Lint çalıştırılmadı; mevcut `next lint` etkileşimli kurulum istediği için CR-011/B-008 kapsamında ayrı tutuldu.
+
+## Windows yerel çalışma doğrulaması — 2026-10-19
+
+Önceki yerel çalıştırma görevinde yeni DB'ye 10 mevcut migration ve sentetik demo uygulandı; demo check PASS, `node --import tsx --test prisma/demo.test.ts prisma/demo.integration.test.ts` 7/7 başarılı. ADMIN login, auth/me, health, students, payments ve dashboard HTTP 200 verdi. [RUNBOOK](../40-operations/RUNBOOK.md). Bu çalışma ürün kabul senaryolarının tamamını doğrulamaz; lint/typecheck/build o görevde çalıştırılmadı.
+
+Aynı tarihli CR-019 belge eşleme görevi kod envanteri, yerel PostgreSQL sürümü (salt okunur sorgu: 15.19), bağlantı/metadata/biçim ve dosya bütünlüğünü kontrol eder. Bu belge işi uygulama testlerini yeniden çalıştırmış veya canlı ortamı doğrulamış sayılmaz.
+
+## Manuel push/alıcı ilk aşaması — 2026-10-19
+
+Prisma validate/generate ve yerel additive migration başarılı. `tsc --noEmit --incremental false` ile typecheck, Next production build ve 15 test geçti: 3 bildirim politika testi, 1 DB entegrasyon testi, 6 demo saf + 1 demo DB + 4 rapor testi. [notification-policy.test](../../src/lib/notification-policy.test.ts) endpoint/anahtar ve offset tarih doğrulamasını; [notification.integration.test](../../src/lib/notification.integration.test.ts) ADMIN/şube sınırlarını, tek kullanımlı davet yarışını, alıcıya personel yetkisi verilmemesini, cihaz sahipliğini, toplu sahte SENT'in engellenmesini, ileri tarihin korunmasını, antrenör alıcı sözleşmesini, eşzamanlı dispatch ve çıkışla iptali kapsar. Test yalnız yerel demo DB'de kendi geçici kayıtlarını temizler; dış sender stub'dır.
+
+HTTP: recipient/PWA kaynakları ve public config 200; yönetici notifications/recipients/session 200; yetkisiz subscription reddedildi. Tarayıcıda alıcı kaydı, manuel tek cihaz, sayfalama ve zamanlama alanları görüldü. 60 sporcu, 300 ödeme, 6 grup ve 9 kullanıcı korundu; test kullanıcıları kalmadı.
+
+Gerçek iPhone izni/push görünümü ve HTTPS test ortamı doğrulanmadı. Ayrı genel lint komutu CR-011 nedeniyle çalıştırılmadı; build'in kendi tip/derleme kontrolleri geçti. Docker doğrulama sonucu ayrıntılı handoff'ta tutulur. [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).

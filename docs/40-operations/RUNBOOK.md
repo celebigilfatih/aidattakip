@@ -1,12 +1,28 @@
 # Runbook
 
-Last updated: 2026-09-15. Komut envanteri kaynaklıdır; çalışma zamanı sonuçları tarihli kayıtlarda ayrıca belirtilir.
+Last updated: 2026-10-19. Komut envanteri kaynaklıdır; çalışma zamanı sonuçları tarihli kayıtlarda ayrıca belirtilir.
 
 ## Ortam ve giriş kaynakları
 
 [package.json](../../package.json), [Dockerfile](../../Dockerfile), [Compose](../../docker-compose.yml), [startup](../../scripts/startup.sh). Docker Node 20 Alpine tanımlar; yerelde zorunlu Node sürümü için ayrı pin bulunmadı. README’nin Node 18+ iddiası bu oturumda doğrulanmadı. `DATABASE_URL` PostgreSQL bağlantısı gerekir; değerler belgelerde tutulmaz.
 
+## Windows yerel çalıştırma — 2026-10-19
+
+Güncelleme — manuel push ilk aşaması: Yeni migration yerelde uygulandı (toplam 11); 5 alıcı/cihaz/delivery tablosu ve PWA kaynakları eklendi. Yerel anahtarlar repository dışında `push-runtime.json` dosyasından sunucu ortamına yüklenir. Güncel geliştirme terminal oturumu **12714**, adres yine loopback:3077; aşağıdaki 65346 önceki çalıştırmadır. `/recipient` alıcı ekranı, `/notifications` alıcı/davet ve tek cihaz yönetimi içerir. iPhone test/dağıtım, runtime ve geri alma adımları [PUSH_GUIDE](PUSH_GUIDE.md) içindedir. Otomatik işleyici kurulmadı.
+
+- Bu bilgisayarda önceki yerel konteyner/volume ve node_modules bulunmadı. Kullanıcı yeni yerel PostgreSQL ve mevcut demo verisinin oluşturulmasını açıkça onayladı.
+- Node v24.19.0 mevcut; npm PATH'te yok. Bundled pnpm üzerinden `pnpm dlx npm@11.12.1 ci --no-audit --no-fund` ile kilitli 616 paket kuruldu. Paket/lock değiştirilmedi; Node/npm sürümleri yeni proje standardı olarak seçilmedi.
+- Yeni `aidat-takip-postgres`, `postgres:15-alpine`, `aidat_takip_postgres_data`; yalnız `127.0.0.1:5477` yayımlanır. Mevcut `.env` ana/lisans bağlantılarının aynı yerel kullanıcıyı ve `aidat_takip`/`license_db` hedeflerini kullandığı doğrulandı; değerler değiştirilmedi veya çıktıya yazılmadı.
+- Aynı günkü CR-019 eşlemesinde salt okunur `current_setting('server_version')` sorgusu yerelde **15.19** döndürdü. Coolify sunucu sürümü bu sonuçtan çıkarılamaz; CR-006 kapsamında TBD'dir.
+- `node node_modules/prisma/build/index.js generate` ve `node node_modules/prisma/build/index.js migrate deploy` başarılı; 10 mevcut migration yalnız yeni yerel DB'ye uygulandı. Yeni license_db mevcut `scripts/init-license-db.sql` ile kuruldu.
+- Yeni yerel ADMIN, README'de belirtilen yerel demo hesabıyla mevcut bcrypt cost 12 biçiminde oluşturuldu. Genel seed kullanılmadı. Demo dry-run ardından kurulum: 2 şube, 6 grup/antrenör, 60 sporcu, 300 ödeme, 78 seans ve 378 yoklama; yönetici dahil 9 kullanıcı. Referans tarih 2026-10-19'dur; önceki makinenin snapshot'ı taşınmadı.
+- Next `node node_modules/next/dist/bin/next dev -p 3077 --hostname 127.0.0.1` ile çalışır. Bu oturumda stdout/stderr içindeki mevcut `[Auth]` logları bir geçici Node sarmalayıcısında filtrelendi; uygulama kodu/secret politikası değişmedi. Yönetilen terminal oturumu 65346 açık bırakıldı; sonraki oturumda port yeniden doğrulanmalıdır.
+- [Yerel giriş](http://127.0.0.1:3077/login): HTTP 200; ADMIN login, auth/me, health, students, payments ve dashboard HTTP 200. `demo-check` PASS; `node --import tsx --test prisma/demo.test.ts prisma/demo.integration.test.ts` 7/7 başarılı. Entegrasyon testi salt okunur transaction kullanır.
+- Konteyner durmuşsa `docker start aidat-takip-postgres` ile mevcut veriyi kullanın. Yeni volume, reset veya genel seed çalıştırmayın. Production'a bağlanılmadı; dış bildirim gönderilmedi. Lint/typecheck/build çalıştırılmadı; kaynak değişikliği yapılmadan yerel çalışma doğrulandı.
+
 ## Coolify demo işletimi
+
+Bu bölüm ADR-0005 ve 2026-09-15 tarihli son dağıtım kaydını esas alır; 2026-10-19 belge eşlemesinde canlı ortam yeniden sorgulanmadı. Coolify PostgreSQL sürümü TBD; yerel 15.19 doğrulaması canlı sunucuya aktarılmaz. [DEPLOYMENT](DEPLOYMENT.md).
 
 - Canonical demo: [https://aidat.spormanage.com.tr](https://aidat.spormanage.com.tr); uygulama `spormanage-aidat-demo`, DB `spormanage_aidat_demo`.
 - Özlüce production: [https://aidat.ozlucespor.com](https://aidat.ozlucespor.com); uygulama ve `ozlucepay` DB'si demo ortamından ayrıdır.
@@ -15,6 +31,12 @@ Last updated: 2026-09-15. Komut envanteri kaynaklıdır; çalışma zamanı sonu
 - Demo doğrulaması: TLS/HTTP 200, broşür ADMIN login, 60 toplam/54 aktif sporcu, 6 grup ve 6 antrenör. Özlüce'de aynı hesap aktif olmamalıdır.
 - Secret değerlerini terminal çıktısına, deployment loguna veya repository belgesine yazma. Parola ve bağlantı secret'ı rotasyonunda DB rolü ile iki runtime URL'si aynı işlemde güncellenmelidir.
 - Domain geçişi başarısızsa yeni demo doğrulanmadan Özlüce hesabını yeniden etkinleştirme veya production DB verisini değiştirme. Güncel karar: [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md).
+
+### Güncel broşür demo erişimi
+
+- Ortak `demo@spormanage.com.tr` hesabı son kayıtta ayrı sentetik demo DB'sinde aktif ADMIN'dir; Özlüce DB'sindeki aynı hesap pasiftir. Parola yalnız kullanıcı tarafından dağıtılır.
+- QR/link hedefi `aidat.spormanage.com.tr` yalnız demo uygulamasına, `aidat.ozlucespor.com` Özlüce uygulamasına aittir. Kullanılmayan `www` varyantı ADR-0005 geçişinde kaldırılmıştır; eski DNS uyarısı güncel kurulum tarifi değildir.
+- Demo ADMIN sentetik veriyi değiştirebilir; kullanım süresi ve parola rotasyon/iptal tarihi TBD. [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) Superseded; geçerli dağıtım kararı ADR-0005'tir.
 
 ## Komut envanteri — tanımlar ve son doğrulama
 
@@ -38,7 +60,9 @@ Komut tanımları kaynakla doğrulandı. Aşağıdaki yerel çalıştırma kayd�
 
 Operasyon sorumlusu ve production erişim prosedürü TBD. Doğrulanmış mevcut production hedefi ve dağıtım kaydı [DEPLOYMENT](DEPLOYMENT.md) içindedir.
 
-## Coolify production işlemleri — 2026-09-15
+## Tarihsel Coolify production işlemleri — 2026-09-15, ADR-0005 öncesi
+
+Aşağıdaki kayıt ortak domain/production ADMIN geçiş aşamasına aittir. Güncel işletimde yukarıdaki Coolify demo bölümünü kullanın; burada yer alan aynı uygulama ve `www` ifadeleri geçersizleşmiş tarihsel durumdur.
 
 - Canonical broşür erişimi: [https://aidat.spormanage.com.tr](https://aidat.spormanage.com.tr). Korunan mevcut adres: [https://aidat.ozlucespor.com](https://aidat.ozlucespor.com).
 - Kaynak: canonical GitHub repository `celebigilfatih/aidattakip`, branch `main`, Dockerfile build, port 3000.
@@ -49,14 +73,14 @@ Operasyon sorumlusu ve production erişim prosedürü TBD. Doğrulanmış mevcut
 - Hata halinde eski image’a dönmeden önce yeni migration olup olmadığı kontrol edilir. Bu kurulumda migration dosyası değişmedi; doğrulanmış otomatik rollback prosedürü TBD.
 - Veritabanı restore veya demo seed dağıtım doğrulaması değildir; mevcut production verisini değiştireceği için bu prosedüre dahil değildir.
 
-### Broşür demo erişimi
+### Tarihsel broşür demo erişimi — ADR-0004
 
 - Ortak hesap: `demo@spormanage.com.tr`, aktif ADMIN. Parola yalnızca kullanıcı tarafından dağıtılır; repository’de tutulmaz.
 - Hesap oluşturma ve yetki kararı [ADR-0004](../50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) kapsamındadır. Ortak ADMIN hesabı production verisini değiştirebilir; kullanım süresi ve rotasyon/iptal tarihi TBD.
 - 2026-09-15 tarihinde `https://aidat.spormanage.com.tr/login` geçerli TLS ile HTTP 200 verdi; canlı login `/dashboard` yönlendirmesi ve ADMIN görünümüyle başarılı oldu, test oturumu kapatıldı.
 - Broşür QR/link hedefi aynı Coolify uygulamasına bağlıdır. `aidat.ozlucespor.com` adresi korunur ve HTTP 200 vermeye devam eder. Coolify’ın otomatik eklediği `www.aidat.spormanage.com.tr` varyantında DNS eşleşmesi yoktur ve yayınlanan broşür bu adresi kullanmaz. CR-018 kapatıldı.
 
-## Yerel çalıştırma — 2026-09-14
+## Tarihsel yerel çalıştırma — 2026-09-14
 
 - Node.js v24.15.0 ve npm 11.12.1 mevcut ortamda doğrulandı; bunlar yeni zorunlu sürüm seçimi değildir.
 - `npm ci --cache /tmp/aidat-npm-cache --no-audit --no-fund --fetch-retries=0 --fetch-timeout=20000` başarılı; kilit dosyası değişmeden 618 paket kuruldu.
@@ -70,7 +94,7 @@ Operasyon sorumlusu ve production erişim prosedürü TBD. Doğrulanmış mevcut
 
 Sunucu bu oturumda açık bırakıldı; sonraki oturumda 3077 portu kontrol edilmeden ikinci sunucu başlatılmamalı.
 
-## Temiz yerel veritabanı ve yönetici — 2026-09-14
+## Tarihsel temiz yerel veritabanı ve yönetici — 2026-09-14
 
 Önceki DB tercihi bekleme durumu kapandı: kullanıcı başlangıç hesabının oluşturulmasını onayladı. Yalnızca yeni yerel ortam hazırlandı; mevcut SQL dökümü içe aktarılmadı.
 
@@ -86,7 +110,7 @@ Sunucu bu oturumda açık bırakıldı; sonraki oturumda 3077 portu kontrol edil
 
 Üretim kurulumu, yedek/restore, veri dönüşümü veya Proposed güvenlik kararları bu onay kapsamında uygulanmadı. Lint/typecheck/production build çalıştırılmadı; uygulama kodu değişmedi.
 
-## Tam futbol demosu — 2026-09-15
+## Tarihsel tam futbol demosu — 2026-09-15
 
 Mevcut yerel DB üzerinde kullanıcı onayıyla kuruldu. Kullanıcı/lisans ve özel ayarlar korundu; kulüp görünen adı SporManage olarak ayarlandı. Detaylar, hesap e-postaları ve gösterim senaryoları [DEMO_GUIDE](DEMO_GUIDE.md); sonuçlar [DEMO_VALIDATION](../30-quality/DEMO_VALIDATION.md).
 
@@ -103,7 +127,7 @@ Mevcut yerel DB üzerinde kullanıcı onayıyla kuruldu. Kullanıcı/lisans ve �
 
 Referans tarih ilk demo şubesinde korunur; takvimi yeni güne taşımak için yeniden seed çalıştırılmaz. Gerçek veri veya SQL yedeği içe aktarılmadı. Fark/çakışma halinde mevcut kayıtları silmeyin veya reset komutu çalıştırmayın; rehberdeki koruma davranışını inceleyin. Genel `db:seed` yerine bu görev için `demo:seed` kullanılır; CR-015 açık kalır.
 
-## SporManage sunum ve rapor çalıştırması — 2026-09-15
+## Tarihsel SporManage sunum ve rapor çalıştırması — 2026-09-15
 
 - Sunum yenilemesi dry-run, gerçek transaction ve ikinci sıfır değişiklik çalıştırmasıyla doğrulandı; parola hashleri değişmedi.
 - Geliştirme sunucusu kapatıldı, `npm run clean` ile `.next` temizlendi ve `npm run build` başarıyla tamamlandı. Ağ erişimi gerektiren Google font importu kaldırıldı; uygulama sistem font yığını kullanır. Eski `swcMinify` seçeneği Next 15 yapılandırmasından kaldırıldı.

@@ -12,7 +12,7 @@
 
 ## Karar dizini
 
-Beş proje ADR’si vardır. ADR-0001 ve ADR-0002 Proposed kalır; ADR-0003 rapor dışa aktarımını, ADR-0005 ayrı demo dağıtımını kullanıcı onayıyla Accepted olarak kaydeder. ADR-0004, ADR-0005 tarafından Superseded durumundadır.
+Altı proje ADR'si vardır. ADR-0001/0002 Proposed; ADR-0003/0005/0006 kullanıcı onayıyla Accepted. ADR-0006 ilk uygulama adımı manuel push/alıcı kaydıdır; otomasyon ve iPhone gerçek teslimi henüz tamamlanmadı. ADR-0004, ADR-0005 tarafından Superseded durumundadır.
 
 | ADR | Başlık | Durum | Onay kaydı | Yerine geçen karar |
 |---|---|---|---|---|
@@ -21,7 +21,8 @@ Beş proje ADR’si vardır. ADR-0001 ve ADR-0002 Proposed kalır; ADR-0003 rapo
 | [ADR-0003](ADR-0003-rapor-disa-aktarim-ve-yetki.md) | Rapor dışa aktarımı ve yetki kapsamı | Accepted | Kullanıcı, 2026-09-15 | CR-010 rapor biçimi |
 | [ADR-0004](ADR-0004-brosur-demo-admin-hesabi.md) | Broşür demo hesabına production ADMIN yetkisi | Superseded | Kullanıcı, 2026-09-15 | [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md) |
 | [ADR-0005](ADR-0005-spormanage-ayri-demo-dagitimi.md) | SporManage ayrı demo dağıtımı | Accepted | Kullanıcı, 2026-09-15 | ADR-0004 ve CR-017/CR-018 dağıtım kararı |
+| [ADR-0006](ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) | Web Push ve aidat hatırlatma kuralları | Accepted | Kullanıcı, 2026-10-19; önce manuel push ve alıcı kaydı. web-push 3.6.7/MPL-2.0 ve yalnız demo HTTPS dağıtımı ayrıca onaylandı; uygulama/cihaz sonucu tarihli kayıtta izlenir | N/A — yeni karar |
 
 ## Açık karar ihtiyaçları
 
-Rol/nesne erişim matrisi, para hassasiyeti ve tahsilat kuralları, yedek/retention, üretim dağıtımı ve lisans durumu [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md) içinde izlenir. Bu alanlar için karar alınmadı.
+Rol/nesne erişim matrisi, para hassasiyeti ve tahsilat kuralları, yedek/retention ve yasal lisans durumu [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md) içinde açıktır. Ayrı demo dağıtımı ADR-0005 ile kabul edilmiştir; bu karar diğer dağıtım veya işletim politikalarının genel onayı değildir. Canlı PostgreSQL sürüm kanıtı CR-006 kapsamında TBD'dir. ADR-0001 Proposed kalır; login log temizliği tamamlanmış olsa da kalan AuthService/fallback/secret maddeleri açık olduğundan tüm öneri uygulanmış sayılmaz.

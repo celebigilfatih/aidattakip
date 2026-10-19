@@ -4,6 +4,43 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Deployment preparation — 2026-10-19 — Yalnız demo push onayı
+
+- Kullanıcı `web-push` 3.6.7/MPL-2.0 paket seçimini ve yalnız SporManage demo ortamına dağıtıp iPhone testi yapmayı açıkça onayladı; ADR-0006 ve PUSH_GUIDE onay kaydı güncellendi. Ayrı demo ref'i hazırlanır; `main`/Özlüce kapsam dışıdır. Bu kayıt dağıtımın veya gerçek cihaz tesliminin tamamlandığı iddiası değildir.
+
+### Added / Fixed — 2026-10-19 — Manuel Web Push ve alıcı kaydı
+
+- ADR-0006 kullanıcı onayıyla Accepted; ilk aşama veli/sporcu için ayrı alıcı oturumu, ADMIN doğrulamalı tek kullanımlık davet, personelin kendi cihaz kaydı, PWA/service worker ve tek cihazda manuel push adaptörüyle uygulandı. Otomatik aidat kuralları/scheduler etkinleştirilmedi.
+- Notification ekranının tümü/grup/antrenör alıcı sözleşmesi, zamanlama alanları/temizleme, offset dönüşümü, sayfalama ve hata sonuçları düzeltildi. Tekil/toplu yollar ortak servise bağlandı; gerçek sağlayıcı olmadan e-posta/SMS artık SENT sayılmıyor. Push ACCEPTED ile görüntülendi/okundu ayrımı korundu.
+- Beş additive tablo ve ilgili enum/ilişkiler için migration yalnız yerel DB'ye uygulandı. Runtime VAPID sırları repository dışında oluşturuldu; `.dockerignore` ortam varyantları/dump/çıktı dosyalarını dışlar.
+- Typecheck, 15 test, production ve Docker build, ağsız image dosya kontrolü ve yerel HTTP/tarayıcı kontrolleri başarılı. iPhone ana ekran uygulamasında kullanılmamış davet yapıştırma akışı eklendi; gerçek iPhone/HTTPS teslimi henüz doğrulanmadı. `web-push` 3.6.7 MPL-2.0 paket seçimi ve yalnız demo dağıtımı için açık onay beklenir; Git push/production deploy yapılmadı.
+- [PUSH_GUIDE](docs/40-operations/PUSH_GUIDE.md), ADR/CR-020, ürün/mimari/kalite belgeleri, Project Boot ve handoff güncellendi. CR-004 e-posta/SMS, otomasyon ve gerçek cihaz kabulü için açık kalır.
+
+### Documentation — 2026-10-19 — Push ve aidat otomasyonu önerisi
+
+- Yerel bildirim ekranı/formu, API/gönderim yolları, şema ve resmi Web Push/Coolify kaynakları incelendi. Kullanıcı alıcıları hem veli/sporcu hem kulüp personeli olarak doğruladı.
+- Gerçek push/cihaz aboneliği ve tekrar kuralları eksik; toplu gönderim yalnız SENT işaretliyor. Alıcı/zamanlama sözleşmesi CR-020'ye, çözüm ve aşamalı uygulama planı ADR-0006'ya Proposed olarak kaydedildi.
+- ADR dizini, CR-004, backlog, entegrasyon, Project Boot ve AI Handoff güncellendi. Uygulama, migration, secret, scheduled task veya entegrasyon kurulmadı; bildirim gönderilmedi.
+
+### Documentation — 2026-10-19 — CR-019 belge eşlemesi
+
+- Mimari ve operasyon belgeleri yerel PostgreSQL 15.19 kanıtını son kayıtlı Coolify topolojisinden ayırır. Çelişkili canlı 15/17 sürüm iddiası yerine TBD ve CR-006 takip kaydı kullanılır; canlı ortam bu görevde yeniden sorgulanmadı.
+- Login API log/debug temizliği tamamlanan ayrı düzeltme olarak güvenlik, gözlemlenebilirlik ve ADR-0001 açıklamalarına işlendi; AuthService log/fallback/secret işleri ve Proposed durumu korundu.
+- Yayın/roadmap/milestone ve entegrasyon kayıtları tarihli dağıtım/yerel test sonuçlarıyla eşlendi. Eski ortak production ADMIN/domain anlatımları tarihsel etiket aldı; güncel işletim ADR-0005'e bağlandı.
+- CR-019 belge kapsamıyla kapatıldı; Project Boot ve AI Handoff güncellendi. Uygulama, veri, altyapı ve karar onayları değiştirilmedi.
+
+### Operations — 2026-10-19 — Windows yerel demo çalıştırması
+
+- Kullanıcı onayıyla yeni yerel PostgreSQL 15 konteyneri/volume, uygulama ve lisans DB'si oluşturuldu; mevcut 10 migration, bcrypt uyumlu yerel yönetici ve sentetik demo kuruldu. Mevcut ortam dosyası ve production korundu.
+- Kilitli bağımlılıklar/Prisma Client kuruldu; Next loopback:3077 üzerinde başlatıldı. ADMIN login ve temel HTTP kontrolleri, demo check ve 7 demo testi başarılı.
+- RUNBOOK, PROJECT_BOOT ve SESSION_HANDOFF güncellendi. Uygulama kaynağı, şema, migration dosyaları, paket/lock ve ADR durumları değiştirilmedi.
+
+### Documentation — 2026-10-19 — CDSK durum kontrolü
+
+- CDSK kök dosyaları, yedi dokümantasyon klasöründeki 40 Markdown belgesi, metadata ve yerel bağlantılar kontrol edildi. Kurulum ve proje bağlamı mevcut; tam süreç/ürün uyumu doğrulanmış değil.
+- PostgreSQL sürümü, login logları ve dağıtım/işletim açıklamalarındaki güncellik çelişkileri CR-019'a kaydedildi; Project Boot ve AI Handoff güncellendi.
+- Uygulama, şema, migration, bağımlılık ve altyapı değişikliği veya yeni ADR yok. Doğrulama kapsamı ve çalıştırılmayan kontroller SESSION_HANDOFF içinde kayıtlıdır.
+
 ### Operations — 2026-09-15 — İzole SporManage demo dağıtımı
 
 - `SporManage Aidat Demo` ayrı Coolify proje/uygulaması olarak kuruldu; mevcut PostgreSQL 15 kaynağında ayrı `spormanage_aidat_demo` veritabanı ve kısıtlı uygulama rolü kullanıldı.

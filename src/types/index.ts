@@ -54,14 +54,17 @@ export enum NotificationType {
 export enum NotificationMethod {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
-  IN_APP = 'IN_APP'
+  IN_APP = 'IN_APP',
+  PUSH = 'PUSH'
 }
 
 export enum NotificationStatus {
   PENDING = 'PENDING',
   SENT = 'SENT',
   FAILED = 'FAILED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
+  PROCESSING = 'PROCESSING',
+  ACCEPTED = 'ACCEPTED'
 }
 
 // Prisma model types - will be generated after DB connection

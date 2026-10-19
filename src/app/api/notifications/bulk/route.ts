@@ -1,92 +1,28 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { AuthService } from '@/lib/auth';
-
-// Get current user from token
-async function getCurrentUser(request: NextRequest) {
-  const token = request.cookies.get('auth-token')?.value
-  if (!token) return null
-  
-  const payload = AuthService.verifyToken(token)
-  if (!payload) return null
-  
-  return await prisma.user.findUnique({
-    where: { id: payload.userId }
-  })
-}
-
+import { NextRequest } from 'next/server'
+import { z } from 'zod'
+import { prisma } from '@/lib/prisma'
+import { notificationFailure, notificationResponse, notificationScope, requireManager, requireSameOrigin } from '@/lib/notification-access'
+import { dispatchNotification } from '@/lib/notification-dispatch'
+import { NotificationError } from '@/lib/notification-policy'
 export async function POST(request: NextRequest) {
   try {
-    const user = await getCurrentUser(request);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    requireSameOrigin(request)
+    const user = await requireManager(request)
+    const { notificationIds, action } = z.object({ notificationIds: z.array(z.string().min(1).max(100)).min(1).max(50), action: z.enum(['send', 'cancel', 'delete']) }).parse(await request.json())
+    const ids = Array.from(new Set(notificationIds))
+    const records = await prisma.notification.findMany({ where: { id: { in: ids }, ...notificationScope(user) }, select: { id: true } })
+    if (records.length !== ids.length) throw new NotificationError(404, 'Seçili bildirimlerden biri yetkili kapsamda bulunamadı.')
+    if (action === 'send') {
+      const results = []
+      for (const id of ids) {
+        try { results.push({ id, success: true, result: await dispatchNotification(id) }) }
+        catch (error) { results.push({ id, success: false, error: error instanceof NotificationError ? error.message : 'Gönderim tamamlanamadı.' }) }
+      }
+      return notificationResponse({ results, affectedRows: results.filter(r => r.success).length, failed: results.filter(r => !r.success).length })
     }
-
-    const body = await request.json();
-    const { notificationIds, action } = body;
-
-    if (!notificationIds || !Array.isArray(notificationIds) || notificationIds.length === 0) {
-      return NextResponse.json(
-        { error: 'Notification IDs are required' },
-        { status: 400 }
-      );
-    }
-
-    if (!action || !['send', 'cancel', 'delete'].includes(action)) {
-      return NextResponse.json(
-        { error: 'Valid action is required (send, cancel, delete)' },
-        { status: 400 }
-      );
-    }
-
-    let result;
-
-    switch (action) {
-      case 'send':
-        // Update status to SENT and set sentAt timestamp
-        result = await prisma.notification.updateMany({
-          where: {
-            id: { in: notificationIds },
-            status: 'PENDING'
-          },
-          data: {
-            status: 'SENT',
-            sentAt: new Date()
-          }
-        });
-        break;
-
-      case 'cancel':
-        // Update status to CANCELLED
-        result = await prisma.notification.updateMany({
-          where: {
-            id: { in: notificationIds },
-            status: 'PENDING'
-          },
-          data: {
-            status: 'CANCELLED'
-          }
-        });
-        break;
-
-      case 'delete':
-        // Delete notifications (only CANCELLED or FAILED ones)
-        result = await prisma.notification.deleteMany({
-          where: {
-            id: { in: notificationIds },
-            status: { in: ['CANCELLED', 'FAILED'] }
-          }
-        });
-        break;
-    }
-
-    return NextResponse.json({
-      success: true,
-      affectedRows: result?.count || 0,
-      action
-    });
-  } catch (error) {
-    console.error('Error performing bulk notification operation:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+    const where = { id: { in: ids }, ...notificationScope(user) }
+    const result = action === 'cancel' ? await prisma.notification.updateMany({ where: { ...where, status: 'PENDING' }, data: { status: 'CANCELLED' } })
+      : await prisma.notification.deleteMany({ where: { ...where, status: { in: ['CANCELLED', 'FAILED'] } } })
+    return notificationResponse({ success: true, affectedRows: result.count })
+  } catch (error) { return notificationFailure(error) }
 }

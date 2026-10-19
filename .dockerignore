@@ -7,6 +7,10 @@ README.md
 .env
 .env.local
 .env.*.local
+.env.*
+aidat_takip.sql
+*.dump
+output
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -1,5 +1,129 @@
 # AI Session Handoff
 
+## Session — 2026-10-19 — Demo push dağıtım onayı ve hazırlığı
+
+Kullanıcı somut `web-push` 3.6.7/MPL-2.0 paket seçimini ve yalnız SporManage demo ortamına dağıtıp iPhone gerçek testini açıkça onayladı. Onay ADR-0006, PUSH_GUIDE, CHANGELOG ve Project Boot'a işlendi. Bu onay `main`/Özlüce dağıtımını kapsamaz. Ayrı `codex/manual-push-demo-20261019` dalı hazırlanır; Coolify demo ref eşlemesi doğrulanmadan uzak push/dağıtım başlatılmaz. Otomatik aidat kuralları kapalı kalır.
+
+Başlangıçta 242 takipli dosyanın hash'i repository dışında alındı; önceki uygulama ve belge değişiklikleri korundu. Yerel image mevcut. SporManage ve Özlüce `/login` HTTPS 200; uzak main hâlâ `b024011fd240fc65581eed24469ef88dbb271fe7`. Bu bilgisayarda Coolify URL/token veya SSH anahtarı yapılandırması bulunmadığından kullanıcıdan panel adresi ya da oturum açık panel sekmesi istendi. Parola/secret istenmedi. Canlı ortam henüz değiştirilmedi; iPhone izin/abonelik/gerçek teslimi bekler. Sonuçlar bu oturum kaydına eklenecek.
+
+## Session — 2026-10-19 — Onaylı manuel Web Push ilk aşaması
+
+### Hedef, yetki ve sonuç
+
+Kullanıcı “ADR-0006’daki planı onaylıyorum. Önce bildirim ekranındaki hataları düzeltip veli/sporcu alıcı kaydını ve tek cihazda manuel push gönderimini çalışır hale getirelim.” dedi; test cihazını iPhone seçti. ADR-0006 Accepted oldu. Bu kapsamın yerel kodu, additive migration'ı, alıcı/cihaz yönetimi ve gerçek Web Push adaptörü hazırlandı. Gerçek iPhone teslimi henüz doğrulanmadı. Otomatik aidat kuralları/scheduler bu ilk aşamada uygulanmadı. Somut `web-push` 3.6.7 MPL-2.0 paket lisansı ve yalnız demo HTTPS dağıtımı açık onay bekler. Yerel hazırlık yeni lisans kararının onaylandığı anlamına gelmez.
+
+### Değişiklikler
+
+- Notification liste/oluşturma/düzenleme/tekil/toplu/send yolları aynı gönderim servisine bağlandı. `all`, grup ve gerçek antrenör hesabı çözümü; tarih temizleme/ISO aktarımı; liste meta verisi/sayfalama; gerçek sağlayıcısı olmayan EMAIL/SMS için sahte SENT üretmeme; GET process-scheduled mutasyonunu kapatma düzeltildi. PROCESSING ve ACCEPTED durumları ayrıldı; ACCEPTED yalnız push servisinin kabulüdür.
+- Prisma'ya NotificationRecipient, PushInvite, RecipientSession, PushDevice, PushDelivery eklendi. `20261019120000_add_manual_web_push` yalnız loopback:5477/aidat_takip üzerinde uygulandı; toplam 11 migration. Mevcut veriler ve eski migration'lar korundu. SystemSetting.updatedAt default farkı yeni migration'a alınmadı; seed/reset/restore yok.
+- Beş `/api/push/*` rota dosyası; ADMIN doğrulamalı tek kullanımlı 24 saat davet, hash'li 7 gün ayrı alıcı oturumu; ADMIN/ACCOUNTING şube kapsamı; origin/endpoint/key kontrolleri; cihaz sahipliği/iptal/süre ve gönderim öncesi aktiflik kontrolü uygulandı. Alıcı çerezi yönetim erişimi sağlamaz. Personel çıkışı cihazlarını pasifleştirir. Yeni akış JWT_SECRET zorunlu doğrular; genel AuthService politikası değiştirilmedi.
+- `/notifications` içine alıcı/davet/tek cihaz manuel gönderim paneli, `/recipient` alıcı ekranı; manifest, service worker ve yerel SM ikonları eklendi. iPhone ana ekran uygulamasında kullanılmamış davet bağlantısı yapıştırılarak oturum kurulabilir; Safari çerezinin taşınacağı varsayılmaz. İzin kullanıcı düğmesine doğrudan bağlıdır. Kilit ekranına kişi/borç ayrıntısı gitmez. Service worker veri önbelleklemez.
+- `web-push` 3.6.7 ve `@types/web-push` 3.6.4 paket/lock'a eklendi; paket lisansı kurulu kaynaktan MPL-2.0 doğrulandı. `scripts/setup-push-runtime.cjs` VAPID anahtarlarını repository dışında `%LOCALAPPDATA%/SporManage/aidattakip/push-runtime.json` içinde korur. `.env` değiştirilmedi; anahtar/değerler belgelere yazılmadı. Docker context `.env.*`, dump ve output dışlayacak şekilde daraltıldı.
+- Mimari, ürün/kapsam, gereksinimler, yol haritası, API envanteri, test/operasyon belgeleri, CR-004/020, ADR dizini, CHANGELOG ve PROJECT_BOOT güncellendi. Kullanıcının önceki CR-019 ve diğer belge değişiklikleri korundu. Envanter 18 sayfa, 53 API rota dosyası, 25 model, 42 docs Markdown belgesidir. CR-020 ilk ekran/API kapsamıyla kapalı; CR-004 gerçek iPhone/otomatik aidat/e-posta/SMS doğrulaması açısından açık.
+
+### Doğrulamalar ve sınırlar
+
+- Prisma validate/generate, TypeScript `tsc --noEmit --incremental false` başarılı. Politika + yerel DB entegrasyonu + demo + rapor toplam **15 test geçti**. Entegrasyon testi yalnız kendi geçici kayıtlarını temizler; dış gönderici kontrollü adaptördür. Davet yarışı, rol/şube/origin, cihaz sahipliği, eşzamanlı tek claim, genel push payload, kanal hataları, tarih temizleme, antrenör alıcısı, iptal ve logout sınandı. İlk denemelerde test fixture'ının eksik Trainer alanları düzeltildi; nihai koşu 15/15. Gerçek Apple servisine gönderim yapılmadı.
+- Yerel production build ve Docker production build başarılı; son image doğrulama kaydı aşağıda tutulur. Genel lint komutu CR-011 nedeniyle ayrı kalite kapısı olarak çalıştırılmadı. Derlemedeki eski browser-data/Prisma deprecation uyarıları engelleyici değildi.
+- HTTP: recipient/manifest/sw/icon/config 200, yönetici notifications/recipients/session 200; oturumsuz cihaz kaydı reddedildi. Tarayıcıda alıcı paneli, pasif cihaz/gönderim kontrolleri, tarih alanları ve sayfalama görüldü. Gerçek UI daveti/izin/abonelik oluşturulmadı. Demo verileri 60 sporcu, 300 ödeme, 6 grup, 9 kullanıcı olarak korundu; test kullanıcıları temizlendi.
+- Yerel Next dev `127.0.0.1:3077` yönetilen terminal **12714** ile açık. Runtime JSON yalnız süreç ortamına yüklenir; mevcut AuthService logları başlatıcıda filtrelenir. İlk entegrasyon denemesinde genel AuthService import'unun mevcut secret-prefix logu görüldüğünden yeni akış doğrudan JWT doğrulamasına alındı; genel kaynak temizliği CR-007/ADR-0001 kapsamında açıktır. Değer burada tekrarlanmaz.
+- Git push/commit, canlı Coolify/DB değişikliği, davet iletimi ve gerçek bildirim gönderimi yapılmadı. `main` iki uygulamayı tetikler; sıradaki onay yalnız sentetik `spormanage-aidat-demo` için ayrı ref/image, ortama özel runtime ve migration planıdır. Özlüce hedef değildir. Canlı PostgreSQL sürümü CR-006 kapsamında TBD; rollback/migration geri alma denenmedi.
+
+### Sonraki adım
+
+[PUSH_GUIDE](../40-operations/PUSH_GUIDE.md) somut iPhone kabul adımlarını ve geri alma sınırlarını içerir. Paket lisansı ve yalnız demo dağıtımı açık onaylandıktan sonra demo runtime/migration hazırlanıp test alıcısı daveti kullanıcı tarafından iPhone ana ekran uygulamasında kabul edilir. Servis ACCEPTED kaydı ile telefonda görülen bildirim ayrı kanıtlanır. Cihaz izni ve gözlem kullanıcıya aittir; bunlar tamamlanmadan gerçek teslim tamamlandı denmez.
+
+Son paket kontrolü: `docker build -t aidattakip:manual-push-20261019 .` nihai iPhone davet yapıştırma arayüzüyle başarılı; image config `sha256:c05e8f10e36b6e94ea1c3157171a41216b4b7fe7e8eced8782cdd13429c26792`. Ağsız, startup/migration çalıştırmayan image kontrolü PWA ikon/SW, recipient ve activate derleme çıktısı ile yeni migration'ın varlığını; `.env*`/SQL dump'ın kökte olmadığını doğruladı. Paket sürüm/lisansı 3.6.7/MPL-2.0. Şema validate yeniden başarılı; son toplam 15 test ve typecheck geçti. 537 yerel belge bağlantısında tek eksik mevcut README/LICENSE (CR-012); yeni kırık hedef yok. 19 korunan dosya (ortam, AGENTS, Constitution, eski migration'lar dahil) başlangıç hash'leriyle aynı. `.cdsk.json` ve whitespace kontrolü başarılı. Yeni/değişen metinlerde VAPID private key literal'i yok. Yönetim ekranı inceleme görüntüsü `output/manual-push-review.png`; Docker context dışında, kaynak dosyası değildir.
+
+## Session — 2026-10-19 — Push ve tekrarlı aidat bildirimi incelemesi
+
+### Kullanıcı hedefi ve sonuç
+
+Kullanıcı `/notifications` yapısını incelemeyi, geciken aidatlar ile belirli gün/haftalarda push göndermenin nasıl yapılacağını sordu. Alıcıları açıkça **hem veli/sporcular hem kulüp personeli** olarak doğruladı. Bu yanıt teknik mimari, şema, yeni kimlik/yetki veya gizlilik kararının onayı değildir. [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) Proposed planı ve açık soruları; CR-020 mevcut ekran/API sözleşmesi eksiklerini kaydeder.
+
+### İnceleme kanıtı
+
+- Zorunlu bağlam okundu. Mevcut değişiklikler korundu; başlangıçtaki 242 takipli dosyanın SHA-256 özeti alındı.
+- Kullanıcının açık yerel sekmesinde mevcut demo hesabıyla normal giriş yapıldı; `/notifications` listesi, filtreleri ve `Yeni Bildirim` formu görüldü. Form hiçbir veri yazılmadan İptal ile kapatıldı; sayfa açık kaldı. Gönder, toplu işlem veya veri değiştiren process-scheduled GET çağrılmadı. Yeni push aboneliği/izin istemi oluşturulmadı.
+- Kaynakta EMAIL/SMS/IN_APP var; push enum/abonelik, service worker, PWA manifesti ve VAPID akışı bulunmadı. Uygulama içi bileşen 30 saniyelik polling ve örnek okundu sayacı kullanıyor. Tekil/toplu/servis gönderim yolları ayrık; bulk send yalnız DB durumunu SENT yapıyor. Aidat otomatik üretici metodu taslak; scheduled processor var ama repository'de periyodik çağıran iş bulunmadı.
+- UI grup/antrenör/tümü alanları POST'ta alıcıya açılmıyor; `all` studentId gerçek ID gibi aranıyor. GET listede scheduledAt/sentAt/iletişim alanları yok. Veli/sporcu için doğrulanmış kimlik/cihaz ilişkisi mevcut değil. Bunlar statik gözlemdir; hatalı POST veya gerçek gönderim test edilmedi.
+- Resmi MDN Push API, WebKit iOS/iPadOS Web Push ve Coolify Scheduled Tasks belgeleri araştırıldı; bağlantılar ADR-0006'dadır. Kurulu canlı Coolify sürümü veya cihaz desteği bu görevde test edilmedi.
+
+### Öneri ve değişiklik sınırı
+
+Mevcut ekranın gönderimler/otomatik kurallar/alıcı-cihaz yönetimi olarak geliştirilmesi; güvenli veli/sporcu alıcı kaydı, izinli Web Push/PWA ve personel özeti; Europe/Istanbul takvim kuralları; Coolify container içi işleyici; güncel bakiye/ilişki/izin kontrolü; kalıcı gönderim ve retry/durum ayrımı önerildi. Tam/kısmi tahsilat ve iptal sonrası yeniden kontrol; aynı alıcı/takvim diliminde tekrarlı iş üretimini önleme; gerçek cihaz görünümü/okundu iddiası yerine servis kabulünü ayrı izleme planlandı. Kesin takvim, rol matrisi, kimlik doğrulama, retention, paket/sağlayıcı ve işletim komutu TBD.
+
+Yalnız ADR-0006 (yeni), ADR dizini, CHANGE_REQUESTS, BACKLOG, INTEGRATIONS, PROJECT_BOOT, CHANGELOG ve bu handoff güncellendi. Mevcut Accepted kararlar korunur; yeni Accepted ADR yok. Kod/şema/migration/ortam/bağımlılık/altyapı değişmedi; seed, deploy veya cron kurulmadı.
+
+### Doğrulama ve sonraki adım
+
+Doğrulama başarılı: Başlangıçtaki 242 takipli dosyadan 7 hedef belge değişti, diğer 235 dosyanın SHA-256 özeti aynı; tek yeni dosya Proposed ADR-0006. Docs sayısı 41 ve belgeler boş değil. 513 yerel bağlantı başvurusunda tek eksik hedef mevcut README/LICENSE (CR-012); yeni kırık hedef yok. `.cdsk.json` ayrıştırıldı ve `git diff --check` geçti. NotificationMethod kanalları kaynakla eşlendi; uygulama kaynakları değişmedi.
+
+Lint/typecheck/test/build çalıştırılmadı: yalnız inceleme ve Proposed plan; gerçek push/tekrar/cihaz testi ancak uygulama sonrası yapılabilir. Sonraki somut adım, ADR-0006 kimlik/yetki/şema/işletim tercihlerini netleştirip onaylı kapsamla önce ekran/API eşlemesini ve tek izinli test cihazına manuel push'u hazırlamaktır. Mevcut CR-004/020 ve diğer açık CR/ADR riskleri sürer.
+
+## Session — 2026-10-19 — CR-019 belge eşlemesi
+
+### Sonuç ve kapsam
+
+Kullanıcı CDSK belgelerini mevcut uygulamayla eşlemeyi ve CR-019 tutarsızlıklarını gidermeyi istedi. Zorunlu okuma sırası izlendi; başlangıçtaki beş değiştirilmiş belge önceki işlerden korunarak devam edildi. Login/AuthService/Next config, paket/lock, Dockerfile/startup, envanter ve kabul edilmiş ADR-0003/0005 eşlendi. Çalışan yerel PostgreSQL sürümü READ ONLY transaction ile 15.19 doğrulandı; canlı Coolify ortamına bağlanılmadı.
+
+CR-019 **belge kapsamıyla kapalıdır**: canlı PostgreSQL 15/17 iddiaları güncel açıklamalarda TBD ile değiştirildi, yetkili sürüm doğrulaması CR-006'ya devredildi. ADR-0005 ilk kaydındaki sürüm ifadesi tarihsel bağlam olarak korundu; Accepted kararın içeriği/onayı değiştirilmedi. Login API temizliği tamamlanan dar düzeltme olarak kaydedildi; AuthService/fallback/secret maddeleri açık, ADR-0001 Proposed kalır. Geçici ortak domain/production ADMIN kayıtları tarihsel etiket aldı; güncel işletim ADR-0005'e bağlandı. Dağıtım ve yerel test kanıtları ürün kabulünden ayrıldı.
+
+### Güncellenen belgeler
+
+PROJECT_BOOT, CHANGELOG; mimari OVERVIEW/SECURITY_MODEL/INTEGRATIONS; execution CHANGE_REQUESTS/BACKLOG/RELEASE_PLAN/MILESTONES; ürün ROADMAP; kalite TEST_STRATEGY; operasyon DEPLOYMENT/RUNBOOK/OBSERVABILITY; ADR-0001/ADR-0005 açıklamaları ve ADR dizini; bu handoff. Önceki oturumların kayıtları korunur. Uygulama, şema, migration, bağımlılık/lock, ortam, Constitution ve AGENTS değiştirilmedi. DB yazma, seed, restore veya deployment yapılmadı.
+
+### Doğrulama ve sınırlar
+
+- 17 sayfa, 48 API rota dosyası, 20 Prisma modeli ve paket/lock sürümleri mevcut kaynaklardan yeniden sayıldı/eşlendi. Başlangıçta özeti alınan 242 takipli dosyadan yalnız hedef 18 belge değişti; diğer 224 dosyanın SHA-256 özeti aynı. Yeni takip edilmeyen dosya yok.
+- Yerel `aidat_takip` hedefi loopback:5477 olarak doğrulandı; READ ONLY transaction içindeki `current_setting('server_version')` 15.19, Docker imaj tanımı `postgres:15-alpine`/running. Bu kanıt canlı PostgreSQL sürümünü belirlemez.
+- 40 docs Markdown belgesi mevcut ve boş değil; `.cdsk.json` ayrıştırıldı, referansları mevcut. 487 yerel bağlantı başvurusu kontrol edildi; tek eksik hedef mevcut README/LICENSE (CR-012), yeni kırık hedef yok. `git diff --check` başarılı. Login'deki tek console çağrısı genel hata mesajı; AuthService log/fallback'i kaynakta mevcut. Beş ADR'nin durumları korundu. ADR-0005'in Decision ve sonraki bölümleri Git HEAD ile içerik olarak aynı; `d6db67c` login düzeltme commit'i doğrulandı.
+- Lint/typecheck/test/build ve HTTP kontrolleri yeniden çalıştırılmadı: bu görev yalnız belge eşlemesi; önceki aynı tarihli 7 test/HTTP sonuçları ilgili çalıştırma kaydına aittir. Canlı log/TLS/DB/rol veya restore kontrolü yapılmadı.
+
+### Kararlar, riskler ve sonraki adım
+
+Yeni ADR/onay yok. ADR-0001/0002 Proposed, ADR-0003/0005 Accepted, ADR-0004 Superseded korunur. Canlı PostgreSQL sürüm kanıtı CR-006; kalan secret/log işleri CR-007/ADR-0001; ayrıntılı kabul, rol/yaş kuralları ve backup/restore mevcut kayıtlarında açıktır. README'nin tarihsel kurulum ve LICENSE eksiklikleri CR-001/012 kapsamında sürer. Önerilen sonraki adım yetkili canlı ortamdan yalnız sürüm kanıtını alarak CR-006 kaydını tamamlamak, ardından kalan ürün/güvenlik kararlarını ayrı kapsamda ele almaktır.
+
+## Session — 2026-10-19 — Windows yerel demo çalıştırması
+
+### Yetki ve yapılan iş
+
+Kullanıcı uygulamayı çalıştırmayı istedi. Bu bilgisayarda node_modules, önceki yerel PostgreSQL konteyneri ve volume bulunmadı. Kullanıcı “Yeni yerel PostgreSQL kur, mevcut demo verisini oluştur” seçeneğini açıkça onayladı. Mevcut `.env` yalnız değerler gösterilmeden doğrulandı; localhost:5477/aidat_takip ve license_db hedefleri kullanıldı. Production ve diğer projelerin konteynerleri değiştirilmedi.
+
+Node v24.19.0 ve bundled pnpm kullanıldı; PATH'te npm bulunmadığından `pnpm dlx npm@11.12.1 ci --no-audit --no-fund` ile 616 kilitli paket kuruldu. Prisma Client 6.17.1 generate ve 10 mevcut migration yeni DB üzerinde başarılı. `aidat-takip-postgres`/`postgres:15-alpine`, `aidat_takip_postgres_data` ve yalnız loopback:5477 bağlantısı oluşturuldu. license_db mevcut SQL ile kuruldu; yeni yerel ADMIN mevcut bcrypt cost 12 biçimini kullanır. Genel seed kullanılmadı.
+
+Demo dry-run ve kurulum tamamlandı: 2 şube, 6 grup/antrenör, 60 sporcu, 300 ödeme, 78 seans, 378 yoklama, yönetici dahil 9 kullanıcı. Referans tarih 2026-10-19; eski makineden dump içe aktarılmadı. Personel parolaları seed tarafından üretildi; çıktıda gösterilmedi ve repository'ye kaydedilmedi. Yerel yönetici girişi README'deki demo bilgilerini kullanır.
+
+### Doğrulamalar ve çalışma durumu
+
+- Next 15.5.9 `127.0.0.1:3077` üzerinde yönetilen terminal oturumu 65346 içinde açık bırakıldı. Mevcut `[Auth]` logları terminale ulaşmadan geçici Node sarmalayıcısıyla filtrelendi; kalıcı log düzeltmesi veya ADR-0001 kabulü yapılmadı.
+- GET /login HTTP 200 ve SporManage metni; POST login 200/ADMIN; auth/me, health, students, payments ve dashboard HTTP 200. Token/çerez ve bağlantı secret'ları çıktıya yazılmadı.
+- `demo-check` PASS; `node --import tsx --test prisma/demo.test.ts prisma/demo.integration.test.ts` 7/7 başarılı. Entegrasyon testi salt okunur transaction içinde tekrar çalıştırma/veri-parola korumasını kontrol etti.
+- Giriş adresi Codex browser panelinde açılmak üzere gönderildi; UI aracı `queued` döndürdü. Görsel tarayıcı incelemesi yapılmadı; HTTP ve giriş doğrulandı.
+- Lint/typecheck/production build ve ürün kabul testleri çalıştırılmadı: görev mevcut kodu yerel çalıştırma ve demo kurulumudur. Yeni migration/şema, uygulama/paket/lock veya ortam dosyası değişikliği yok. Yalnız RUNBOOK, PROJECT_BOOT, CHANGELOG ve bu handoff güncellendi; önceki CDSK/CR-019 değişiklikleri korundu. `git diff --check` başarılı; yerel bağlantılarda mevcut README/LICENSE eksikliği dışında yeni kırık hedef yok.
+
+### Kararlar, riskler ve sonraki adım
+
+Yeni ADR gerekmedi; mevcut belgelenmiş yerel topoloji kullanıcı onayıyla yeniden kuruldu. Sunucu/konteyner açık bırakıldı; sonraki çalışmada port ve mevcut konteyner kontrol edilmeli, DB yeniden oluşturulmamalı. Mevcut CR/Proposed ADR riskleri sürer. Uygulamaya [yerel giriş adresinden](http://127.0.0.1:3077/login) devam edilebilir.
+
+## Session — 2026-10-19 — CDSK durum kontrolü
+
+### Sonuç ve kapsam
+
+Kullanıcının “CDSK belgeleri uygulanmış mı?” sorusu için zorunlu okuma sırası izlendi; belge envanteri, metadata, karar ve geçmiş doğrulama kayıtları incelendi. Mevcut login, rapor export ve sporcu kayıt koduyla örnek eşleme yapıldı. Sonuç: CDSK iskeleti kurulmuş, proje bağlamı doldurulmuş ve ADR/CHANGELOG/handoff süreci kullanılmış; tam süreç ve ürün uyumu kanıtlanmış değil. Ayrıntılı kabul ölçütleri ve CDSK sürümü TBD; ADR-0001/0002 Proposed, ADR-0003/0005 Accepted, ADR-0004 Superseded.
+
+### Değişiklikler ve doğrulamalar
+
+- Başlangıçta çalışma ağacı temizdi. Yalnız PROJECT_BOOT, CHANGELOG, CHANGE_REQUESTS ve bu handoff güncellendi; uygulama/şema/migration/bağımlılık/altyapı değişmedi.
+- Beş kök dosya ve yedi docs klasöründe 40 Markdown belgesi mevcut; boş docs belgesi yok. `.cdsk.json` başarıyla ayrıştırıldı; durum `context-documented`, CDSK sürümü `TBD`.
+- Değişiklik öncesi 452, belge güncellemeleri sonrası 462 yerel Markdown bağlantı başvurusu kontrol edildi; tek eksik hedef README'deki LICENSE (mevcut CR-012). Yeni kırık bağlantı yok; `git diff --check` başarılı.
+- Belgelerdeki PostgreSQL 15/17 sürüm çelişkisi, kaldırılmış login loglarının mevcutmuş gibi anlatılması ve eski dağıtım/işletim açıklamaları CR-019'a kaydedildi. Mevcut kod ADR-0003 export sözleşmesini ve yaş ayrımı olmadan veli zorunluluğunu içeriyor; bu statik eşleme çalışma zamanı testi değildir.
+- Lint/typecheck/test/build çalıştırılmadı: görev belge durum incelemesi ve bulgu kaydıyla sınırlı. DB bağlantısı, migration, seed, restore, HTTP veya canlı ortam kontrolü yapılmadı. Önceki tarihli başarı kayıtları güncel çalıştırma sonucu sayılmadı.
+
+### Açık konular ve sonraki adım
+
+Yeni ADR veya onay gerektiren karar alınmadı. Belge güncelliği için CR-019 çözülmeli; gerçek PostgreSQL sürümü bu görevde doğrulanmadı. Kabul kriterleri, yaş/veli kuralı, rol matrisi, lint ve backup/restore açıklıkları ilgili mevcut CR/ADR kayıtlarında sürüyor. İlk öneri belge eşlemesini tamamlamak, ardından açık ürün kararlarını netleştirmektir.
+
 ## Session — 2026-09-15 — Ayrı SporManage demo dağıtımı
 
 ### Session summary

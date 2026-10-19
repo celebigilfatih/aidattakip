@@ -25,6 +25,8 @@ Kullanıcı tarafından belirtilmiş sayısal hedef, kabul ölçütü veya tesli
 
 ## Açık sorular
 
+2026-10-19 onaylı ek iş: Kullanıcı [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) planını kabul edip önce bildirim ekranı/API hataları, veli/sporcu alıcı kaydı ve tek cihazda manuel push istedi. Yerel ilk aşama uygulandı/test edildi; iPhone gerçek teslimi HTTPS ortamında bekler. Alıcı hedefi hem veli/sporcu hem kulüp personelidir; otomatik aidat takvimi sonraki aşamadır. Bu kayıt genel ürün kabulü veya bütün açık yaş/rol kurallarının çözümü değildir.
+
 Çocuk/yetişkin ayrımının yaş eşiği ve veli/iletişim kuralları, kesin MVP alt özellikleri, rol bazlı yetki matrisi, kulüp/şube ayrımı ve ticari dağıtım beklentisi: TBD. Çelişkiler [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md) içinde izlenir.
 
 Yaş kapsamı kararı kullanıcı yanıtından bu belgeye kaydedildi. Uygulama kuralı önerisi [ADR-0002](../50-decisions/ADR-0002-cocuk-yetiskin-sporcu-kaydi.md) içindedir; yaş eşiği veya API değişikliği onaylanmış sayılmaz.

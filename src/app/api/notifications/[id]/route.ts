@@ -1,179 +1,37 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { AuthService } from '@/lib/auth';
-
-// Get current user from token
-async function getCurrentUser(request: NextRequest) {
-  const token = request.cookies.get('auth-token')?.value
-  if (!token) return null
-  
-  const payload = AuthService.verifyToken(token)
-  if (!payload) return null
-  
-  return await prisma.user.findUnique({
-    where: { id: payload.userId }
-  })
+import { NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { notificationFailure, notificationResponse, notificationScope, requireManager, requireSameOrigin } from '@/lib/notification-access'
+import { messageSchema, NotificationError, parseSchedule } from '@/lib/notification-policy'
+type Context = { params: Promise<{ id: string }> }
+async function find(request: NextRequest, context: Context) {
+  const user = await requireManager(request), { id } = await context.params
+  const record = await prisma.notification.findFirst({ where: { id, ...notificationScope(user) } })
+  if (!record) throw new NotificationError(404, 'Bildirim bulunamadı.')
+  return record
 }
-
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params
-    const user = await getCurrentUser(request);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const notification = await prisma.notification.findUnique({
-      where: { id },
-      include: {
-        student: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            phone: true
-          }
-        },
-        createdBy: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        }
-      }
-    });
-
-    if (!notification) {
-      return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(notification);
-  } catch (error) {
-    console.error('Error fetching notification:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+export async function GET(request: NextRequest, context: Context) {
+  try { return notificationResponse(await find(request, context)) } catch (error) { return notificationFailure(error) }
 }
-
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: NextRequest, context: Context) {
   try {
-    const { id } = await params
-    const user = await getCurrentUser(request);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const body = await request.json();
-    console.log(`[Update Notification] Request for ID: ${id}`, body);
-    const {
-      title,
-      message,
-      type,
-      method,
-      scheduledAt,
-      recipientEmail,
-      recipientPhone
-    } = body;
-
-    // Check if notification exists and is editable
-    const existingNotification = await prisma.notification.findUnique({
-      where: { id }
-    });
-
-    if (!existingNotification) {
-      console.log(`[Update Notification] Not found: ${id}`);
-      return NextResponse.json({ error: 'Bildirim bulunamadı' }, { status: 404 });
-    }
-
-    if (existingNotification.status === 'SENT') {
-      console.log(`[Update Notification] Cannot edit SENT notification: ${id}`);
-      return NextResponse.json(
-        { error: 'Gönderilmiş bildirimleri düzenleyemezsiniz' },
-        { status: 400 }
-      );
-    }
-
-    const updatedNotification = await prisma.notification.update({
-      where: { id },
-      data: {
-        ...(title && { title }),
-        ...(message && { message }),
-        ...(type && { type }),
-        ...(method && { method }),
-        ...(scheduledAt && { scheduledAt: new Date(scheduledAt) }),
-        ...(recipientEmail !== undefined && { recipientEmail }),
-        ...(recipientPhone !== undefined && { recipientPhone })
-      },
-      include: {
-        student: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            phone: true
-          }
-        },
-        createdBy: {
-          select: {
-            id: true,
-            name: true,
-            email: true
-          }
-        }
-      }
-    });
-
-    console.log(`[Update Notification] Success: ${id}`);
-    return NextResponse.json(updatedNotification);
-  } catch (error) {
-    console.error('Error updating notification:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+    requireSameOrigin(request)
+    const record = await find(request, context)
+    if (!['PENDING', 'FAILED'].includes(record.status)) throw new NotificationError(409, 'İşlenmiş bildirim düzenlenemez.')
+    const input = messageSchema.parse(await request.json())
+    if (input.method !== record.method) throw new NotificationError(400, 'Kanalı değiştirmek için yeni bildirim oluşturun.')
+    const result = await prisma.notification.updateMany({ where: { id: record.id, status: { in: ['PENDING', 'FAILED'] } }, data: {
+      title: input.title, message: input.message, type: input.type, scheduledAt: parseSchedule(input.scheduledAt), recipientEmail: input.recipientEmail || null, recipientPhone: input.recipientPhone || null,
+    } })
+    if (!result.count) throw new NotificationError(409, 'Bildirim başka bir işlemde değişti.')
+    return notificationResponse({ success: true })
+  } catch (error) { return notificationFailure(error) }
 }
-
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(request: NextRequest, context: Context) {
   try {
-    const { id } = await params
-    const user = await getCurrentUser(request);
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Check if notification exists and is deletable
-    const existingNotification = await prisma.notification.findUnique({
-      where: { id }
-    });
-
-    if (!existingNotification) {
-      console.log(`[Delete Notification] Not found: ${id}`);
-      return NextResponse.json({ error: 'Notification not found' }, { status: 404 });
-    }
-
-    if (existingNotification.status === 'SENT') {
-      console.log(`[Delete Notification] Cannot delete SENT notification: ${id}`);
-      return NextResponse.json(
-        { error: 'Gönderilmiş bildirimleri silemezsiniz' },
-        { status: 400 }
-      );
-    }
-
-    await prisma.notification.delete({
-      where: { id }
-    });
-
-    console.log(`[Delete Notification] Success: ${id}`);
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error deleting notification:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+    requireSameOrigin(request)
+    const record = await find(request, context)
+    const result = await prisma.notification.deleteMany({ where: { id: record.id, status: { in: ['PENDING', 'FAILED', 'CANCELLED'] } } })
+    if (!result.count) throw new NotificationError(409, 'İşlenmiş bildirim silinemez.')
+    return notificationResponse({ success: true })
+  } catch (error) { return notificationFailure(error) }
 }

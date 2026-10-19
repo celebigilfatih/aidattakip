@@ -10,7 +10,9 @@
 
 Broşür hesabı önce mevcut Özlüce production uygulamasında ADMIN olarak oluşturulmuştu. Ortak bir broşür hesabının gerçek production kayıtlarını görmesi ve değiştirebilmesi veri bütünlüğü ile gizlilik riski doğuruyordu. Demo verisinin doğrulanmış yerel snapshot'ı hazırdı ve `aidat.spormanage.com.tr` alan adının bu veriyle çalışan ayrı bir uygulamaya yönelmesi istendi.
 
-Sunucuda çalışan PostgreSQL 15 kaynağı birden fazla mantıksal veritabanını barındırıyor. Kullanıcı, ikinci bir PostgreSQL servisinin gereksiz olduğunu belirterek aynı fiziksel kaynak içinde ayrı veritabanı ve rol izolasyonunu seçti.
+2026-09-15 tarihli ilk kayıt, birden fazla mantıksal veritabanını barındıran sunucu kaynağını PostgreSQL 15 olarak tanımlıyordu. Kullanıcı, ikinci bir PostgreSQL servisinin gereksiz olduğunu belirterek aynı fiziksel kaynak içinde ayrı veritabanı ve rol izolasyonunu seçti.
+
+Belge eşleme notu (2026-10-19): Eski OVERVIEW metnindeki 17 Alpine ifadesiyle sürüm çelişkisi bulundu. Canlı sunucu sürümü bu görevde sorgulanmadığından güncel doğrulanmış sürüm **TBD** olarak izlenir; [CR-006](../20-execution/CHANGE_REQUESTS.md). Yerelde doğrulanan 15.19 canlı ortamın kanıtı değildir. Bu not kabul edilmiş izolasyon kararını veya onay kapsamını değiştirmez.
 
 ## Decision
 

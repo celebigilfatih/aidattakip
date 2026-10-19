@@ -29,6 +29,8 @@ model User {
   markedAttendances Attendance[]   @relation("AttendanceMarker")
   createdExceptions TrainingException[] @relation("ExceptionCreator")
   groupPermissions  UserGroupPermission[]
+  notificationRecipient NotificationRecipient? @relation("StaffRecipient")
+  issuedPushInvites PushInvite[]
 
   @@map("users")
 }
@@ -56,6 +58,7 @@ model Student {
   group          Group?         @relation(fields: [groupId], references: [id])
   parents        Parent[]       @relation("StudentParents")
   attendanceAnalytics AttendanceAnalytics[]
+  notificationRecipient NotificationRecipient? @relation("StudentRecipient")
 
   @@index([groupId, isActive])
   @@index([branchId, isActive])
@@ -77,6 +80,7 @@ model Parent {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   students     Student[] @relation("StudentParents")
+  notificationRecipient NotificationRecipient? @relation("ParentRecipient")
 
   @@map("parents")
 }
@@ -272,11 +276,16 @@ model Notification {
   sentAt         DateTime?
   recipientEmail String?
   recipientPhone String?
+  recipientId    String?
+  targetDeviceId String?
   createdAt      DateTime           @default(now())
   updatedAt      DateTime           @updatedAt
   createdById    String
   createdBy      User               @relation("NotificationSender", fields: [createdById], references: [id])
   student        Student?           @relation(fields: [studentId], references: [id])
+  recipient      NotificationRecipient? @relation(fields: [recipientId], references: [id], onDelete: SetNull)
+  targetDevice   PushDevice? @relation(fields: [targetDeviceId], references: [id], onDelete: SetNull)
+  deliveries     PushDelivery[]
 
   @@index([method, status, createdAt])
   @@index([createdAt])
@@ -503,6 +512,7 @@ enum NotificationMethod {
   EMAIL
   SMS
   IN_APP
+  PUSH
 }
 
 enum NotificationStatus {
@@ -510,6 +520,90 @@ enum NotificationStatus {
   SENT
   FAILED
   CANCELLED
+  PROCESSING
+  ACCEPTED
+}
+
+enum RecipientKind {
+  STAFF
+  PARENT
+  STUDENT
+}
+
+model NotificationRecipient {
+  id String @id @default(cuid())
+  kind RecipientKind
+  userId String? @unique
+  parentId String? @unique
+  studentId String? @unique
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  user User? @relation("StaffRecipient", fields: [userId], references: [id], onDelete: Cascade)
+  parent Parent? @relation("ParentRecipient", fields: [parentId], references: [id], onDelete: Cascade)
+  student Student? @relation("StudentRecipient", fields: [studentId], references: [id], onDelete: Cascade)
+  invites PushInvite[]
+  sessions RecipientSession[]
+  devices PushDevice[]
+  notifications Notification[]
+  @@map("notification_recipients")
+}
+
+model PushInvite {
+  id String @id @default(cuid())
+  tokenHash String @unique
+  recipientId String
+  createdById String
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  recipient NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  createdBy User @relation(fields: [createdById], references: [id])
+  @@map("push_invites")
+}
+
+model RecipientSession {
+  id String @id @default(cuid())
+  tokenHash String @unique
+  recipientId String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  recipient NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  @@index([recipientId])
+  @@map("recipient_sessions")
+}
+
+model PushDevice {
+  id String @id @default(cuid())
+  recipientId String
+  sessionHash String
+  expiresAt DateTime
+  endpoint String @unique
+  p256dh String
+  auth String
+  label String
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  recipient NotificationRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  notifications Notification[]
+  deliveries PushDelivery[]
+  @@index([recipientId, isActive])
+  @@index([sessionHash])
+  @@map("push_devices")
+}
+
+model PushDelivery {
+  id String @id @default(cuid())
+  notificationId String
+  deviceId String
+  status String @default("PROCESSING")
+  statusCode Int?
+  createdAt DateTime @default(now())
+  finishedAt DateTime?
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  device PushDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  @@unique([notificationId, deviceId])
+  @@map("push_deliveries")
 }
 
 model SystemSetting {
