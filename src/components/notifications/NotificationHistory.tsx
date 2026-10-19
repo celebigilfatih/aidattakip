@@ -20,7 +20,7 @@ import { tr } from 'date-fns/locale';
 const Textarea = ({ className = "", ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
   const baseClasses = "flex min-h-[80px] w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
   const combinedClasses = `${baseClasses} ${className}`.trim()
-  
+
   return (
     <textarea
       className={combinedClasses}
@@ -133,7 +133,7 @@ export default function NotificationHistory() {
 
       const response = await fetch(`/api/notifications?${params}`);
       const data = await response.json();
-      
+
       if (response.ok) {
         setNotifications(data.notifications);
         setPages(data.pagination?.pages || 1);
@@ -158,7 +158,7 @@ export default function NotificationHistory() {
     try {
       const response = await fetch('/api/students?limit=1000');
       const data = await response.json();
-      
+
       if (response.ok) {
         setStudents(data.students);
       }
@@ -171,7 +171,7 @@ export default function NotificationHistory() {
     try {
       const response = await fetch('/api/groups');
       const data = await response.json();
-      
+
       if (response.ok) {
         setGroups(data.groups || []);
       }
@@ -184,7 +184,7 @@ export default function NotificationHistory() {
     try {
       const response = await fetch('/api/trainers');
       const data = await response.json();
-      
+
       if (response.ok) {
         setTrainers(data.trainers || []);
       }
@@ -195,10 +195,10 @@ export default function NotificationHistory() {
 
   const handleCreateNotification = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
-      const url = editingNotification 
-        ? `/api/notifications/${editingNotification.id}` 
+      const url = editingNotification
+        ? `/api/notifications/${editingNotification.id}`
         : '/api/notifications';
       const method = editingNotification ? 'PUT' : 'POST';
 
@@ -692,7 +692,7 @@ export default function NotificationHistory() {
         </Card>
       )}
 
-      
+
       {requestError && <p role="alert" className="text-red-700">{requestError}</p>}
       <div className="flex items-center gap-3">
         <Button variant="outline" disabled={page <= 1} onClick={() => setPage(page - 1)}>Önceki</Button>
@@ -716,7 +716,7 @@ export default function NotificationHistory() {
                       }
                     }}
                   />
-                  
+
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                       {getMethodIcon(notification.method)}
@@ -724,9 +724,9 @@ export default function NotificationHistory() {
                       {getStatusBadge(notification.status)}
                       <Badge variant="outline">{getTypeLabel(notification.type)}</Badge>
                     </div>
-                    
+
                     <p className="text-gray-600 mb-3">{notification.message}</p>
-                    
+
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       {notification.student && (
                         <div className="flex items-center gap-1">
@@ -734,19 +734,19 @@ export default function NotificationHistory() {
                           {notification.student.firstName} {notification.student.lastName}
                         </div>
                       )}
-                      
+
                       <div className="flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {mounted ? format(new Date(notification.createdAt), 'dd MMM yyyy HH:mm', { locale: tr }) : '...'}
                       </div>
-                      
+
                       {notification.scheduledAt && (
                         <div className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
                           Zamanlandı: {mounted ? format(new Date(notification.scheduledAt), 'dd MMM yyyy HH:mm', { locale: tr }) : '...'}
                         </div>
                       )}
-                      
+
                       {notification.sentAt && (
                         <div className="flex items-center gap-1">
                           <Send className="w-4 h-4" />
@@ -754,7 +754,7 @@ export default function NotificationHistory() {
                         </div>
                       )}
                     </div>
-                    
+
                     {(notification.recipientEmail || notification.recipientPhone) && (
                       <div className="mt-2 text-sm text-gray-500">
                         {notification.recipientEmail && <div>E-posta: {notification.recipientEmail}</div>}
@@ -763,7 +763,7 @@ export default function NotificationHistory() {
                     )}
                   </div>
                 </div>
-                
+
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="sm">
@@ -780,7 +780,7 @@ export default function NotificationHistory() {
                     <DropdownMenuItem onClick={() => handleEditNotification(notification)}>
                       Düzenle
                     </DropdownMenuItem>
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       className="text-red-600"
                       onClick={() => handleDeleteNotification(notification.id)}
                     >
