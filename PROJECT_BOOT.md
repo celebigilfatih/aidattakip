@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.12
+- Document version: 0.4.13
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -24,6 +24,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Explicit non-goals: TBD — kullanıcı tarafından belirlenmedi.
 
 ## 2. Current Status
+
+- Güncel geliştirme (CR-024): Kullanıcı yeni personelin Pazartesi09:00 aidat özeti seçimini aynı forma istedi. İsteğe bağlı kutu ve mevcut kurala atomik katılım eklendi; yeni kural/açma yok, mali rol ve kapsam korunur. Typecheck/40 test başarılı; Docker/yalnız demo yayını [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md) içinde izlenir. Aşağıdaki yayın kayıtları tarihçedir.
 
 - Güncel yayın: Kullanıcı talebiyle Bildirimler → Personel ve Cihazlar bölümüne ADMIN personel oluşturma ve aynı formda alıcı seçimi eklendi (CR-023 kapalı). Hesap/alıcı atomik, şube/antrenör grupları ve mevcut rol sınırı korunur. Typecheck,30 regresyon+6 yeni test ve Docker başarılı; yalnız demo48d55af Success/3m40s. Canlı form/arama doğrulandı;10 personel/17 bildirim, açık bakiye ve etkin Pazartesi09:00 Demo Kullanıcı kuralı korundu. Yeni model/ADR yok. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
 

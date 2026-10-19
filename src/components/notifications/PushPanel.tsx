@@ -22,7 +22,7 @@ export default function PushPanel({onSent}:{onSent:()=>void}){
   <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3"><CardTitle>Personel ve Cihazlar</CardTitle>{catalog?.canManageStaff&&<StaffCreateDialog onCreated={created}/>}</CardHeader>
   <CardContent className="space-y-4">
    <p className="text-sm text-slate-600">Yeni personel ekleyin veya mevcut personeli bildirim alıcısı seçin. Personel kendi hesabıyla <a href="/recipient" className="text-blue-700 underline">cihazını kaydeder</a>.</p>
-   <p className="rounded-md bg-blue-50 p-3 text-sm text-blue-900">Aidat özeti yalnız yönetici/muhasebeye açıktır. Haftalık özeti alacak kişileri ayrıca <strong>Otomatik Aidat Özeti</strong> bölümündeki kuraldan seçin.</p>
+   <p className="rounded-md bg-blue-50 p-3 text-sm text-blue-900">Yeni personeli eklerken Pazartesi 09.00 aidat özetini de seçebilirsiniz. Özet yalnız yönetici/muhasebeye açıktır. Mevcut personelin takvim seçimleri <strong>Otomatik Aidat Özeti</strong> bölümünden düzenlenir.</p>
    {notice&&<p role="status" className="rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-900">{notice}</p>}
    <label className="block text-sm font-medium">Personel ara<input type="search" className="mt-1 min-h-11 w-full rounded-md border px-3 py-2 text-base" placeholder="Ad soyad ile ara" value={search} onChange={e=>setSearch(e.target.value)}/></label>
    {!catalog&&!error&&<p role="status">Personeller yükleniyor…</p>}

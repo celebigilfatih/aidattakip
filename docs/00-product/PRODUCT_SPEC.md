@@ -2,7 +2,7 @@
 
 ## Bildirim ekranında personel oluşturma — 2026-10-19
 
-Kullanıcı talebiyle ADMIN, Personel ve Cihazlar bölümünden yeni giriş hesabı oluşturup aynı formdaki bildirim alıcısı kutusunu seçebilir. Mevcut personel adla aranıp ayrıca seçilebilir. Rol ve şube mali erişimi belirler; alıcı seçimi mali yetki veya haftalık kurala otomatik üyelik vermez. Personel kendi cihazında izin verir. [CR-023](../20-execution/CHANGE_REQUESTS.md), [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
+Kullanıcı talebiyle ADMIN, Personel ve Cihazlar bölümünden yeni giriş hesabı oluşturup aynı formdaki bildirim alıcısı kutusunu seçebilir. Yeni personel için ayrıca varsayılan kapalı **Pazartesi09:00 aidat özeti** kutusu vardır; uygun mali rol ve şubede mevcut kurala açık seçimle katılır. Mevcut personel adla aranıp ayrıca seçilebilir. Rol ve şube mali erişimi belirler; yalnız alıcı seçimi mali yetki veya haftalık kurala otomatik üyelik vermez. Personel kendi cihazında izin verir. [CR-023/024](../20-execution/CHANGE_REQUESTS.md), [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md).
 
 ## Güncel personel bildirim kapsamı
 

@@ -1,5 +1,9 @@
 # Test Strategy
 
+## Personel formundan özet kuralına katılım — 2026-10-19
+
+Toplam40 test geçti. Onboarding entegrasyonu mevcut6 teste4 senaryo ekler: yönetici kapsamındaki tam Pazartesi09:00 kuralları, mali personelin atomik üyeliği ve mevcut alıcı/cursor/takvim koruması, rol/alıcı/şube/değişmiş-silinmiş-yanlış saatli kural reddi, kapalı kuralın kapalı kalması ve paralel üyelik ekleme. Kendi yerel sentetik fixture'ları temizlenir; dış push yok. Typecheck başarılı, yerel UI kural yok açıklaması/kapalı kutu doğrulandı. Docker/demo kabulü handoff'ta izlenir.
+
 ## Bildirim ekranından personel oluşturma — 2026-10-19
 
 [staff-onboarding.integration.test.ts](../../src/lib/staff-onboarding.integration.test.ts) yalnız loopback5477/aidat_takip üzerinde6 test: veli/oturumsuz/pasif/ACCOUNTING/origin reddi, şube ve grup kapsamı, atomik hesap/alıcı, hash doğrulaması ve yanıt gizliliği, mevcut e-posta, paralel mükerrer kayıt, alıcı kutusu kapalı hesap ve pozitif antrenör grup kaydı. Kendi sentetik fixture'larını temizler; dış push yok. Mevcut30 regresyon da geçti. Typecheck, yerel Docker adayı ve son UI arama temizliği dahil nihai demo48d55af Docker build başarılı. Gerçek tarayıcı390px dialog taşması, rol/şube/gruplar, alıcı kutusu ve personel araması; canlı1280px form ve arama kontrol edildi. Canlı API'de mevcut personel/cihaz/bakiye/kural korundu; gerçek yeni personel/iPhone kurulumu bu görevde yapılmadı. Genel lint CR-011 nedeniyle, restore/rollback ve tam erişilebilirlik taraması bu dar işte çalıştırılmadı.

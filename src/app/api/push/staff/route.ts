@@ -5,6 +5,8 @@ import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 import { notificationFailure, notificationResponse, requireManager, requireSameOrigin } from '@/lib/notification-access'
 import { NotificationError } from '@/lib/notification-policy'
+import { financialRole } from '@/lib/staff-summary-policy'
+import { summaryRuleScope } from '@/lib/staff-summary-service'
 
 const inputSchema = z.object({
   name: z.string().trim().min(1).max(120),
@@ -15,6 +17,7 @@ const inputSchema = z.object({
   branchId: z.string().min(1).max(100).nullable(),
   groupIds: z.array(z.string().min(1).max(100)).max(200).default([]),
   selectForNotifications: z.boolean(),
+  summaryRuleId: z.string().min(1).max(100).nullable().default(null),
 })
 
 export async function GET(request: NextRequest) {
@@ -25,7 +28,12 @@ export async function GET(request: NextRequest) {
       select: { id: true, name: true, groups: { where: { isActive: true }, select: { id: true, name: true }, orderBy: { name: 'asc' } } },
       orderBy: { name: 'asc' },
     })
-    return notificationResponse({ branches, fixedBranchId: user.branchId })
+    const summaryRules = await prisma.staffSummaryRule.findMany({
+      where: { ...summaryRuleScope(user), weekdays: { equals: [1] }, time: '09:00' },
+      select: { id: true, name: true, enabled: true, branchId: true },
+      orderBy: { createdAt: 'asc' },
+    })
+    return notificationResponse({ branches, fixedBranchId: user.branchId, summaryRules })
   } catch (error) { return notificationFailure(error) }
 }
 
@@ -37,13 +45,26 @@ export async function POST(request: NextRequest) {
     if (manager.branchId && input.branchId !== manager.branchId) throw new NotificationError(403, 'Yalnız kendi şubenize personel ekleyebilirsiniz.')
     if (input.role === 'TRAINER' && !input.branchId) throw new NotificationError(400, 'Antrenör için şube seçin.')
     if (input.role !== 'TRAINER' && input.groupIds.length) throw new NotificationError(400, 'Grup seçimi yalnız antrenör içindir.')
+    if (input.summaryRuleId && (!input.selectForNotifications || !financialRole(input.role))) throw new NotificationError(400, 'Aidat özeti için bildirim alıcısı seçilmeli ve rol yönetici veya muhasebe olmalıdır.')
     const password = await bcrypt.hash(input.password, 10)
     const staff = await prisma.$transaction(async tx => {
       if (input.branchId && !await tx.branch.findFirst({ where: { id: input.branchId, isActive: true } })) throw new NotificationError(400, 'Aktif bir şube seçin.')
       const groupIds = Array.from(new Set(input.groupIds))
       if (groupIds.length && await tx.group.count({ where: { id: { in: groupIds }, branchId: input.branchId!, isActive: true } }) !== groupIds.length) throw new NotificationError(400, 'Gruplar seçilen aktif şubeye ait olmalıdır.')
       if (await tx.user.findFirst({ where: { email: { equals: input.email, mode: 'insensitive' } } })) throw new NotificationError(409, 'Bu e-posta ile bir kullanıcı var. Listeden mevcut personeli alıcı olarak seçin.')
-      return tx.user.create({
+      let summaryRule = null
+      if (input.summaryRuleId) {
+        await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.summaryRuleId} FOR UPDATE`
+        summaryRule = await tx.staffSummaryRule.findFirst({
+          where: { id: input.summaryRuleId, ...summaryRuleScope(manager), weekdays: { equals: [1] }, time: '09:00' },
+          include: { createdBy: { select: { isActive: true, role: true, branchId: true } } },
+        })
+        if (!summaryRule) throw new NotificationError(409, 'Seçilen Pazartesi 09.00 kuralı artık kullanılamıyor. Formu kapatıp yeniden açın.')
+        if (summaryRule.branchId && summaryRule.branchId !== input.branchId) throw new NotificationError(400, 'Aidat özeti kuralı personelin şubesiyle eşleşmelidir.')
+        const owner = summaryRule.createdBy
+        if (!owner.isActive || !financialRole(owner.role) || (owner.branchId && owner.branchId !== summaryRule.branchId)) throw new NotificationError(409, 'Kural sahibinin yetkisi değişmiş. Başka bir kural seçin.')
+      }
+      const created = await tx.user.create({
         data: {
           name: input.name, email: input.email, password, phone: input.phone || null,
           role: input.role, branchId: input.branchId,
@@ -52,6 +73,8 @@ export async function POST(request: NextRequest) {
         },
         select: { id: true, name: true, notificationRecipient: { select: { id: true } } },
       })
+      if (summaryRule && created.notificationRecipient) await tx.staffSummaryRecipient.create({ data: { ruleId: summaryRule.id, recipientId: created.notificationRecipient.id } })
+      return { ...created, summaryRule: summaryRule ? { id: summaryRule.id, name: summaryRule.name, enabled: summaryRule.enabled } : null }
     })
     return notificationResponse({ staff, staffUrl: '/recipient' }, 201)
   } catch (error) {

@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Personel formunda Pazartesi09:00 aidat özeti (CR-024)
+
+Kullanıcı yeni personelin özet alıp almayacağını aynı formdan seçmek istedi. StaffCreateDialog varsayılan kapalı kutu, uygun mali rol/aktif alıcı, şubeye uyumlu mevcut Pazartesi09:00 kuralları ve çoklu seçim içerir. Rol/şube/alıcı değişiminde seçim temizlenir; hiç uygun kural yoksa kapalı kutu/açıklama, kapalı kuralda gönderim olmayacağı bilgisi gösterilir. Masaüstünde alanlar iki kolon, mobilde tek kolon. PushPanel açıklaması güncellendi.
+
+GET staff.summaryRules kapsam içi tam `[1]`/`09:00` kural seçenekleri; POST optional summaryRuleId eksik/null ile geriye uyumlu. Mali rol+alıcı zorunlu; rule row lock ile gün/saat/yönetici kapsamı/yeni personel şubesi/owner yetkisi tekrar okunur. User+recipient+membership aynı transaction. Kuralın diğer üyeleri, etkinliği, saat/gün/cursor/oluşturan/geçmişi değişmez. Yeni kural/manuel push yok. Eski CR-023 ayrı sekme adımı yeni personel için bu açık kullanıcı talebiyle değişti; ADR-0007 politika ve model/migration/paket/secret değişmedi, yeni ADR gerekmedi.
+
+Yerel typecheck ve40 test başarılı (onboarding10, diğer30). Şube/rol/alıcı/yabancı veya eski kural reddinde hesap oluşmadı; kapalı kural ve paralel append koruması sınandı. Yerel tarayıcı mali rol ve kural yok açıklamasını doğruladı; sentetik hesap/üyelik yalnız entegrasyon testinde oluşturulup temizlendi. Docker77027 oturumu sürüyor; henüz yeni demo yayını yapılmadı. Runtime48d55af ve etkin tek Demo Kullanıcı Pazartesi09:00 kuralı korunur. Kanıt output/staff-summary-onboarding (Git dışında). Genel lint CR-011, restore/rollback/tam erişilebilirlik ve gerçek yeni personel/iPhone kurulumu bu işte çalıştırılmadı.
+
 ## 2026-10-19 — Bildirim ekranından personel oluşturma (CR-023)
 
 Kapanış: Yalnız demo48d55af2b32b4e769dedda9d13cfe246b1e6b0e6, Coolify4mwc4uzb1ateelgbalszgryd Success/Finished,03m40s (başlangıç12:32:42 UTC). Nihai kaynak Docker build başarılı; runtime pini48d55af, branch codex/staff-summary-20261019/manual deployments modeli aynı. Yeni API form şube/grup seçeneklerini canlı döndürdü. Canlı1280px form576px, yatay taşma yok; varsayılan Sekreter/alıcı açık ve Demo araması tek sonuç doğrulandı. output/staff-onboarding/live-personnel.png ve live-create-personnel.png kaydedilip açıldı. Yeni personel oluşturmadan kontroller tamamlandı; gerçek personel/telefon kurulumu yapılmadı. Önceki36 test toplamı30 regresyon+6 yeni entegrasyon; genel lint CR-011, rollback/restore ve tam erişilebilirlik taraması kapsam dışında. Yeni ADR gerekmedi, ADR-0007 geçerli.

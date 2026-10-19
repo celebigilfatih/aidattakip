@@ -2,6 +2,8 @@
 
 ## ADR-0007 personel ve özet sözleşmesi
 
+- Staff formu `GET` yanıtındaki `summaryRules` ile kendi yönetim kapsamındaki yalnız `[1]`/`09:00` kurallarını sunar. `POST /api/push/staff` opsiyonel `summaryRuleId` alır (eksik/null → üyelik yok); alıcı seçili ve mali rol zorunludur. Kural row lock sonrası gün/saat/yönetici kapsamı/personel şubesi/kural sahibi yeniden doğrulanır; hesap+alıcı+üyelik aynı transaction. Var olan alıcılar/etkinlik/takvim/cursor değişmez. Kural artık uygun değilse409, mali rol/alıcı/şube uyuşmazlığı400; hesap yarım oluşmaz. Yanıt staff.summaryRule id/name/enabled veya null. Eski istemciyle geriye uyumludur.
+
 - `GET /api/push/staff`: aktif ADMIN'in personel formu için kendi kapsamındaki aktif şubeleri ve grupları döndürür. `POST`: name/email/password/phone, mevcut dört rol, branchId, antrenör groupIds ve selectForNotifications alır; hesap + isteğe bağlı STAFF alıcı tek transaction. Şube bağlı ADMIN başka şube/kapsamsız hesap oluşturamaz; gruplar aktif ve seçilen şubeye ait olmalıdır. Aynı e-posta409; alan hatası400, oturumsuz401, yetkisiz/origin403. Yanıt201 yalnız id/ad/alıcı id ve cihaz yolu; şifre/hash/cihaz anahtarı yok. Mevcut `/api/users` sözleşmesi değişmedi. [Kaynak](../../src/app/api/push/staff/route.ts).
 
 - POST /api/push/recipients yalnız ADMIN, kind STAFF ve kendi şubesinin aktif personeli; DELETE seçimi/cihazları kapatır. GET tüm kapsam içi personelin seçim, ana cihaz, süre ve son delivery durumunu döndürür; endpoint/key yok.
