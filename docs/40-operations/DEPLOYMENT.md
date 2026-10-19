@@ -1,5 +1,12 @@
 # Deployment
 
+## 2026-10-19 — Personel iPhone ve otomatik özet kabulü tamamlandı
+
+- Manuel test 14:35 İstanbul: cmvf6h3tg0007qq010x6b9l9i, Apple HTTP201/ACCEPTED; kullanıcı bildirimi gördüğünü ve Demo Kullanıcı personel ekranını açtığını doğruladı.
+- Gerçek Coolify 14:39:02 çalışması Success, evaluatedRules1/claimedRuns1. Run cmvf6lobv0001qqjngod4dh9r, tek bildirim cmvf6locv0003qqjn2wxgjual, yalnız ana iPhone cihazı; Apple HTTP201/ACCEPTED. Kullanıcı ikinci bildirimin güncel geciken aidat listesini açtığını doğruladı. Canlı 54 sporcu/150 gecikmiş aidat/201.000 açık bakiye için tek push üretildi; demo bildirim sayısı toplam17. Servis kabulü ve kullanıcı gözlemi ayrı kanıtlardır.
+- Durdur PATCH HTTP200; kapalı kontrol saati14:42'de gerçek Coolify çalışması 14:42:05 Success, evaluatedRules0/claimedRuns0. Saat geçtikten sonra run sayısı1/bildirim sayısı17 ve cursor değişmedi. Kural standart Pazartesi09:00, yalnız Demo Kullanıcı ve kapalı durumuna geri alındı; geçmiş silinmedi. İşleyici her dakika etkin kalır, kapalı kural gönderim üretmez.
+- Yeni iPhone ana cihazı 30 gün geçerli; eski pasif personel/veli cihazları korunur. Runtime pin dbc329d0 ve ayrı demo dalı sürer; yeni kaynak yayını yapılmadı. Typecheck/30 test/Docker kanıtı önceki uygulama aşamasındandır; bu kabul adımında API ve gerçek cihaz/cron kontrolleri yapıldı, aynı kod testleri gereksiz tekrar edilmedi.
+
 ## 2026-10-19 — Personel özeti yalnız demo dağıtımı ve işleyici hazır
 
 - Kaynak: `codex/staff-summary-20261019`, sabit `dbc329d0ab24fd9900f26e5fbf498e7d60e5d515`. Coolify `tyc0xe2aajlja5eyzvrncm4j` Success/Finished, 3m02s; rolling update 11:19:58 UTC tamamlandı. Önceki `brnxohzlxg6swgbjpf3vdrgc` adayı service worker aktivasyon düzeltmesi için migration/runtime geçişinden önce iptal edildi; yayımlanmış sürüm sayılmaz.

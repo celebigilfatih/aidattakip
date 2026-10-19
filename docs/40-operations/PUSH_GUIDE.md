@@ -1,6 +1,6 @@
 # Personel bildirimleri ve otomatik aidat özeti
 
-Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) Accepted, 2026-10-19. Uygulama/test ve yalnız demo dbc329d0 dağıtımı hazır; Coolify her dakikalık işleyici doğrulandı. Yeni kural kapalı; gerçek personel cihaz/takvim kabulü bekler. Önceki veli iPhone testi bu yeni personel kabulünün yerine geçmez.
+Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) Accepted, 2026-10-19. Uygulama/test ve yalnız demo dbc329d0 dağıtımı hazır; Coolify her dakikalık işleyici doğrulandı. Gerçek personel iPhone manuel ve otomatik tek özet, mali liste açılışı ve kapalı saat kontrolü başarılı. Standart kural Pazartesi09:00/kapalı; işletim için ADMIN/ACCOUNTING bilinçli etkinleştirir. Önceki veli iPhone testi bu yeni personel kabulünün yerine geçmez.
 
 ## Günlük kullanım
 

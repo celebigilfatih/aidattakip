@@ -25,7 +25,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 
 ## 2. Current Status
 
-- Güncel görev: 2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yerel migration/typecheck/30 test ve Docker build başarılı. Yalnız demo dbc329d0 sabiti Success ile dağıtıldı; migration ve her dakikalık Coolify işleyicisi doğrulandı. Kural kapalı; gerçek personel iPhone ve kısa takvim/durdurma kabulü bekler. [ADR-0007](docs/50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md), [CR-021](docs/20-execution/CHANGE_REQUESTS.md). Aşağıdaki kayıtlar tarihçedir.
+- Güncel görev: 2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yerel migration/typecheck/30 test ve Docker build başarılı. Yalnız demo dbc329d0 sabiti Success ile dağıtıldı; migration ve her dakikalık Coolify işleyicisi doğrulandı. Gerçek personel iPhone manuel ve otomatik özet/tıklama kabulü, kapalı saat kontrolü tamamlandı; kural Pazartesi09:00 ve kapalı. [ADR-0007](docs/50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md), [CR-021](docs/20-execution/CHANGE_REQUESTS.md). Aşağıdaki kayıtlar tarihçedir.
 
 - Güncel iPhone kabulü (2026-10-19): Yalnız demo sabit 5e1fd7c, Coolify Success/2m44s. Apple Topic hatası düzeltildi; normal API testi HTTP201/ACCEPTED. Kullanıcı bildirimin geldiğini ve dokununca Volkan Acar ekranı açıldığını doğruladı. Typecheck, dört ilgili test, Docker build başarılı; demo verisi ve Özlüce korundu. Otomasyon kapalı. Aşağıdaki eski durumlar tarihçedir. [PUSH_GUIDE](docs/40-operations/PUSH_GUIDE.md).
 
@@ -46,7 +46,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Phase: Mevcut uygulamaya CDSK bağlamı kazandırma; ürün kabul aşaması TBD.
 - Version: package.json 1.0.0; 2026-09-15 dağıtım kaydı mevcut, bu numaranın release etiketi/ürün kabulüyle eşlenmesi TBD.
 - Active sprint veya milestone: TBD
-- Current focus: Yerel demo çalışır; 2026-10-19 yalnız SporManage personel özeti yayını hazır, gerçek personel iPhone/takvim testi yürütülüyor. Özlüce production aynı container/image ile korunuyor. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Current focus: Yerel demo çalışır; 2026-10-19 yalnız SporManage personel özeti yayını hazır, gerçek personel iPhone/takvim testi tamamlandı. Özlüce production aynı container/image ile korunuyor. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 - Critical risks: Demo ADMIN sentetik veriyi değiştirebilir; iki DB aynı fiziksel PostgreSQL servisinin kapasite/erişilebilirliğini paylaşır; doğrulanmış zamanlanmış backup/restore ve parola rotasyon tarihi yoktur. [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
 - Blocking decisions: Dağıtım kaydı mevcut; kesin ürün kabulü TBD. Production başlangıç kimliği/rol düzeltmesi ve kalan secret politikası açık onay bekler. ADR-0001 ve ADR-0002 hâlâ Proposed; login log temizliği ayrı düzeltme olarak tamamlandı.
 - Last status update: 2026-10-19
@@ -88,7 +88,7 @@ Diğer bağlam kaynakları: [GLOSSARY](docs/00-product/GLOSSARY.md), [PERSONAS](
 | Rapor XLSX, tarayıcı PDF ve export yetkisi | Accepted; uygulandı | [ADR-0003](docs/50-decisions/ADR-0003-rapor-disa-aktarim-ve-yetki.md) |
 | Broşür demo hesabı production ADMIN rolü | Superseded | [ADR-0004](docs/50-decisions/ADR-0004-brosur-demo-admin-hesabi.md) |
 | SporManage ayrı demo uygulaması ve mantıksal DB | Accepted; uygulandı | [ADR-0005](docs/50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md) |
-| Personel bildirimi ve haftalık aidat özeti | Accepted; 30 test ve demo yayın/işleyici hazır, gerçek personel cihaz/takvim kabulü sürüyor | [ADR-0007](docs/50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) |
+| Personel bildirimi ve haftalık aidat özeti | Accepted; 30 test, demo yayın ve gerçek personel iPhone/takvim/durdurma kabulü tamam | [ADR-0007](docs/50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) |
 | Web Push ve periyodik aidat hatırlatma | Accepted; manuel ilk aşama demoda, iPhone kabulü tamam, otomasyon sonraki aşama | [ADR-0006](docs/50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) |
 
 Karar gerekçeleri burada kopyalanmaz; asıl belgeye bağlantı verilir.
@@ -97,7 +97,7 @@ Karar gerekçeleri burada kopyalanmaz; asıl belgeye bağlantı verilir.
 
 - Project purpose: [PRODUCT_SPEC](docs/00-product/PRODUCT_SPEC.md) içindeki kullanıcı hedefi.
 - Constraints and prohibitions: [CONSTITUTION](docs/00-product/CONSTITUTION.md) ve [AGENTS.md](AGENTS.md); projeye özel kısıtlar TBD.
-- Open questions: ADR-0007 gerçek personel cihaz/takvim kabulü; production başlangıç kimliği/rolü, buildtime secret erişimi, backup/restore; yaş eşiği/veli kuralları, rol matrisi, para kuralları, operasyon hedefleri ve CDSK sürümü; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
+- Open questions: ADR-0007 sonrası gerçek işletim alıcı/takvim seçimi; production başlangıç kimliği/rolü, buildtime secret erişimi, backup/restore; yaş eşiği/veli kuralları, rol matrisi, para kuralları, operasyon hedefleri ve CDSK sürümü; [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
 - Recent decisions: Kullanıcı ayrı demo uygulamasını ve mevcut PostgreSQL kaynağında ayrı mantıksal DB kullanımını onayladı; ADR-0005 Accepted, ADR-0004 Superseded. ADR-0001/0002 Proposed, ADR-0003 Accepted kalır.
 - Recently completed work: 2026-10-19 manuel push/alıcı kaydı yerel uygulaması ve doğrulamaları; ADR-0006 Accepted, CR-020 ilk aşama kapalı. Demo paket/dağıtımı onaylandı; ilk gerçek iPhone testi tamamlandı. [PUSH_GUIDE](docs/40-operations/PUSH_GUIDE.md).
 

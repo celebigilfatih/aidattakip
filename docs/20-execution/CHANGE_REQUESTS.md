@@ -2,10 +2,10 @@
 
 ## CR-021 — Personel odaklı bildirim ve otomatik aidat özeti
 
-- Status: In progress — kullanıcı beş bölümlük planın tamamını açıkça uygulamayı onayladı; ADR-0007 Accepted.
+- Status: Closed — onaylı uygulama, demo yayını, gerçek personel iPhone/takvim/durdurma kabulü tamamlandı; ADR-0007 Accepted.
 - Önceki kaynak: ADR-0006 hem veli/sporcu hem personel ve oturuma bağlı cihaz kaydı içeriyordu. Yeni onay alıcı işletimini yalnız seçili personele ve cihaz kaydını 30 güne değiştirir; eski tarihçe korunur.
 - Uygulama: ADMIN seçimi, ana cihaz, 30 gün/sessiz yenileme/iptal; mali rol ve şube kapsamı; haftalık takvim ve bir saat telafi; ortak güncel borç hesabı, kalıcı çalışma/idempotent gönderim. Veli davet/abonelik/gönderimi kapalı.
-- Yerel kanıt: Additive migration applied; typecheck ve 30 test başarılı. 200 sentetik sporcu tek özet, paralel işleyici, 1 saat sınırı, rol/şube, çıkış/iptal sınandı. Yalnız demo dbc329d0 Success, migration ve Coolify her dakikalık işleyici doğrulandı. Kural kapalı; gerçek personel iPhone/takvim/durdurma kabulü bekler.
+- Yerel kanıt: Additive migration applied; typecheck ve 30 test başarılı. 200 sentetik sporcu tek özet, paralel işleyici, 1 saat sınırı, rol/şube, çıkış/iptal sınandı. Yalnız demo dbc329d0 Success, migration ve Coolify her dakikalık işleyici doğrulandı. Gerçek personel manuel push, tek otomatik özet ve doğru mali liste açılışı kullanıcı tarafından doğrulandı. Kapalı saatte gerçek cron sıfır çalışma üretti; kural standart Pazartesi09:00/kapalı.
 - Takip: CR-004 e-posta/SMS ve ilk sürüm dışı otomasyon tercihleri ayrıca açık kalır.
 
 Last updated: 2026-10-19. Durum: Repository kaynakları ve tarihli uygulama/doğrulama kayıtları birlikte izlenir.

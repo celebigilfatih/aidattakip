@@ -2,7 +2,7 @@
 
 ## Güncel personel bildirim kapsamı
 
-2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yerel migration/typecheck/27 test başarılı; demo dağıtımı ve gerçek personel iPhone/takvim testi henüz bekler. [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md). Aşağıdaki ADR-0006 kayıtları tarihçedir.
+2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yalnız demo dbc329d0 dağıtımı, gerçek personel iPhone manuel/otomatik özet kabulü ve kapalı kural testi tamamlandı. 30 test/typecheck/Docker build başarılı; haftalık kural Pazartesi09:00 ve kapalı bırakıldı. [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md). Aşağıdaki ADR-0006 kayıtları tarihçedir.
 
 Last updated: 2026-10-19. Durum: Mevcut kod, yerel doğrulamalar ve onaylı yalnız demo dağıtımı eşlenmiştir. Canlı demo migration/runtime/HTTPS ve ortak PostgreSQL sürümü doğrulandı; Özlüce'de yalnız container/image/StartedAt koruma kontrolü yapıldı.
 
@@ -24,7 +24,7 @@ Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL
 
 ## Dağıtım topolojisi
 
-2026-10-19 manuel push güncellemesi: Demo ayrı `codex/manual-push-demo-20261019` dalı ve sabit 5e1fd7c ile dağıtıldı; auto deploy manuel, yeni migration yalnız demo DB'sinde applied. Özlüce aynı container/image ile çalışmayı sürdürür. ADR-0005'in demo main kaydı için tarihli istisna ADR-0006 onayındadır; otomatik aidat kuralları kurulmadı.
+2026-10-19 personel özeti güncellemesi: Demo ayrı `codex/staff-summary-20261019` dalı ve sabit dbc329d0 ile dağıtıldı; auto deploy manuel, additive migration yalnız demo DB'sinde applied. Coolify her dakika container içi TSX işleyicisini çalıştırır; kurallar varsayılan kapalıdır. Özlüce aynı container/image ile çalışmayı sürdürür. Ayrı sabit demo ref ve personel otomasyonu ADR-0007 ile onaylıdır.
 
 2026-09-15 tarihli son dağıtım kaydına göre Özlüce production ve SporManage demo iki ayrı Coolify uygulamasıdır. Aynı fiziksel PostgreSQL kaynağını paylaşırlar; `ozlucepay` ile `spormanage_aidat_demo` ayrı mantıksal veritabanları ve ayrı uygulama rolleri kullanır. Demo lisans tablosu kullanıcı kararıyla demo DB içinde tutulur. Alan adı ve veri izolasyonu [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md), işletim ayrıntısı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içindedir.
 

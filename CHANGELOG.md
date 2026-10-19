@@ -1,5 +1,10 @@
 #### Deployed — 2026-10-19 — Personel özeti yalnız SporManage demo
 
+### Verified — 2026-10-19 — Personel iPhone ve otomatik aidat özeti
+
+- Manuel bildirim ve gerçek 14:39 takvim özeti Apple HTTP201; kullanıcı doğru personel ekranını ve güncel geciken aidat listesini doğruladı. 150 gecikmiş aidat için tek ana cihaz bildirimi üretildi.
+- Durdurma sonrasında kapalı 14:42 saatindeki gerçek cron0 çalışma/0 yeni bildirim üretti. Kural Pazartesi09:00/kapalı durumuna geri alındı, geçmiş korundu; CR-021 kapatıldı.
+
 - Sabit dbc329d0, Coolify Success/3m02s; additive migration, mevcut veri/anahtarlar ve HTTPS doğrulandı. Güncellenen PWA service worker aktivasyonu ve güvenli bildirim yönlendirmesi dahil.
 - Her dakikalık container TSX Scheduled Task etkin ve gerçek otomatik çalışması başarılı. Haftalık kural kapalıdır; personel iPhone ve kısa takvim/durdurma kabulü bekler. Main ve Özlüce değişmedi.
 
