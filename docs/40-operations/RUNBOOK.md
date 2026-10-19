@@ -2,7 +2,7 @@
 
 ## Personel özeti güncel çalışma — 2026-10-19
 
-Yerel12 migration/28 model korunur; mevcut PostgreSQL konteyneri ve loopback:3077 geliştirme terminali42251 yeniden başlatıldı, seed/reset yok. ADR-0007 personel/30 gün/haftalık özet,30 test ve gerçek personel iPhone/takvim/durdurma kabulü tamam. Yalnız demo güncel UI kaynağı codex/staff-summary-20261019 / sabit1db9776. Her dakikalık Coolify worker node --import tsx /app/scripts/staff-summary-worker.ts etkin; kural Pazartesi09:00/kapalıdır. [PUSH_GUIDE](PUSH_GUIDE.md). Aşağıdaki eski dağıtım satırları tarihçedir.
+Yerel12 migration/28 model korunur; mevcut PostgreSQL konteyneri ve loopback:3077 geliştirme terminali42251 yeniden başlatıldı, seed/reset yok. ADR-0007 personel/30 gün/haftalık özet,30 test ve gerçek personel iPhone/takvim/durdurma kabulü tamam. Yalnız demo güncel UI kaynağı codex/staff-summary-20261019 / sabit1db9776. Her dakikalık Coolify worker node --import tsx /app/scripts/staff-summary-worker.ts etkin; mevcut demo kuralı kullanıcı talebiyle yalnız Demo Kullanıcı için Pazartesi09:00 Europe/Istanbul etkindir (ilk gelecek slot26.10.2026); yeni kurallar kapalı başlar. [PUSH_GUIDE](PUSH_GUIDE.md). Aşağıdaki eski dağıtım satırları tarihçedir.
 
 Last updated: 2026-10-19. Komut envanteri kaynaklıdır; çalışma zamanı sonuçları tarihli kayıtlarda ayrıca belirtilir.
 

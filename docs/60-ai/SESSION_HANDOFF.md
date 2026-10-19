@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Demo Kullanıcı Pazartesi09:00 kuralı etkin
+
+Kullanıcı iPhone görünümünü uygun bulduğunu bildirdi ve mevcut Pazartesi09:00 aidat özeti kuralını Demo Kullanıcı için açıkça etkinleştirmeyi istedi. Yalnız SporManage demo normal ADMIN API'siyle mevcut kural cmvf6082n0003qq013241p05b güncellendi: enabled=true, weekdays=[1], time=09:00 Europe/Istanbul, tek alıcı Demo Kullanıcı (cmvf3ej2e0005pn01wxtyqt3z). Yeni kural veya manuel gönderim oluşturulmadı; ana iPhone etkin ve18.11.2026 geçerli doğrulandı.
+
+Kaydetme sonrası GET ve canlı panel Pazartesi/09:00/Demo Kullanıcı/Kural etkin seçimlerini doğruladı. Sonraki planlanan slot paylaşılan summarySlots hesabıyla26 Ekim2026 Pazartesi09:00 Türkiye saati (06:00 UTC). Etkinleştirme günü19 Ekim09:00 geçmiş olduğundan geriye dönük bildirim oluşmadı. Gerçek işleyici lastEvaluatedAt12:17:03.474 UTC ile etkinleştirmeden sonra kuralı değerlendirdi; çalışma sayısı1 ve toplam bildirim17 korundu. Borç kalmazsa veya güncel alıcı/cihaz/rol şartı sağlanmazsa gönderim yapılmaz; otomatik tekrar yok.
+
+Kanıt output/monday-summary-enabled.png, tarayıcıdan kaydedilip açıldı (Git dışında). API/kalıcılık ve gerçek işleyici cursor kontrolü başarılı. Yalnız yapılandırma/belge değiştiği için typecheck/test/Docker yeniden çalıştırılmadı; kod/schema/migration/anahtar/deploy değişmedi, yeni ADR gerekmedi (ADR-0007). Runtime1db9776 pini ve main/Özlüce korunur. Geçici yönetici oturumu normal logout HTTP200 ile kapatılıp kendi repository dışı cookie dosyası kaldırıldı; iPhone oturumu etkilenmedi. Önceki kapalı kural kayıtları tarihçedir.
+
 ## 2026-10-19 — Geciken aidat UI/UX yalnız demo yayını tamamlandı
 
 Son kapanış: geçici CLI yönetici test oturumu normal logout HTTP200 ile kapatıldı; kendi repository dışı cookie dosyası kaldırıldı. Telefon oturumu/cihaz izni korunur. Uzak main b024011 değişmedi.49 Markdown/577 yerel bağlantı kontrolünde tek eksik eski README/LICENSE (CR-012);18 korunan dosya başlangıç hashleriyle aynı, gerçek private VAPID literal sızıntısı yok. Metadata JSON geçerli.

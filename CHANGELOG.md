@@ -1,4 +1,13 @@
-#### Deployed — 2026-10-19 — Personel özeti yalnız SporManage demo
+# Changelog
+
+Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncellenir. Geçmiş sürümler: TBD.
+
+## [Unreleased]
+
+### Operations — 2026-10-19 — Pazartesi aidat özeti etkinleştirildi
+
+- Kullanıcı iPhone görünümünü onayladı; yalnız Demo Kullanıcı için mevcut Pazartesi09:00 Türkiye saati kuralı etkinleştirildi. Sonraki çalışma26.10.2026 09:00; yeni kural veya anlık push yok.
+- API/kalıcılık, aktif ana cihaz ve gerçek worker değerlendirmesi doğrulandı;17 bildirim/tek önceki çalışma korundu. Kod, migration, anahtar veya dağıtım değişmedi; ADR-0007 geçerli. Changelog ve Change Requests başlık sırası da düzeltildi.
 
 ### Improved — 2026-10-19 — Geciken aidat listesi UI/UX
 
@@ -10,14 +19,11 @@
 - Manuel bildirim ve gerçek 14:39 takvim özeti Apple HTTP201; kullanıcı doğru personel ekranını ve güncel geciken aidat listesini doğruladı. 150 gecikmiş aidat için tek ana cihaz bildirimi üretildi.
 - Durdurma sonrasında kapalı 14:42 saatindeki gerçek cron0 çalışma/0 yeni bildirim üretti. Kural Pazartesi09:00/kapalı durumuna geri alındı, geçmiş korundu; CR-021 kapatıldı.
 
+### Deployed — 2026-10-19 — Personel özeti yalnız SporManage demo
+
 - Sabit dbc329d0, Coolify Success/3m02s; additive migration, mevcut veri/anahtarlar ve HTTPS doğrulandı. Güncellenen PWA service worker aktivasyonu ve güvenli bildirim yönlendirmesi dahil.
 - Her dakikalık container TSX Scheduled Task etkin ve gerçek otomatik çalışması başarılı. Haftalık kural kapalıdır; personel iPhone ve kısa takvim/durdurma kabulü bekler. Main ve Özlüce değişmedi.
 
- Changelog
-
-Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncellenir. Geçmiş sürümler: TBD.
-
-## [Unreleased]
 
 ### Added / Changed — 2026-10-19 — Personel bildirimi ve haftalık aidat özeti
 

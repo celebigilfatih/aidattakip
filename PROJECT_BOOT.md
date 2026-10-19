@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.10
+- Document version: 0.4.11
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -24,6 +24,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Explicit non-goals: TBD — kullanıcı tarafından belirlenmedi.
 
 ## 2. Current Status
+
+- Güncel işletim: Kullanıcı iPhone UI görünümünü onayladı; yalnız Demo Kullanıcı için mevcut haftalık aidat özeti Pazartesi09:00 Europe/Istanbul etkinleştirildi. Sonraki çalışma26 Ekim2026 09:00. Aktif ana iPhone, kalıcılık ve etkin kuralı değerlendiren gerçek worker doğrulandı; anlık bildirim gönderilmedi. Kod/yayın değişmedi, runtime1db9776. [İşletim kaydı](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kapalı kural kayıtları etkinleştirme öncesinin tarihçesidir.
 
 - Güncel UI işi: Bildirimin açtığı geciken aidat listesi mobil/tablet kartları, masaüstü tablo, arama/filtre/sıra/20 satır sayfalama ve durum eylemleriyle düzenlendi. Yerel typecheck/genişlik/davranış kontrolleri başarılı; yalnız demo1db9776 Success/3m09s yayımlandı ve canlı mobil/masaüstü kontrolleri geçti. CR-022 kapalı; otomatik kural Pazartesi09:00/kapalı. [CR-022](docs/20-execution/CHANGE_REQUESTS.md), [İnceleme](docs/30-quality/OVERDUE_UX_REVIEW.md). Mali hesap/yetki/otomatik kural değişmedi.
 

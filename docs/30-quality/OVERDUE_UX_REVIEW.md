@@ -25,3 +25,5 @@ Gerçek tarayıcı yerel kontrolü:SAHIN araması Arda Şahin'in2 aidatını/2.0
 Ekran görüntüleri bu inceleme sırasında tarayıcıdan kaydedilip yerel dosya olarak açıldı. PNG kanıtları output altında Git dışında tutulur. Yerel veri canlı demodan farklıdır; öncesi/sonrası tutarlar görsel değişim nedeniyle değişmiş sayılmaz.390px tarayıcı kontrolü gerçek iPhone Safari veya VoiceOver testi değildir. Tam WCAG uyumu, ekran okuyucu ve tüm tarayıcı/platform kabulü iddia edilmez. API mali rol/şube hesapları ADR-0007 entegrasyon testlerinin kapsamındadır.
 
 Son durum:CR-022 kapalı. Nihai canlı mobil/masaüstü kanıtları10-live-mobile-after.png ve11-live-desktop-after.png; sayfa/yerleşim kodu src/app/notifications/overdue/page.tsx ve src/components/AppLayout.tsx. Yeni ADR gerekmedi; ADR-0007 mali hesap/erişim sözleşmesi korunur.
+
+2026-10-19 kullanıcı kabulü: “iPhone’da da düzgün görünüyor.” Bu yanıt gerçek iPhone görünümünün kullanıcı kabulüdür; VoiceOver/tam WCAG testi anlamına gelmez. Ardından kullanıcı Demo Kullanıcı Pazartesi09:00 kuralının etkinleştirilmesini istedi; operasyon sonucu SESSION_HANDOFF'ta kaydedildi.
