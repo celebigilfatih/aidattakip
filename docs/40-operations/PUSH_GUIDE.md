@@ -1,6 +1,6 @@
 # Personel bildirimleri ve otomatik aidat özeti
 
-Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) Accepted, 2026-10-19. Uygulama/test yerelde hazır; demo ve gerçek personel cihaz kabulü bekler. Önceki veli iPhone testi bu yeni personel kabulünün yerine geçmez.
+Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) Accepted, 2026-10-19. Uygulama/test ve yalnız demo dbc329d0 dağıtımı hazır; Coolify her dakikalık işleyici doğrulandı. Yeni kural kapalı; gerçek personel cihaz/takvim kabulü bekler. Önceki veli iPhone testi bu yeni personel kabulünün yerine geçmez.
 
 ## Günlük kullanım
 
@@ -31,7 +31,7 @@ Bir saat dahil telafi yapılır; daha eski slot MISSED, birikmiş mesaj gönderi
 
 ## Test ve yayın
 
-    node --import tsx --test src/lib/notification-policy.test.ts src/lib/staff-summary-policy.test.ts src/lib/notification.integration.test.ts prisma/demo.test.ts prisma/demo.integration.test.ts src/lib/reporting.test.ts
+    node --import tsx --test src/lib/service-worker.test.ts src/lib/notification-policy.test.ts src/lib/staff-summary-policy.test.ts src/lib/notification.integration.test.ts prisma/demo.test.ts prisma/demo.integration.test.ts src/lib/reporting.test.ts
     node node_modules/typescript/bin/tsc --noEmit --incremental false
     docker build -t aidattakip:staff-summary-20261019 .
 

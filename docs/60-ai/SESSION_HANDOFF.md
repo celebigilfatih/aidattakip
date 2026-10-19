@@ -1,5 +1,15 @@
 # AI Session Handoff
 
+## 2026-10-19 — Personel özeti yalnız demo dağıtımı ve işleyici hazır
+
+- Kaynak: `codex/staff-summary-20261019`, sabit `dbc329d0ab24fd9900f26e5fbf498e7d60e5d515`. Coolify `tyc0xe2aajlja5eyzvrncm4j` Success/Finished, 3m02s; rolling update 11:19:58 UTC tamamlandı. Önceki `brnxohzlxg6swgbjpf3vdrgc` adayı service worker aktivasyon düzeltmesi için migration/runtime geçişinden önce iptal edildi; yayımlanmış sürüm sayılmaz.
+- Container `69fca1f6d5b1`, image commit etiketi yukarıdaki pin; build image SHA `0d3163ef86e3ae3d8eeaf2d12f38a9aea09fdb214854c19434117e4427bffb15`. UID1001, runtime VAPID format/fingerprint aynı; yeni secret/servis yok. Image içinde .env/dump yok. Yeni additive migration applied; 10 kullanıcı/60 sporcu/60 veli/300 ödeme ve başlangıçtaki 15 bildirim/2 alıcı/2 cihaz korundu. Veli cihazları politika gereği pasifleştirildi.
+- HTTPS recipient/overdue/config/personel/kural/önizleme kontrolleri başarılı. Uzak main hâlâ b024011; Özlüce container `14c56b463e9e1bbf9d549fe816050a749ec0f137c6b4732d586566be6213db3b`, image b024011 ve StartedAt 2026-10-17T21:57:10.916623555Z dağıtım sonrası da aynı. Demo auto deploy yalnız manuel; sonraki belge commit'leri runtime pinini değiştirmez.
+- Demo Scheduled Task `yybczzxmkxknwvcndbffmgmv`: etkin, her dakika, timeout300, uygulamanın güncel container'ında `node --import tsx /app/scripts/staff-summary-worker.ts`. İlk gerçek otomatik çalışma 11:21:02 UTC Success/2s, çıktı evaluatedRules0/claimedRuns0. Dış cron API yok. Haftalık aidat özeti kuralı Pazartesi09:00 ve kapalı oluşturuldu; alıcı yalnız Demo Kullanıcı.
+- Gerçek personel iPhone ve kısa takvim/durdurma kabulü henüz tamamlanmadı. Kullanıcı cihaz kaydı mesajı bildirdi; sunucu kontrolü mevcut iPhone cihazını pasif/ana cihaz yok gösterdi. Bu nedenle personel push gönderimi başlatılmadı; telefondaki güncel kayıt adımı beklenir. Önceki Volkan Acar kabulü yeni personel testinin yerine geçmez.
+
+Güncel kapanış denetimi: 48 kök/docs Markdown dosyası, 570 yerel bağlantı; tek eksik eski README/LICENSE (CR-012). Metadata JSON geçerli. Başlangıç snapshot'ına göre 18 AGENTS/Constitution/ortam/paket/eski SQL migration dosyası aynı; gerçek yerel/demo private VAPID literal'i takipli dosyalarda yok. Yeni service worker testleri dahil son suite 30/30; remote final Docker build tip/derleme kapısı başarılı. Kullanıcı ilk kayıt mesajını ve ardından ana cihaz gördüğünü bildirse de canlı API ve yalnız demo DB salt okunur sorgusu ana cihaz null/eski iPhone pasif gösterdi; henüz manuel push oluşturulmadı/gönderilmedi. Ortam adresi ve güncel fiziksel kayıt kullanıcıyla doğrulanıyor. CLI test oturumu repository dışında tutulur; test bitiminde normal logout ile kapatılacak.
+
 ## 2026-10-19 — Personel özeti demo yayın ön kontrolü
 
 Demo 7605b37de3a9 / 5e1fd7c runtime başlangıcı: 10 kullanıcı, 60 sporcu, 60 veli, 300 ödeme, 15 bildirim, 2 alıcı/2 cihaz. Runtime VAPID fingerprint 5ca9f29071797f80 valid; yeni key yok. Özlüce ID/image/StartedAt önceki guard ile aynı. Demo auto deploy Manual deployments only. Yerel yeni dal codex/staff-summary-20261019; main değişmez.

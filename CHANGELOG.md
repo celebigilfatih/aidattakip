@@ -1,4 +1,9 @@
-# Changelog
+#### Deployed — 2026-10-19 — Personel özeti yalnız SporManage demo
+
+- Sabit dbc329d0, Coolify Success/3m02s; additive migration, mevcut veri/anahtarlar ve HTTPS doğrulandı. Güncellenen PWA service worker aktivasyonu ve güvenli bildirim yönlendirmesi dahil.
+- Her dakikalık container TSX Scheduled Task etkin ve gerçek otomatik çalışması başarılı. Haftalık kural kapalıdır; personel iPhone ve kısa takvim/durdurma kabulü bekler. Main ve Özlüce değişmedi.
+
+ Changelog
 
 Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncellenir. Geçmiş sürümler: TBD.
 
