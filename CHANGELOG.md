@@ -3,7 +3,7 @@
 ### Improved — 2026-10-19 — Geciken aidat listesi UI/UX
 
 - Mevcut liste görüntülenip mobil taşma ve arama/sayfalama eksikleri giderildi. Mobil/tablet kartları, masaüstü tablo, genel/filtre toplamları, Türkçe arama, grup/durum filtreleri ve sıralama eklendi.20 aidat/sayfa, liste başına odak dönüşü ve erişilebilir etiketler.
-- Yükleme/yenileme, boş sonuç ve401/403 hata eylemleri ayrılır. AppLayout içerik kolonunda min-width0; API, mali hesap, yetki, veri ve otomatik kurallar değişmedi. Yerel typecheck ve gerçek tarayıcı kontrolleri başarılı; yeni demo yayını hazırlanıyor.
+- Yükleme/yenileme, boş sonuç ve401/403 hata eylemleri ayrılır. AppLayout içerik kolonunda min-width0; API, mali hesap, yetki, veri ve otomatik kurallar değişmedi. Yerel typecheck ve gerçek tarayıcı kontrolleri başarılı; yalnız demo1db9776 Success/3m09s yayımlandı. Canlı mobil/masaüstü ve arama/sayfa kontrolleri geçti;54 sporcu/150 aidat/201.000 açık bakiye,17 bildirim ve kapalı kural korundu.
 
 ### Verified — 2026-10-19 — Personel iPhone ve otomatik aidat özeti
 

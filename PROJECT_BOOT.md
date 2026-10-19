@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.9
+- Document version: 0.4.10
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -25,7 +25,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 
 ## 2. Current Status
 
-- Güncel UI işi: Bildirimin açtığı geciken aidat listesi mobil/tablet kartları, masaüstü tablo, arama/filtre/sıra/20 satır sayfalama ve durum eylemleriyle düzenlendi. Yerel typecheck/genişlik/davranış kontrolleri başarılı; yalnız demo yayını hazırlanıyor. [CR-022](docs/20-execution/CHANGE_REQUESTS.md), [İnceleme](docs/30-quality/OVERDUE_UX_REVIEW.md). Mali hesap/yetki/otomatik kural değişmedi.
+- Güncel UI işi: Bildirimin açtığı geciken aidat listesi mobil/tablet kartları, masaüstü tablo, arama/filtre/sıra/20 satır sayfalama ve durum eylemleriyle düzenlendi. Yerel typecheck/genişlik/davranış kontrolleri başarılı; yalnız demo1db9776 Success/3m09s yayımlandı ve canlı mobil/masaüstü kontrolleri geçti. CR-022 kapalı; otomatik kural Pazartesi09:00/kapalı. [CR-022](docs/20-execution/CHANGE_REQUESTS.md), [İnceleme](docs/30-quality/OVERDUE_UX_REVIEW.md). Mali hesap/yetki/otomatik kural değişmedi.
 
 - Güncel görev: 2026-10-19 ADR-0007 Accepted: Kullanıcı personel odaklı bildirim ve otomatik aidat özeti planının tümünü uygulamayı onayladı. Yeni veli/sporcu push kapalı; ADMIN seçili personel, ana cihaz ve 30 günlük yenilenebilir kayıt. Mali özet ADMIN/ACCOUNTING ve güncel şube kapsamı; diğer personel yalnız genel duyuru. Haftalık gün/saat, İstanbul vade günü sonrası aktif/pasif açık borçlar, 1 saat telafi ve kalıcı çalışma/tek gönderim uygulanıyor. Yerel migration/typecheck/30 test ve Docker build başarılı. Yalnız demo dbc329d0 sabiti Success ile dağıtıldı; migration ve her dakikalık Coolify işleyicisi doğrulandı. Gerçek personel iPhone manuel ve otomatik özet/tıklama kabulü, kapalı saat kontrolü tamamlandı; kural Pazartesi09:00 ve kapalı. [ADR-0007](docs/50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md), [CR-021](docs/20-execution/CHANGE_REQUESTS.md). Aşağıdaki kayıtlar tarihçedir.
 

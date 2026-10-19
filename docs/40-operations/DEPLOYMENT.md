@@ -1,5 +1,13 @@
 # Deployment
 
+## 2026-10-19 — Geciken aidat UI/UX yalnız demo yayını tamamlandı
+
+Kaynak codex/staff-summary-20261019, sabit1db9776f823bef9e7cf7a8457e267b0d1e077c86. Coolify yslyduhrhiazinxddvlpv1e4 Success/Finished,03m09s; rolling update12:06:09 UTC /15:06:09 İstanbul tamamlandı. Yeni container adı oibkjai6tfoeur5gxnx3ekxt-20261019T120300, image SHA968736093f0490bc052e5742295d02c466a2696d89a798411e89dcc2b327dd46. Nihai kaynak gerçek demo Docker üretim derlemesi/tip kontrolünden geçti. Yerel Docker adayı da tamamlandı (config eae84b299d14010fbee6ebe3af9b286335948ff4e572c58fde8c36e122ac74d5); son responsive sınıf düzeltmelerinden önceki adaydır, nihai kaynak kanıtı remote build'dir.
+
+Yayın öncesi/sonrası normal ADMIN API kontrolleri:54 sporcu/150 gecikmiş aidat/201.000 açık bakiye ve toplam17 bildirim aynı; tek kural Pazartesi09:00/kapalı ve tek eski otomatik run korundu. Liste/özet/kural/bildirim/config HTTP200; mevcut demo public VAPID aynı. Yeni API, schema, migration, secret veya paket yok; yeni push gönderilmedi. Yeni container sonrası gerçek Coolify12:07:02 UTC işleyicisi Success, evaluatedRules0/claimedRuns0. Main/Özlüce'ye dağıtım yapılmadı; runtime ayrı sabit pin ve manual deploy olarak kalır.
+
+Canlı tarayıcıda mobil kartlar ve masaüstü tablo doğrulandı. SAHIN araması Arda Şahin'in3 aidatını/3.500 tutarını buldu, genel toplam201.000 kaldı. Sayfa geçişi/geri dönüş; klavye Tab odağı etiketli sporcu durumu alanına geçti, kontrol44px. Yerel320/390/768/1280 genişliklerinde taşma yok; tablet bakiye kartı ilk incelemede bölündüğü için tam satıra alınıp yeniden kontrol edildi. output/overdue-ux/10-live-mobile-after.png ve11-live-desktop-after.png canlı kanıt; yerel görüntülerdeki59.250 farklı yerel veri setidir. Görüntüler kaydedilip açıldı; Git dışında tutulur. Gerçek iPhone Safari/VoiceOver yeni UI kabulü ayrıca kullanıcıya bırakılır; önceki gerçek push/tıklama kabulü korunur. [İnceleme](../30-quality/OVERDUE_UX_REVIEW.md).
+
 ## 2026-10-19 — Personel iPhone ve otomatik özet kabulü tamamlandı
 
 - Manuel test 14:35 İstanbul: cmvf6h3tg0007qq010x6b9l9i, Apple HTTP201/ACCEPTED; kullanıcı bildirimi gördüğünü ve Demo Kullanıcı personel ekranını açtığını doğruladı.

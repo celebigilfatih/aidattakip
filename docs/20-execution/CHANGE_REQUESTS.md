@@ -1,9 +1,9 @@
 ### CR-022 — Geciken aidat listesi okunabilirliği
 
-- Status: In progress — kullanıcı mevcut listeyi inceleyip UI/UX düzenlemesini istedi.
+- Status: Closed — mevcut liste UI/UX düzeltmesi yalnız demo1db9776 ile yayımlandı ve canlı doğrulandı.
 - Kanıt: Güncel demo ekranları yakalandı;390px genişlikte bakiye ekran dışında, arama/filtre/sayfalama yok,401 durumda giriş düğmesi yok. [İnceleme](../30-quality/OVERDUE_UX_REVIEW.md).
 - Düzeltme: Mobil/tablet kartları, masaüstü tablo, özet/filtre toplamı ayrımı, Türkçe arama, grup/durum/sıra,20 satır sayfalama ve durum eylemleri. Mali API/hesap/şube yetkisi değişmez; yeni ADR/migration yok.
-- Yerel kontrol: Typecheck;320/390/768/1280 genişlikleri, arama/grup/durum/sıralama, boş sonuç, sayfa sınırları ve odak başarılı. Yalnız demo yayını ve canlı doğrulama bekler.
+- Yerel kontrol: Typecheck;320/390/768/1280 genişlikleri, arama/grup/durum/sıralama, boş sonuç, sayfa sınırları ve odak başarılı. Coolify Success/3m09s; canlı mobil/masaüstü ve arama/sayfalama kontrolleri geçti. Önceki mali toplamlar/17 bildirim ve kapalı kural korundu.
 
  Change Requests
 

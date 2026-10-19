@@ -2,7 +2,7 @@
 
 ## Personel özeti güncel çalışma — 2026-10-19
 
-Yerel 12 migration ve 28 model; geliştirme terminali 24013, loopback:3077. Önceki 12714 kapatıldı. ADR-0007 personel/30 gün/haftalık özet uygulandı; 27 test/typecheck ve Docker build geçti. Runtime worker komutu node --import tsx /app/scripts/staff-summary-worker.ts; yalnız demo Scheduled Tasks kurulumu/takvim kabulü henüz bekler. Ayrı dal codex/staff-summary-20261019; eski dağıtım satırları tarihçedir. [PUSH_GUIDE](PUSH_GUIDE.md).
+Yerel12 migration/28 model korunur; mevcut PostgreSQL konteyneri ve loopback:3077 geliştirme terminali42251 yeniden başlatıldı, seed/reset yok. ADR-0007 personel/30 gün/haftalık özet,30 test ve gerçek personel iPhone/takvim/durdurma kabulü tamam. Yalnız demo güncel UI kaynağı codex/staff-summary-20261019 / sabit1db9776. Her dakikalık Coolify worker node --import tsx /app/scripts/staff-summary-worker.ts etkin; kural Pazartesi09:00/kapalıdır. [PUSH_GUIDE](PUSH_GUIDE.md). Aşağıdaki eski dağıtım satırları tarihçedir.
 
 Last updated: 2026-10-19. Komut envanteri kaynaklıdır; çalışma zamanı sonuçları tarihli kayıtlarda ayrıca belirtilir.
 
