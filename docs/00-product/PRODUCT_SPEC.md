@@ -1,8 +1,12 @@
 # Aidat Takip — Product Specification
 
+## Personel ekranından kuralı etkinleştirme ve durdurma — 2026-10-19
+
+Personel ve Cihazlar → Aidat özeti takvimi kartında **Etkinleştir / Durdur** bulunur. ADMIN/ACCOUNTING mevcut şube kapsamında kuralın ortak durumunu değiştirir; gün/saat, sahip, şube, alıcılar, cihazlar ve geçmiş korunur. Etkinleştirme en az bir seçili/aktif mali personel ve geçerli kural sahibi ister; cihaz izni gönderim anında ayrıca kontrol edilir. Boş alıcılı kuralda etkinleştirme açıklamayla kapalıdır. Geçersizleşmiş alıcı/sahip kuralın durdurulmasını engellemez. Etkinleşme yalnız gelecek slotlara uygulanır, tekrar aynı durumu kaydetmek cursor'ı değiştirmez. Bu, önceki kısa akışın etkinlik işlemi için ayrı sekmeye gitme sınırını kullanıcı talebiyle kaldırır. ADR-0007 politikası değişmez. [CR-027](../20-execution/CHANGE_REQUESTS.md).
+
 ## Personel ve Cihazlar ekranında aidat takvimi — 2026-10-19
 
-ADMIN/ACCOUNTING kendi kapsamındaki mevcut haftalık kuralın günlerini ve saatini **Aidat özeti takvimi → Gün ve saati düzenle** ile değiştirebilir. Takvim aynı kuralın tüm alıcılarına uygulanır; Türkiye saati (Europe/Istanbul) açıkça gösterilir. Yalnız gün/saat değişir; alıcılar, sahip, şube, etkinlik ve geçmiş korunur. Değişen takvim kaydetme anından sonraki slotlara uygulanır; geçmiş saatler telafi edilmez. Aynı gün/saat tekrar kaydedilirse değerlendirme imleci de korunur. Yeni kural oluşturma/etkinleştirme bu kısa forma dahil değildir. [CR-026](../20-execution/CHANGE_REQUESTS.md).
+ADMIN/ACCOUNTING kendi kapsamındaki mevcut haftalık kuralın günlerini ve saatini **Aidat özeti takvimi → Gün ve saati düzenle** ile değiştirebilir. Takvim aynı kuralın tüm alıcılarına uygulanır; Türkiye saati (Europe/Istanbul) açıkça gösterilir. Yalnız gün/saat değişir; alıcılar, sahip, şube, etkinlik ve geçmiş korunur. Değişen takvim kaydetme anından sonraki slotlara uygulanır; geçmiş saatler telafi edilmez. Aynı gün/saat tekrar kaydedilirse değerlendirme imleci de korunur. Gün/saat formu yeni kural oluşturmaz; etkinlik aynı karttaki ayrı düğmeden yönetilir (CR-027). [CR-026](../20-execution/CHANGE_REQUESTS.md).
 
 Yeni personel formu ve mevcut personel kartları artık yalnız Pazartesi09:00 yerine kapsam içindeki tüm haftalık kuralları güncel gün/saatleriyle gösterir. Bu, CR-024/025'teki Pazartesi09:00 arayüz kısıtının kullanıcı talebiyle genişletilmesidir; ADR-0007'nin haftalık takvim, rol ve şube politikası değişmez.
 

@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 import { notificationFailure, notificationResponse, requireManager, requireSameOrigin } from '@/lib/notification-access'
 import { NotificationError } from '@/lib/notification-policy'
 import { financialRole, summaryRuleSchema } from '@/lib/staff-summary-policy'
-import { summaryRuleScope } from '@/lib/staff-summary-service'
+import { summaryRuleScope, validateSummaryRecipients } from '@/lib/staff-summary-service'
 
 export async function GET(request: NextRequest) {
   try {
@@ -22,14 +22,30 @@ export async function PATCH(request: NextRequest) {
   try {
     requireSameOrigin(request)
     const manager = await requireManager(request)
-    const input = z.object({ userId: z.string().min(1).max(100), ruleId: z.string().min(1).max(100), receive: z.boolean() }).parse(await request.json())
+    const input = z.union([
+      z.object({ ruleId: z.string().min(1).max(100), enabled: z.boolean() }).strict(),
+      z.object({ userId: z.string().min(1).max(100), ruleId: z.string().min(1).max(100), receive: z.boolean() }).strict(),
+    ]).parse(await request.json())
     const result = await prisma.$transaction(async tx => {
       await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.ruleId} FOR UPDATE`
       const rule = await tx.staffSummaryRule.findFirst({
         where: { id: input.ruleId, ...summaryRuleScope(manager) },
-        include: { createdBy: { select: { isActive: true, role: true, branchId: true } } },
+        include: { createdBy: { select: { isActive: true, role: true, branchId: true } }, recipients: { select: { recipientId: true } } },
       })
       if (!rule) throw new NotificationError(409, 'Aidat özeti kuralı artık kullanılamıyor. Listeyi yenileyin.')
+      if ('enabled' in input) {
+        if (input.enabled) {
+          const owner = rule.createdBy
+          if (!owner.isActive || !financialRole(owner.role) || (owner.branchId && owner.branchId !== rule.branchId)) throw new NotificationError(409, 'Kural sahibinin yetkisi değişmiş. Kuralı kontrol edin.')
+          await validateSummaryRecipients(rule.recipients.map(r => r.recipientId), rule.branchId, tx)
+        }
+        const changed = rule.enabled !== input.enabled
+        const saved = await tx.staffSummaryRule.update({ where: { id: rule.id },
+          data: changed ? { enabled: input.enabled, ...(input.enabled ? { lastEvaluatedAt: new Date(Date.now() - 1) } : {}) } : {},
+          select: { id: true, name: true, enabled: true },
+        })
+        return { rule: saved }
+      }
       const person = await tx.user.findFirst({
         where: { id: input.userId, ...(manager.branchId ? { branchId: manager.branchId } : {}) },
         include: { notificationRecipient: { select: { id: true, kind: true, isActive: true, staffPushEnabled: true } } },

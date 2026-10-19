@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Personel ekranından etkinleştirme/durdurma (CR-027)
+
+Kullanıcı mevcut takvim kartından ortak etkinlik durumunu da yönetmek istedi. StaffSummarySchedule durum düğmesi, alıcısız kural engeli ve tüm bağlı personele etki açıklaması; PushPanel async başarı/hata, üstte alert ve kart/üyelikleri yenileme içerir. PATCH staff-summary `{ruleId,enabled}` ek biçimi mevcut üyelik gövdesini korur. Aynı mali yönetici/origin/şube ve kural kilidi; etkinleştirmede mevcut üyeler ve sahip geçerliliği, durdurmada geçersiz alıcı/sahip engeli yok. validateSummaryRecipients transaction client kabul eder, boş alıcıyı reddeder. Yalnız false→true cursor şimdi-1ms; no-op/stop korur. Takvim/üyeler/sahip/cihaz/geçmiş aynı; ADR-0007, model/migration/paket/anahtar/yetki/retention değişmedi, yeni ADR gerekmedi. Önceki ayrı sekme yönlendirmesi CR-027 ile güncellendi.
+
+Typecheck/51 test geçti (onboarding21+mevcut30). İlk koşuda50/51: yeni tarihçe fixture'ı FK nedeniyle temizlenemedi; run→rule temizleme sırası eklendi, kendi tek eski fixture'ı loopback5477 ve prefix/history guard ile temizlendi. Sonraki paket51/51. Dış push yok. Yerel1280px gerçek UI etkinleştir/yenile/durdur/yenile, alıcısız düğme kapalı ve üyelik kartında durum yansıması doğrulandı. İki UI fixture kuralı kapalı/tek üye/0 run; kendi ID+prefix ile temizlendi. Kanıt output/staff-rule-state (Git dışında). Genel lint CR-011, restore/rollback/tam erişilebilirlik ve yeni gerçek iPhone testi kapsam dışı.
+
+Yerel Docker exit0, config274ee5d4e76e4c67ee8ca8bca6e4869d51eff94ff4ede4aa779c97ccbd7bcb74; demo yayını henüz yapılmadı. Yalnız demo ec5e2dc ve mevcut etkin Pazartesi09:00 tek Demo Kullanıcı kuralı,10 personel/17 bildirim/ana iPhone guard alındı; canlı durum değiştirilmeden yayımlanacak. Main b024011/Özlüce'ye işlem yok. Dosyalar: staff-summary route, staff-summary-service, StaffSummarySchedule/PushPanel, onboarding entegrasyonu ve ürün/API/CR/kalite/operasyon/CHANGELOG/boot/handoff.
+
 ## 2026-10-19 — Personel ekranından gün/saat düzenleme (CR-026)
 
 Kapanış: Yalnız demo ec5e2dc66d79d7ddec577593c3fded5c4148ac27, Coolify orvnvpbspsfgvcihnbbkzuxk Success/03m06s; başlangıç13:18:48 UTC. Nihai demo Docker ve yerel Docker exit0/config aca0c39d30b9aa7aff7ca9121e8dfbfdab8fe964ed6b46ac3d6e6ac1d15c97c1. Runtime pini ec5e2dc, branch codex/staff-summary-20261019 ve manuel dağıtım modeli korundu. Main b024011/Özlüce'ye işlem yok. Yeni ADR gerekmedi, ADR-0007 aynı. Aşağıdaki hazırlık satırları tarihçedir.

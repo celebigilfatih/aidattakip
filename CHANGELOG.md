@@ -4,6 +4,11 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Added — 2026-10-19 — Personel ekranında özet kuralının etkinliği
+
+- Aidat takvimi kartından Etkinleştir/Durdur; ortak etki, boş alıcı ve sonuç/hata açıklamaları. Seçimler ve takvim korunur, ayrı sekme gerekmez.
+- PATCH durum gövdesi aynı mali yetki/şube ve row lock ile mevcut alıcı/sahip doğrular; kapatma geçersiz seçimle de çalışır. Etkinleşmede gelecek slotlar, no-op cursor ve geçmiş koruması. ADR-0007/model/migration/paket/anahtar değişmedi. Typecheck/51 test ve yerel UI başarılı; CR-027, Docker/demo doğrulaması sürüyor.
+
 ### Added — 2026-10-19 — Personel ekranında aidat takvimi
 
 - Personel ve Cihazlar → Aidat özeti takvimi kartı ve gün/saat dialogu; çoklu hafta günü, Türkiye saati, ortak alıcı etkisi, kaydet/vazgeç ve hata/boş gün durumları.

@@ -6,8 +6,9 @@ import { getStaffOverdue } from './staff-overdue'
 import { NotificationError } from './notification-policy'
 
 export function summaryRuleScope(user: User) { return user.branchId ? { branchId: user.branchId } : {} }
-export async function validateSummaryRecipients(ids: string[], branchId: string | null) {
-  const count = await prisma.notificationRecipient.count({ where: { id: { in: ids }, kind: 'STAFF', staffPushEnabled: true, isActive: true,
+export async function validateSummaryRecipients(ids: string[], branchId: string | null, db: Prisma.TransactionClient = prisma) {
+  if (!ids.length) throw new NotificationError(400, 'Etkinleştirmek için en az bir özet alıcısı seçin.')
+  const count = await db.notificationRecipient.count({ where: { id: { in: ids }, kind: 'STAFF', staffPushEnabled: true, isActive: true,
     user: { isActive: true, role: { in: ['ADMIN', 'ACCOUNTING'] }, ...(branchId ? { branchId } : {}) } } })
   if (count !== ids.length) throw new NotificationError(400, 'Özet alıcıları seçili, aktif ve aynı yetkili kapsamda yönetici/muhasebe olmalıdır.')
 }

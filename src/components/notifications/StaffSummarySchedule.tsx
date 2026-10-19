@@ -7,8 +7,9 @@ import { type MembershipRule } from './StaffSummaryMembership'
 import { summaryDays, summarySchedule } from './summary-schedule'
 import { staffRequest } from './staff-http'
 
-export default function StaffSummarySchedule({ rule, disabled, onSaved }: {
+export default function StaffSummarySchedule({ rule, disabled, onSaved, onEnabledChange }: {
   rule: MembershipRule; disabled: boolean; onSaved: (rule: Pick<MembershipRule, 'id' | 'weekdays' | 'time'>) => void
+  onEnabledChange: (enabled: boolean) => void
 }) {
   const [open, setOpen] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState('')
   const [weekdays, setWeekdays] = useState(rule.weekdays), [time, setTime] = useState(rule.time)
@@ -25,10 +26,13 @@ export default function StaffSummarySchedule({ rule, disabled, onSaved }: {
     } catch (e) { setError(e instanceof Error ? e.message : 'Takvim kaydedilemedi.') }
     finally { setBusy(false) }
   }
-  return <article className="flex flex-col gap-3 rounded-md border bg-white p-3 sm:flex-row sm:items-center sm:justify-between">
+  return <article className="space-y-3 rounded-md border bg-white p-3">
     <div className="min-w-0 space-y-1 break-words"><p className="text-sm font-semibold">{rule.name}</p><p className="text-sm">{summarySchedule(rule)}</p><p className="text-xs text-slate-600">{rule.enabled ? 'Kural etkin' : 'Kural kapalı; özet gönderilmez'} · {rule.recipientIds.length} seçili personel</p></div>
+    <p className="text-xs text-slate-600">{rule.enabled ? 'Durdur, bu kurala bağlı tüm personel için yeni otomatik gönderimleri durdurur.' : !rule.recipientIds.length ? 'Etkinleştirmek için aşağıdaki personel kartlarından en az bir özet alıcısı seçin.' : 'Etkinleştir, bu kurala bağlı tüm personel için gelecek planlanan saatleri açar. Geçmiş saatler için bildirim gönderilmez.'}</p>
+    <div className="flex flex-wrap gap-2">
+    <Button type="button" variant={rule.enabled ? 'outline' : 'default'} className="min-h-11" disabled={disabled || busy || (!rule.enabled && !rule.recipientIds.length)} aria-label={`${rule.name}: ${rule.enabled ? 'kuralı durdur' : 'kuralı etkinleştir'}`} onClick={() => onEnabledChange(!rule.enabled)}>{rule.enabled ? 'Durdur' : 'Etkinleştir'}</Button>
     <Dialog open={open} onOpenChange={changeOpen}>
-      <DialogTrigger asChild><Button variant="outline" className="min-h-11 shrink-0 self-start" disabled={disabled} aria-label={`${rule.name}: gün ve saati düzenle`}>Gün ve saati düzenle</Button></DialogTrigger>
+      <DialogTrigger asChild><Button variant="outline" className="min-h-11" disabled={disabled || busy} aria-label={`${rule.name}: gün ve saati düzenle`}>Gün ve saati düzenle</Button></DialogTrigger>
       <DialogContent className="max-h-[90dvh] w-[calc(100%-2rem)] overflow-y-auto rounded-lg sm:max-w-lg">
         <DialogHeader><DialogTitle>Aidat özeti takvimini düzenle</DialogTitle><DialogDescription>{rule.name} · Türkiye saati (Europe/Istanbul)</DialogDescription></DialogHeader>
         <form onSubmit={save} className="space-y-4">
@@ -44,5 +48,6 @@ export default function StaffSummarySchedule({ rule, disabled, onSaved }: {
         </form>
       </DialogContent>
     </Dialog>
+    </div>
   </article>
 }

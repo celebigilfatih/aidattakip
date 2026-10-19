@@ -1,5 +1,9 @@
 # Deployment
 
+## 2026-10-19 — Personel ekranında Etkinleştir/Durdur (CR-027) hazırlığı
+
+Kaynak codex/staff-summary-20261019, yalnız demo sabit ref/manuel dağıtım hazırlanıyor. Typecheck/51 test ve yerel UI geçti; Docker exit0, config274ee5d4e76e4c67ee8ca8bca6e4869d51eff94ff4ede4aa779c97ccbd7bcb74. Mevcut runtime ec5e2dc/etkin Pazartesi09:00 tek Demo Kullanıcı kuralı korunacak; main b024011/Özlüce'ye işlem yok. Model/migration/paket/anahtar/cron değişmedi. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+
 ## 2026-10-19 — Personel ekranında aidat takvimi yalnız demo (CR-026)
 
 Kaynak codex/staff-summary-20261019, sabit ec5e2dc66d79d7ddec577593c3fded5c4148ac27. Yalnız SporManage demo Coolify orvnvpbspsfgvcihnbbkzuxk Success/03m06s; başlangıç13:18:48 UTC. Manuel/sabit ref modeli aynı. Typecheck/47 test ve yerel Docker exit0 (config aca0c39d30b9aa7aff7ca9121e8dfbfdab8fe964ed6b46ac3d6e6ac1d15c97c1); nihai demo Docker derlemesi başarılı. Model/migration/paket/anahtar/cron değişmedi. Main b024011/Özlüce'ye işlem yapılmadı.
