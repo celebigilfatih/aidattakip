@@ -26,7 +26,7 @@ Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL
 |---|---|---|
 | Windows yerel demo | 2026-10-19 salt okunur `current_setting('server_version')`: **15.19**; imaj `postgres:15-alpine` | Loopback:5477 üzerinde `aidat_takip` ve `license_db` |
 | Repository Compose tanımı | `postgres:15-alpine`; çalışan Coolify servisini kanıtlamaz | Dosya modeli; [CR-006](../20-execution/CHANGE_REQUESTS.md) açık |
-| Coolify ortak PostgreSQL kaynağı | **TBD** — eski belgelerde 15/17 çelişkisi var; sunucu sürümü bu görevde sorgulanmadı | Son kayıtlı topoloji ADR-0005; sürüm doğrulama takibi CR-006 |
+| Coolify ortak PostgreSQL kaynağı | 2026-10-19 demo rolüyle READ ONLY sorgu: **17.7**; eski 15/17 iddiası tarihli kanıtla ayrıldı | Son kayıtlı topoloji ADR-0005; sürüm doğrulama takibi CR-006 |
 
 ## Sürümler
 

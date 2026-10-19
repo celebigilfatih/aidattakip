@@ -7,6 +7,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 ### Deployment preparation — 2026-10-19 — Yalnız demo push onayı
 
 - Kullanıcı `web-push` 3.6.7/MPL-2.0 paket seçimini ve yalnız SporManage demo ortamına dağıtıp iPhone testi yapmayı açıkça onayladı; ADR-0006 ve PUSH_GUIDE onay kaydı güncellendi. Ayrı demo ref'i hazırlanır; `main`/Özlüce kapsam dışıdır. Bu kayıt dağıtımın veya gerçek cihaz tesliminin tamamlandığı iddiası değildir.
+- Coolify demo kaynağı ayrı branch ve manuel dağıtıma alındı; ayrıca anlık kullanıcı onayıyla ayrı demo VAPID/origin/subject runtime değişkenleri kaydedildi, buildtime kapalı doğrulandı. Demo DB'nin PostgreSQL 17.7 sürümü salt okunur sorguyla kanıtlandı; dağıtım öncesi yalnız demo yedeği alındı ve arşiv listesi kontrol edildi.
 
 ### Added / Fixed — 2026-10-19 — Manuel Web Push ve alıcı kaydı
 

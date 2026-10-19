@@ -48,7 +48,7 @@ Bu kayıtlar kaynaklar arasındaki çelişki veya uygulama eksiklerini açıkça
 - Kaynaklar: [Compose](../../docker-compose.yml), [Dockerfile](../../Dockerfile), [gitignore](../../.gitignore).
 - İlk gözlem (2026-09-14): Compose init.sql bağlaması tanımlı fakat dosya yok. Dockerfile .npmrc kopyalıyor; ortam kurulumu ve taşınabilirlik o görevde doğrulanmamıştı.
 - Mevcut kanıt: 2026-09-15 Docker build/Coolify dağıtımı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içinde kayıtlı; 2026-10-19 Windows yerel kurulumunda 10 migration uygulandı. Bunlar eksik init.sql ile Compose'un uçtan uca çalıştığını kanıtlamaz.
-- Kalan takip: Compose eksikleri ve taşınabilirliği incelenmeli. CR-019 eşlemesinde canlı PostgreSQL sürümünün eski 15/17 kayıtlarıyla doğrulanamadığı görüldü; yetkili ortamdan yalnız sunucu sürümü okunup buraya tarihli kanıt eklenmeli. Doğrulanana kadar Coolify sürümü TBD; yerel salt okunur sorgu 2026-10-19 tarihinde 15.19 döndürdü.
+- Kalan takip: Compose eksikleri ve taşınabilirliği incelenmeli. CR-019 eşlemesinde canlı PostgreSQL sürümünün eski 15/17 kayıtlarıyla doğrulanamadığı görüldü; yetkili ortamdan yalnız sunucu sürümü okunup buraya tarihli kanıt eklenmeli. 2026-10-19 demo uygulamasının kısıtlı spormanage_demo rolüyle READ ONLY transaction içinde current_database/current_user/server_version sorgulandı: spormanage_aidat_demo / spormanage_demo / **17.7**. Canlı sürüm alt takibi tamamlandı; yerel 15.19 ayrı kanıttır. Compose/init.sql taşınabilirlik işi açık kalır.
 - Durum/onay: Açık; ortam/topoloji değişikliği açık onay gerektirir.
 
 ## CR-007 — Secret ve kimlik doğrulama logları

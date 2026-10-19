@@ -53,4 +53,3 @@ export function validateSubscription(input: unknown) {
   }
   return { ...data, endpoint: validatePushEndpoint(data.endpoint) }
 }
-

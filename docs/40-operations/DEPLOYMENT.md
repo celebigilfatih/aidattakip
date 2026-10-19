@@ -1,5 +1,11 @@
 # Deployment
 
+## 2026-10-19 — Demo push dağıtım ön hazırlığı
+
+Kullanıcı paket/yalnız demo dağıtımını ve ayrıca tarayıcı üzerinden demo VAPID runtime kaydını onayladı. Coolify v4.4.6 paneli `https://coolify.webmahsul.com.tr`; demo projesi `rtm2rg3oq1r0gzynacainabz`, environment `pznrtz0nys4vptuwt3wqkbsj`, uygulama `oibkjai6tfoeur5gxnx3ekxt`. Demo auto deploy **Manual deployments only**, branch `codex/manual-push-demo-20261019` olarak kaydedildi. Bu dar test için ADR-0005'in demo `main` kaydının yerine ADR-0006 onaylı ayrı ref kullanılır; Özlüce source/config değişmez.
+
+Yalnız demo DB hedefi/rolü doğrulandı; server_version 17.7 ve dağıtım öncesi 10 kullanıcı/60 sporcu/60 veli/300 ödeme/12 bildirim sayıldı. Demo yedeği hostta `/data/coolify/backups/aidattakip-manual-push/spormanage-before-push-20261019.dump`, 80.587 byte ve izin 600; SHA-256 `14ceb630db88e79057f1f20f85bb2bb558258bfd407e2b372a8316df3398d530`. Arşiv listesi okunabildi; restore/retention kabulü değildir. Runtime origin/subject demo HTTPS, VAPID anahtarları demo için ayrı; buildtime kapalı doğrulandı. Yeni uygulama/migration dağıtım sonucu bu kayıttan ayrı izlenecek.
+
 ## 2026-10-19 — Manuel push dağıtım adayı
 
 ADR-0006 ilk aşaması yalnız yerelde uygulanıp additive migration yerel DB'ye işlendi. Yeni kaynak için Git push veya canlı Coolify deployment yapılmadı. `web-push` 3.6.7 MPL-2.0 somut paket lisansı ve iPhone testi için yalnız ayrı sentetik demo uygulamasına dağıtım 2026-10-19 tarihinde kullanıcı tarafından açıkça onaylandı. Demo için `codex/manual-push-demo-20261019` dalı hazırlanır; canlı çalıştırma sonuçları ayrıca kaydedilir. `main` push'u iki uygulamayı da tetikleyebildiğinden demo için ayrı incelenmiş ref/image kullanılmalıdır. Özlüce uygulaması/DB'si hedef değildir. Ortama özel runtime VAPID anahtarları, APP_ORIGIN, migration ve iPhone adımları [PUSH_GUIDE](PUSH_GUIDE.md) içindedir. Otomatik aidat işi/scheduler yoktur; önceki canlı durum kayıtları aşağıda tarihsel bağlamıyla korunmuştur.
@@ -10,7 +16,7 @@ Last updated: 2026-10-19. Durum: Mevcut dosya modeli ve 2026-09-15 tarihli son C
 
 Esas alınan dağıtım kararı [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md): Özlüce production ve SporManage demo ayrı uygulama/DB/rol kullanır, fiziksel PostgreSQL servisini paylaşır. Aşağıdaki ayrı demo bölümü bu kararın son kayıtlı uygulama kanıtıdır. Daha eski ortak domain/ADMIN bölümleri tarihsel kayıttır.
 
-Coolify PostgreSQL sunucu sürümü **TBD**: eski kayıtlar 15 ve 17 Alpine diyor; yetkili canlı bağlantıdan sunucu sürümü bu görevde okunmadı. Sürüm doğrulama işi [CR-006](../20-execution/CHANGE_REQUESTS.md) altında açık kalır. Windows yerel PostgreSQL'i 2026-10-19 tarihinde salt okunur sorguda **15.19** döndürdü (`postgres:15-alpine`); bu, Coolify sürümünü doğrulamaz. Yerel kurulum [RUNBOOK](RUNBOOK.md) içindedir.
+Coolify PostgreSQL sunucu sürümü **17.7**: 2026-10-19 demo uygulamasının spormanage_demo rolüyle READ ONLY transaction içinde current_database/current_user/server_version sorgusu spormanage_aidat_demo / spormanage_demo / 17.7 döndürdü. Eski 15/17 kayıtları tarihsel bağlamdır. Sürüm doğrulama işi [CR-006](../20-execution/CHANGE_REQUESTS.md) altında açık kalır. Windows yerel PostgreSQL'i 2026-10-19 tarihinde salt okunur sorguda **15.19** döndürdü (`postgres:15-alpine`); bu, Coolify sürümünü doğrulamaz. Yerel kurulum [RUNBOOK](RUNBOOK.md) içindedir.
 
 ## SporManage ayrı demo kurulumu — 2026-09-15
 
