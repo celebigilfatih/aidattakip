@@ -1,5 +1,9 @@
 # Test Strategy
 
+## Bildirim ekranından personel oluşturma — 2026-10-19
+
+[staff-onboarding.integration.test.ts](../../src/lib/staff-onboarding.integration.test.ts) yalnız loopback5477/aidat_takip üzerinde6 test: veli/oturumsuz/pasif/ACCOUNTING/origin reddi, şube ve grup kapsamı, atomik hesap/alıcı, hash doğrulaması ve yanıt gizliliği, mevcut e-posta, paralel mükerrer kayıt, alıcı kutusu kapalı hesap ve pozitif antrenör grup kaydı. Kendi sentetik fixture'larını temizler; dış push yok. Mevcut30 regresyon da geçti. Typecheck ve yerel Docker adayı başarılı; son küçük UI arama temizliği dahil nihai demo build handoff'ta izlenir. Gerçek tarayıcı390px dialog taşması, rol/şube/gruplar, alıcı kutusu ve personel araması kontrol edildi; gerçek yeni personel/iPhone kurulumu bu görevde yapılmadı.
+
 ## ADR-0007 personel ve özet testleri
 
 Typecheck ve toplam 30 test geçti: bildirim politika, İstanbul zaman/sözleşme, DB entegrasyonu, mevcut demo/rapor regresyonları. DB testi yalnız loopback:5477/aidat_takip ve kendi fixture kural/kişi/verisinde çalışır; gönderici stub, dış push yok. 200 aktif/pasif sporcu, kısmi/tam/iptal/vade günü, mali rol/şube, 30 gün, logout/iptal/410, paralel claim, restart, kapalı kural ve tam 1 saat telafi sınırı kapsanır. Gerçek demo personel iPhone manuel push ve otomatik tek özet Apple HTTP201; kullanıcı her iki görünüm/tıklamayı doğruladı. Gerçek cron etkin saatte1, kapalı kontrol saatinde0 çalışma üretti; standart kural kapalı bırakıldı. Genel lint CR-011 nedeniyle ayrı kapı değildir.

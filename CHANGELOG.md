@@ -4,6 +4,11 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Added — 2026-10-19 — Bildirim ekranından personel ekleme
+
+- Personel ve Cihazlar bölümünde yeni personel formu ve adla arama. Giriş hesabı ile isteğe bağlı bildirim alıcısı tek kayıtta oluşturulur; şube ve antrenör grupları seçilebilir. Mobil dialog, yükleme/hata ve başarı yönlendirmesi.
+- Yalnız aktif ADMIN ve mevcut şube sınırı; yeni additive staff API, atomik kayıt ve mükerrer e-posta kontrolü. Cihaz izni, mali yetki ve haftalık kural üyeliği ayrı kalır. Model/migration/paket/anahtar değişmedi; ADR-0007 geçerli. Nihai kontrol/yayın handoff'ta izlenir.
+
 ### Operations — 2026-10-19 — Pazartesi aidat özeti etkinleştirildi
 
 - Kullanıcı iPhone görünümünü onayladı; yalnız Demo Kullanıcı için mevcut Pazartesi09:00 Türkiye saati kuralı etkinleştirildi. Sonraki çalışma26.10.2026 09:00; yeni kural veya anlık push yok.

@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.11
+- Document version: 0.4.12
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -24,6 +24,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Explicit non-goals: TBD — kullanıcı tarafından belirlenmedi.
 
 ## 2. Current Status
+
+- Güncel geliştirme: Kullanıcı talebiyle Bildirimler → Personel ve Cihazlar bölümüne ADMIN personel oluşturma ve aynı formda alıcı seçimi eklendi (CR-023). Hesap/alıcı atomik, şube/antrenör grupları ve mevcut rol sınırı korunur. Yerel kontroller/yayın sonucu [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md) içinde izlenir; yeni model/ADR yok. Pazartesi09:00 Demo Kullanıcı kuralı değiştirilmez.
 
 - Güncel işletim: Kullanıcı iPhone UI görünümünü onayladı; yalnız Demo Kullanıcı için mevcut haftalık aidat özeti Pazartesi09:00 Europe/Istanbul etkinleştirildi. Sonraki çalışma26 Ekim2026 09:00. Aktif ana iPhone, kalıcılık ve etkin kuralı değerlendiren gerçek worker doğrulandı; anlık bildirim gönderilmedi. Kod/yayın değişmedi, runtime1db9776. [İşletim kaydı](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kapalı kural kayıtları etkinleştirme öncesinin tarihçesidir.
 

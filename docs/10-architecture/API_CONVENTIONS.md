@@ -2,6 +2,8 @@
 
 ## ADR-0007 personel ve özet sözleşmesi
 
+- `GET /api/push/staff`: aktif ADMIN'in personel formu için kendi kapsamındaki aktif şubeleri ve grupları döndürür. `POST`: name/email/password/phone, mevcut dört rol, branchId, antrenör groupIds ve selectForNotifications alır; hesap + isteğe bağlı STAFF alıcı tek transaction. Şube bağlı ADMIN başka şube/kapsamsız hesap oluşturamaz; gruplar aktif ve seçilen şubeye ait olmalıdır. Aynı e-posta409; alan hatası400, oturumsuz401, yetkisiz/origin403. Yanıt201 yalnız id/ad/alıcı id ve cihaz yolu; şifre/hash/cihaz anahtarı yok. Mevcut `/api/users` sözleşmesi değişmedi. [Kaynak](../../src/app/api/push/staff/route.ts).
+
 - POST /api/push/recipients yalnız ADMIN, kind STAFF ve kendi şubesinin aktif personeli; DELETE seçimi/cihazları kapatır. GET tüm kapsam içi personelin seçim, ana cihaz, süre ve son delivery durumunu döndürür; endpoint/key yok.
 - POST /api/push/activate 410; veli alıcı çerezi personel yetkisi değildir. POST subscription yalnız seçili aktif personel; 30 gün. renewOnly true yalnız halen aktif/süresi geçerli sahipli aboneliği yeniler. PATCH subscription sahipli geçerli cihazı ana cihaz yapar.
 - GET /api/notifications/overdue-summary aktif ADMIN/ACCOUNTING ve şube sınırı; güncel toplam/ayrıntı. GET/POST/PUT/PATCH summary-rules aynı mali sınır, yeni kural kapalı, hafta günleri 1..7/saat HH:mm/seçili mali alıcılar. PATCH action disable veya bilinçli send yeni manuel çalışma.

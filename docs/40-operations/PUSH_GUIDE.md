@@ -4,6 +4,8 @@ Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.
 
 ## Günlük kullanım
 
+Yeni personel için ADMIN, Personel ve Cihazlar → **Yeni personel ekle** kullanır. Ad soyad/e-posta/ilk giriş şifresi/rol/şube; telefon isteğe bağlı, antrenör için şube zorunlu ve grup seçimi isteğe bağlıdır. Varsayılan rol Sekreterdir. **Bildirim alıcısı olarak seç** açıkken **Oluştur ve alıcı seç**, giriş hesabı ile alıcıyı birlikte kaydeder; kapatılırsa yalnız hesap oluşur. Giriş bilgileri otomatik iletilmez; mevcut e-posta tekrar oluşturulamaz. Mevcut personel adla aranır ve **Alıcı olarak seç** kullanılır. Cihaz izni personelin telefonunda verilir; aidat özeti için yönetici/muhasebe ayrıca mevcut kuraldan alıcı seçilir. Yönetici rolü yalnız bildirim almak için verilmemelidir.
+
 1. ADMIN /notifications → Personel ve Cihazlar bölümünde aktif personeli seçer. ADMIN/ACCOUNTING mali özet; diğer personel yalnız genel duyuru alır. Alıcı seçimi mali yetki sağlamaz.
 2. Personel kendi hesabıyla /recipient açar. iPhone: Safari → Paylaş → Ana Ekrana Ekle, simgeden aç ve personel girişi. Bu cihazda bildirimleri aç düğmesine dokunup izni kendisi verir. Davet yoktur.
 3. Eski veli aboneliği çakışırsa ekrandaki eski aboneliği sıfırla düğmesiyle tarayıcı aboneliğini kaldırıp yeniden açar. Eski sunucu cihaz sahipliği/geçmişi başka kişiye taşınmaz.

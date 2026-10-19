@@ -1,5 +1,11 @@
 # AI Session Handoff
 
+## 2026-10-19 — Bildirim ekranından personel oluşturma (CR-023)
+
+Kullanıcı yeni personel hesabını ve bildirim alıcısı seçimini tek Bildirimler ekranından yönetmeyi istedi. PushPanel yeni personel dialogu, mevcut personel araması ve mobil satır düzeni içerir. StaffCreateDialog mevcut dört rol, şube/antrenör grupları ve varsayılan açık alıcı kutusunu kullanır; varsayılan rol Sekreter. Yeni GET/POST /api/push/staff yalnız aktif ADMIN, aynı origin ve mevcut şube sınırını uygular. Şube/grup doğrulaması ve user+recipient nested create tek transaction;409 mükerrer e-posta. Ortak HTTP yardımcısı ayrıldı; eski import sözleşmeleri korunur. Yeni schema/migration/paket/anahtar/yetki kararı yok; ADR-0007 geçerli.
+
+Typecheck, mevcut30 regresyon ve6 yeni onboarding entegrasyon testi geçti (son ek pozitif antrenör senaryosu dahil). Gerçek tarayıcı390px dialog soldan16px/genişlik358px, belge scrollWidth390; yatay taşma yok, uzun form içten kayar. Rol→Antrenör/şube→Merkez grupları doğru açıldı; Muhasebe açıklaması, alıcı kutusunu kapatınca Personeli oluştur eylemi ve Aylin aramasında tek satır doğrulandı. Password alanı UI testinde doldurulmadı; gerçek hesap oluşturma API/DB entegrasyon testinde sentetik fixture ile doğrulandı. Test fixture temizliği kendi prefix'iyle sınırlıdır. Yerel Docker adayı exit0, config b698842142c250d31a7e8c40e5c1a4dc24f350bbedd6d05e9a9379f45999ecb4; son UI arama temizliği öncesidir, nihai kaynak demo build ile doğrulanır. Yalnız demo yayını sürüyor; mevcut runtime1db9776 ve etkin Pazartesi09:00/Demo Kullanıcı kuralı değiştirilmedi. Yayın öncesi10 personel/17 bildirim/54 sporcu150 geciken aidat201.000 açık bakiye ve tek önceki run; normal personel oturumuyla salt okunur API belgeleri doğrulandı. output/staff-onboarding yerel kanıtları Git dışında. Main b024011 korundu.
+
 ## 2026-10-19 — Demo Kullanıcı Pazartesi09:00 kuralı etkin
 
 Kullanıcı iPhone görünümünü uygun bulduğunu bildirdi ve mevcut Pazartesi09:00 aidat özeti kuralını Demo Kullanıcı için açıkça etkinleştirmeyi istedi. Yalnız SporManage demo normal ADMIN API'siyle mevcut kural cmvf6082n0003qq013241p05b güncellendi: enabled=true, weekdays=[1], time=09:00 Europe/Istanbul, tek alıcı Demo Kullanıcı (cmvf3ej2e0005pn01wxtyqt3z). Yeni kural veya manuel gönderim oluşturulmadı; ana iPhone etkin ve18.11.2026 geçerli doğrulandı.
