@@ -4,6 +4,16 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Verified — 2026-10-19 — Demo iPhone gerçek push testi tamamlandı
+
+- Apple Topic düzeltmesi 5e1fd7c yalnız demo ortamına başarıyla dağıtıldı (2m44s); normal API gönderimi ACCEPTED, Apple HTTP201. Kullanıcı bildirimin geldiğini ve dokununca Volkan Acar alıcı ekranının açıldığını doğruladı. Önceki iki FAILED test kaydı korundu.
+- Typecheck, dört ilgili test ve gerçek Docker production build geçti; demo sporcu/ödeme verileri ve Özlüce container/image/StartedAt korundu. Operasyon rehberi, ADR kanıtı, Project Boot ve handoff güncellendi; yeni ADR yok, otomasyon etkinleştirilmedi.
+
+### Fixed — 2026-10-19 — Apple push Topic uyumluluğu
+
+- iPhone veli cihazı kaydedildi. İlk normal gönderim HTTP 400/FAILED, ayrı tek cihaz tanılama denemesi Apple `BadWebPushTopic` döndürdü. Ham CUID yerine 32 karakterlik hash Topic kullanılır; payload ve izin sınırları korunur. Typecheck ve dört politika/entegrasyon testi geçti. Yalnız demo 5e1fd7c dağıtımı ve yeni gerçek cihaz sonucu bekleniyor.
+- Önceki davet ekranı düzeltmesi 86105c3, Coolify urf7fi3z4gfwjq8lcug5s5ih ile Success/2m52s dağıtıldı.
+
 ### Fixed — 2026-10-19 — iPhone davet ekranında personel oturumu
 
 - Açık personel oturumu kişisel davet yapıştırma alanını gizliyordu; alan personel oturumunda da gösterilir. Veli/sporcu/personel oturum türü görünür ve davet kabulü beklerken cihaz kayıt düğmesi kapalıdır. Mevcut davet/API/yetki sözleşmesi korunur; typecheck geçti. Yalnız demo için sonraki dağıtım hazırlanır.

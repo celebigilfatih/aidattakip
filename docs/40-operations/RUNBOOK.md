@@ -4,6 +4,8 @@ Last updated: 2026-10-19. Komut envanteri kaynaklıdır; çalışma zamanı sonu
 
 ## Ortam ve giriş kaynakları
 
+Güncel demo (2026-10-19): sabit 5e1fd7c / ayrı codex/manual-push-demo-20261019 dalı, auto deploy manuel. İlk gerçek iPhone push testi Apple HTTP201 ve kullanıcının görünüm/tıklama onayıyla başarılı. Otomasyon kapalıdır; manuel işlem ve geri alma sınırları [PUSH_GUIDE](PUSH_GUIDE.md), dağıtım kanıtları [DEPLOYMENT](DEPLOYMENT.md) içindedir.
+
 [package.json](../../package.json), [Dockerfile](../../Dockerfile), [Compose](../../docker-compose.yml), [startup](../../scripts/startup.sh). Docker Node 20 Alpine tanımlar; yerelde zorunlu Node sürümü için ayrı pin bulunmadı. README’nin Node 18+ iddiası bu oturumda doğrulanmadı. `DATABASE_URL` PostgreSQL bağlantısı gerekir; değerler belgelerde tutulmaz.
 
 ## Windows yerel çalıştırma — 2026-10-19

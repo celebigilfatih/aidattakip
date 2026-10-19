@@ -14,6 +14,6 @@ Bu liste önerilen çalışma sırasıdır; uygulama veya kritik karar onayı de
 | B-006 Yedek/restore kapsamı | Operasyon | CR-005 | Tüm modeller/ilişkiler ve ayrı lisans verisi için kapsam; izole geri yükleme kanıtı | Öneri; retention/restore kararı onaylı değil |
 | B-007 Bildirim/lisans açıklıkları | Kapsam netleşince | CR-004/012 | Kapsam kararı ve gerçekle uyumlu özellik açıklamaları | Rapor bölümü ADR-0003 ile tamamlandı; diğerleri açık |
 | B-008 Otomatik lint yapılandırması | Kalite | CR-011 | Etkileşimsiz lint komutu, repository yapılandırması ve doğrulanmış temiz sonuç | Ayrı iş; bu çalışma kapsamına alınmadı |
-| B-009 Push ve aidat hatırlatma planı | Kullanıcı talebi | CR-004/020, ADR-0006 | Ekran/API eşleme; doğrulanmış alıcı ve tek cihaz; ardından borç/tekrar kuralları | Accepted; yerel ilk aşama/test ve onaylı MPL-2.0 paket/HTTPS demo dağıtımı tamamlandı. iPhone cihaz kabulü açık; otomasyon sonraki aşama |
+| B-009 Push ve aidat hatırlatma planı | Kullanıcı talebi | CR-004/020, ADR-0006 | Ekran/API eşleme; doğrulanmış alıcı ve tek cihaz; ardından borç/tekrar kuralları | Accepted; yerel ilk aşama/test ve onaylı MPL-2.0 paket/HTTPS demo dağıtımı tamamlandı. iPhone servis/görünüm/tıklama kabulü tamam; otomasyon sonraki aşama |
 
 Sorumlular, tahminler, sprint ve tarihler TBD. Kalite adayları [TEST_STRATEGY](../30-quality/TEST_STRATEGY.md) içindedir.

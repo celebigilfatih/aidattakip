@@ -1,6 +1,6 @@
 # Manuel Web Push — ilk aşama
 
-Last updated: 2026-10-19. Karar: [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) Accepted. İlk aşama yerel ve yalnız SporManage HTTPS demo ortamında hazırdır; Coolify 6b1e1c2 dağıtımı, migration ve runtime/API kontrolleri başarılı. Gerçek iPhone teslimi henüz doğrulanmadı. Otomatik aidat kuralları ve scheduler etkin değildir. [DEPLOYMENT](DEPLOYMENT.md).
+Last updated: 2026-10-19. Karar: [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) Accepted. İlk aşama yerel ve yalnız SporManage HTTPS demo ortamında hazırdır. Güncel 5e1fd7c dağıtımı, migration ve runtime/API kontrolleri başarılı. 2026-10-19 gerçek iPhone testi: Apple HTTP201/ACCEPTED; kullanıcı bildirimin geldiğini ve dokununca Volkan Acar alıcı ekranının açıldığını doğruladı. Otomatik aidat kuralları ve scheduler etkin değildir. [DEPLOYMENT](DEPLOYMENT.md).
 
 ## Ekranlar ve kişiler
 
@@ -18,7 +18,7 @@ Runtime değişkenleri: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`
 
 Migration `20261019120000_add_manual_web_push` yerel ve kullanıcı onaylı SporManage demo DB'sine uygulandı. Beş yeni tablo (notification_recipients, push_invites, recipient_sessions, push_devices, push_deliveries), yeni enum değerleri ve Notification alıcı/cihaz ilişkileri ekler. Eski kayıtları silmez/dönüştürmez. Demo dağıtım öncesi yedeği ve sonrasında 60 sporcu/300 ödeme koruması doğrulandı. Migration üretiminde fark edilen SystemSetting.updatedAt default farkı bu migration'a alınmadı. Genel seed/reset çalıştırılmaz.
 
-## iPhone test adımları — dağıtım hazır, cihaz izni bekliyor
+## iPhone test adımları — ilk gerçek test kabul edildi
 
 1. Onaylı HTTPS test ortamında bu kaynak, migration ve o ortama özel VAPID runtime değerleri hazırlanır. Yerel loopback adresine iPhone'dan bağlanılamaz. Yerel anahtarlar veya abonelikler production ile paylaşılmaz.
 2. Yönetici `Alıcılar ve Cihazlar` bölümünde test alıcısını doğrulayıp kişisel davet oluşturur. Gerçek kişinin yerine sentetik test alıcısı seçilecekse bağlantıyı sadece test cihazını kullanan kişi alır.
@@ -30,6 +30,8 @@ Migration `20261019120000_add_manual_web_push` yerel ve kullanıcı onaylı Spor
 7. `Bildirimleri kapat`, alıcı oturumu çıkışı ve yönetici erişim iptali denenir. Eski cihaza yeni gönderim yapılmaması doğrulanır. Ekran/cihaz gözlemleri tarihli handoff'a işlenir.
 
 Kilit ekranına kişi, tutar veya borç ayrıntısı gönderilmez; genel mesaj taşınır. Alıcı ekranı yalnız kendi recipientId'sine gönderilen mesajları ve güncel ilişkisi bulunan aktif sporcunun yayınlanmış uygulama içi mesajlarını gösterir.
+
+İlk test geçmişi: 25 karakter ham CUID Topic Apple tarafından BadWebPushTopic/400 ile reddedildi. Topic 32 karakter hash biçimine düzeltildikten sonra aynı cihaz/anahtarlarla HTTP201 ve kullanıcı ekran kabulü alındı. İki başarısız kayıt korunur. İzin kapatma/logout/yönetici iptali yerel entegrasyonda sınandı; gerçek iPhone üzerindeki bu üç iptal senaryosu ayrıca denenmedi.
 
 ## Gönderim sözleşmesi ve işletim sınırları
 

@@ -12,7 +12,7 @@ Kullanıcının ilk hedefi sporcu ve aidat takibi. CDSK bağlamı belgelenmiş, 
 | Repository’den bağlam doldurma | Belgelendi | 2026-09-14; uygulama kabulü değildir |
 | Rapor dışa aktarımı ve demo dağıtımı | Tamamlandı; ADR-0003/0005 Accepted, ADR-0004 Superseded | 2026-09-15 tarihli [DEPLOYMENT](../40-operations/DEPLOYMENT.md) ve [DEMO_VALIDATION](../30-quality/DEMO_VALIDATION.md); genel MVP kabulü değildir |
 | Windows yerel demo ve CDSK belge eşlemesi | Yerel kurulum doğrulandı; CR-019 belge kapsamı kapalı | 2026-10-19; [RUNBOOK](../40-operations/RUNBOOK.md), [CHANGE_REQUESTS](../20-execution/CHANGE_REQUESTS.md) |
-| Manuel push ve ayrı alıcı kaydı | ADR-0006 Accepted; yerel ilk aşama/test ve onaylı ayrı HTTPS demo dağıtımı tamamlandı; iPhone gerçek testi bekliyor | 2026-10-19; [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md). Otomatik kurallar sonraki aşama |
+| Manuel push ve ayrı alıcı kaydı | ADR-0006 Accepted; yerel ilk aşama/test ve onaylı ayrı HTTPS demo dağıtımı tamamlandı; ilk gerçek iPhone servis/görünüm/tıklama testi başarılı | 2026-10-19; [PUSH_GUIDE](../40-operations/PUSH_GUIDE.md). Otomatik kurallar sonraki aşama |
 | MVP ayrıntıları ve kritik kararların netleşmesi | Önerilen sonraki adım | TBD; kullanıcı kararları gerekli |
 | Sporcu/aidat ürün kabul senaryoları | Demo/test/smoke kanıtı var; kesin iş kuralı ve kapsamlı kabul açık | TBD; [TEST_STRATEGY](../30-quality/TEST_STRATEGY.md) |
 | Kalan düzeltmeler ve sonraki yayın hazırlığı | Öneri; mevcut dağıtımın yapılmadığı anlamına gelmez | TBD; açık bulgu ve onaylara bağlı |

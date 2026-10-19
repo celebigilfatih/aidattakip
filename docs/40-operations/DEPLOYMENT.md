@@ -1,5 +1,17 @@
 # Deployment
 
+## 2026-10-19 — Güncel demo sürümü ve iPhone kabulü başarılı
+
+Yalnız SporManage demo `5e1fd7c5164f58043537c56e1f70a6d5dea47c08` dağıtıldı: Coolify `jvjrrs7wqdpzdiai7nzxywje` Success/Finished, 2m44s; rolling update 10:34:53 UTC. Container `7605b37de3a9`, image aynı commit etiketi. Runtime UID1001, VAPID fingerprint/format, migration applied ve image ortam/dump dışlaması doğrulandı. 10 kullanıcı/60 sporcu/60 veli/300 ödeme korundu; iki başarısız testten sonra bildirim sayısı 14, başarılı testle 15 oldu. Özlüce container ID/image/StartedAt değişmedi; main değişmedi, demo auto deploy manuel ve kaynak sabit kaldı.
+
+Yeni normal API testi `cmvf4c11n0001o401vul843he`, tek PARENT Volkan Acar ve kayıtlı tek iPhone cihazını hedefledi. Gönderim API HTTP200/ACCEPTED; Apple delivery HTTP201, 2026-10-19 10:35:35.410 UTC (13:35 İstanbul). Kullanıcı açıkça “Bildirim geldi, dokununca Volkan Acar ekranı açıldı” yanıtıyla fiziksel bildirim görünümünü ve doğru alıcı ekranı açılışını doğruladı. Bu bir kullanıcı gözlemidir; otomatik read receipt veya diğer cihazların kabulü değildir. İki eski FAILED kayıt korunur, otomatik tekrar yok. Telefon cihaz izni korunur; otomatik aidat kuralları/scheduler/e-posta/SMS kurulmadı.
+
+[Doğrulama ve kalan sınırlar](../60-ai/SESSION_HANDOFF.md). Aşağıdaki sürümler tarihsel dağıtım kayıtlarıdır; güncel pin 5e1fd7c, otomatik dağıtım manuel kalır.
+
+## 2026-10-19 — Davet ekranı güncellemesi ve iPhone testi
+
+Yalnız demo `86105c39e0dedece2e4adfcc867142245f0b7964`, Coolify `urf7fi3z4gfwjq8lcug5s5ih` Success/2m52s; 10:19:55 UTC rolling update tamamlandı. Container `87948fff7aab`. Runtime, migration, 60 sporcu/300 ödeme ve Özlüce koruması yeniden doğrulandı. Kullanıcının iPhone veli kaydı etkinleşti. İlk normal ve ayrı kontrollü tanılama gönderimleri HTTP 400/FAILED; Apple nedeni `BadWebPushTopic`. Topic düzeltmesi 5e1fd7c aynı demo dalından dağıtılıyor; gerçek teslim henüz başarılı değildir. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+
 ## 2026-10-19 — Manuel push yalnız demo dağıtımı başarılı
 
 | Alan | Doğrulanan sonuç |

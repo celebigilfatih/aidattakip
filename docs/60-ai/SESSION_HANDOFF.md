@@ -1,5 +1,26 @@
 # AI Session Handoff
 
+## Güncel kapanış — 2026-10-19 — iPhone gerçek push kabulü tamamlandı
+
+Yalnız SporManage demo `5e1fd7c5164f58043537c56e1f70a6d5dea47c08` dağıtıldı: Coolify `jvjrrs7wqdpzdiai7nzxywje` Success/Finished, 2m44s; rolling update 10:34:53 UTC. Container `7605b37de3a9`, image aynı commit etiketi. Runtime UID1001, VAPID fingerprint/format, migration applied ve image ortam/dump dışlaması doğrulandı. 10 kullanıcı/60 sporcu/60 veli/300 ödeme korundu; iki başarısız testten sonra bildirim sayısı 14, başarılı testle 15 oldu. Özlüce container ID/image/StartedAt değişmedi; main değişmedi, demo auto deploy manuel ve kaynak sabit kaldı.
+
+Yeni normal API testi `cmvf4c11n0001o401vul843he`, tek PARENT Volkan Acar ve kayıtlı tek iPhone cihazını hedefledi. Gönderim API HTTP200/ACCEPTED; Apple delivery HTTP201, 2026-10-19 10:35:35.410 UTC (13:35 İstanbul). Kullanıcı açıkça “Bildirim geldi, dokununca Volkan Acar ekranı açıldı” yanıtıyla fiziksel bildirim görünümünü ve doğru alıcı ekranı açılışını doğruladı. Bu bir kullanıcı gözlemidir; otomatik read receipt veya diğer cihazların kabulü değildir. İki eski FAILED kayıt korunur, otomatik tekrar yok. Telefon cihaz izni korunur; otomatik aidat kuralları/scheduler/e-posta/SMS kurulmadı.
+
+Değişen kod: notification-dispatch.ts Topic hash biçimi; notification.integration.test.ts 32 karakter/Base64url regresyonu. Yeni şema, migration, servis veya ADR kararı yok; Accepted ADR-0006 yetkisi kullanıldı. Typecheck ve dört politika/yerel DB entegrasyon testi geçti; gerçek Coolify Docker production build/typecheck başarılı. Tam 15 test önceki uygulama paketinde geçmişti, bu dar düzeltmede yalnız dört ilgili test tekrarlandı. Genel lint CR-011 nedeniyle, rollback/restore ve diğer cihaz testleri bu kapsamda çalıştırılmadı. Apple resmi hata sözleşmesi ile gerçek BadWebPushTopic nedeni karşılaştırıldı; biçim düzeltmesinden sonra aynı cihaz/key ile HTTP201 alındı. Panel kanıtı output/demo-iphone-push-accepted.png (Git dışında).
+
+Son kapanış doğrulaması: 47 kök/docs Markdown dosyasında 555 yerel bağlantı; tek eksik eski README/LICENSE (CR-012), yeni kırık hedef yok. Metadata JSON geçerli; 18 korunan ortam/AGENTS/Constitution/paket/eski migration dosyası başlangıç hash'leriyle aynı. Takipli dosyalarda gerçek demo private VAPID veya davet token literal'i yok. API toplam 15 bildirim doğruladı. Geçici CLI yönetici test oturumu normal logout HTTP200 ile kapatıldı ve repository dışındaki geçici cookie dosyası kaldırıldı; iPhone veli kaydı/izni ve demo runtime anahtarları korunur. Uzak main b024011 değişmedi.
+
+Sonraki adım: ADR-0006 otomasyon aşaması için kesin takvim, vade/sessiz saatler, personel özeti ve işletim tercihlerini netleştirmek; manuel test başarısı otomasyonun tamamlandığı anlamına gelmez. Önceki kayıtlar tarihçedir.
+
+## Session — 2026-10-19 — Gerçek iPhone kaydı ve Apple Topic hatası
+
+Veli davet ekranı düzeltmesi `86105c39e0dedece2e4adfcc867142245f0b7964`, yalnız demo Coolify `urf7fi3z4gfwjq8lcug5s5ih` ile Success/2m52s; rolling update 10:19:55 UTC. Container `87948fff7aab`, runtime/migration kontrolleri geçti, 10 kullanıcı/60 sporcu/60 veli/300 ödeme korundu. Özlüce container/image/StartedAt değişmedi.
+
+Kullanıcı doğrudan davette Volkan Acar gördüğünü, ardından Ana Ekran uygulamasında cihaz kaydedildiğini bildirdi. ADMIN API aynı PARENT alıcısında tek etkin iPhone cihazını doğruladı. İlk normal API gönderimi `cmvf43kcu0005r501hb6nito3`, 10:29 UTC: HTTP 502; delivery HTTP 400/FAILED, sentAt null. Gerçek teslim iddia edilmedi. Ayrı bilinçli tanılama kaydı `cmvf4592r0009r501u59b9477` normal ADMIN oluşturma API ile açıldı; yalnız bu kayıt için demo/kimlik/cihaz/izin/süre kontrolü, atomik claim ve delivery kaydıyla container içinde tek gönderim yapıldı. Aynı adaptör ayarlarıyla HTTP 400 ve izin listeli `BadWebPushTopic` alındı; ham provider body, endpoint veya anahtar loglanmadı. İki FAILED kayıt korunur; otomatik retry yapılmadı.
+
+Gönderimsiz runtime incelemesi VAPID çiftinin kriptografik eşleşmesini, doğru audience/subject, 12 saat JWT ömrü, TTL60, normal urgency ve aes128gcm doğruladı. Sorun 25 karakterlik ham CUID Topic biçimi; Topic 32 karakter SHA-256 özetine çevrildi. Şema/API/yetki veya key değişikliği yok. Typecheck ve dört politika/yerel DB entegrasyon testi geçti; yeni regresyon Topic uzunluğunu ve Base64url çözümünü denetler. Kaynak `5e1fd7c5164f58043537c56e1f70a6d5dea47c08` yalnız demo dalına gönderildi; yeniden gerçek test ve fiziksel görünüm henüz bekler. Apple resmi kaynağı: https://developer.apple.com/documentation/usernotifications/sending-web-push-notifications-in-web-apps-and-browsers
+
+
 ## Session — 2026-10-19 — Demo push dağıtım onayı ve hazırlığı
 
 ### Güncel sonuç — dağıtım başarılı, iPhone adımı bekleniyor

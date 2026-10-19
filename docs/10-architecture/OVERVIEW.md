@@ -20,7 +20,7 @@ Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL
 
 ## Dağıtım topolojisi
 
-2026-10-19 manuel push güncellemesi: Demo ayrı `codex/manual-push-demo-20261019` dalı ve sabit 6b1e1c2 ile dağıtıldı; auto deploy manuel, yeni migration yalnız demo DB'sinde applied. Özlüce aynı container/image ile çalışmayı sürdürür. ADR-0005'in demo main kaydı için tarihli istisna ADR-0006 onayındadır; otomatik aidat kuralları kurulmadı.
+2026-10-19 manuel push güncellemesi: Demo ayrı `codex/manual-push-demo-20261019` dalı ve sabit 5e1fd7c ile dağıtıldı; auto deploy manuel, yeni migration yalnız demo DB'sinde applied. Özlüce aynı container/image ile çalışmayı sürdürür. ADR-0005'in demo main kaydı için tarihli istisna ADR-0006 onayındadır; otomatik aidat kuralları kurulmadı.
 
 2026-09-15 tarihli son dağıtım kaydına göre Özlüce production ve SporManage demo iki ayrı Coolify uygulamasıdır. Aynı fiziksel PostgreSQL kaynağını paylaşırlar; `ozlucepay` ile `spormanage_aidat_demo` ayrı mantıksal veritabanları ve ayrı uygulama rolleri kullanır. Demo lisans tablosu kullanıcı kararıyla demo DB içinde tutulur. Alan adı ve veri izolasyonu [ADR-0005](../50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md), işletim ayrıntısı [DEPLOYMENT](../40-operations/DEPLOYMENT.md) içindedir.
 

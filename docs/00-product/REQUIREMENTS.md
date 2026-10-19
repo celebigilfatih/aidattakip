@@ -22,6 +22,6 @@ REQ-001 için kaydın ilişkileriyle saklanıp filtrelenebilmesi; REQ-002 için 
 
 ## Fonksiyonel olmayan gereksinimler
 
-REQ-004 (2026-10-19, kullanıcı onayı): Hem veli/sporcu hem kulüp personeli için bildirim hedefi; ilk adım doğrulanmış ayrı alıcı kaydı ve tek cihazda manuel Web Push. Kaynak [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md). Yerel API/cihaz sahipliği/davet/gönderim testleri tamamlandı; iPhone üzerinde gerçek teslim kabulü açık. Otomatik borç/takvim kuralları ilk adımda etkin değildir.
+REQ-004 (2026-10-19, kullanıcı onayı): Hem veli/sporcu hem kulüp personeli için bildirim hedefi; ilk adım doğrulanmış ayrı alıcı kaydı ve tek cihazda manuel Web Push. Kaynak [ADR-0006](../50-decisions/ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md). Yerel API/cihaz sahipliği/davet/gönderim testleri tamamlandı; iPhone üzerinde ilk gerçek teslim, Apple HTTP201 ve kullanıcının bildirim/tıklama onayıyla demo ortamında kabul edildi. Otomatik borç/takvim kuralları ilk adımda etkin değildir.
 
 Performans hedefi, kullanıcı/veri hacmi, erişilebilirlik seviyesi, uptime, RPO/RTO, veri saklama ve gizlilik gereksinimleri: TBD. CDSK kalite/onay kuralları bağlayıcıdır; yeni sayısal ürün hedefi tanımlanmadı.
