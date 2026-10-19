@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Personel ekranından yeni aidat özeti kuralı (CR-028)
+
+Kullanıcı gün/saat/alıcıları tek formda seçerek ilk kuralı da Personel ve Cihazlar ekranından oluşturmayı istedi. Yeni StaffSummaryCreateDialog ve PushPanel bağlantısı; varsayılan Pazartesi09:00/boş alıcı, kural adı, çoklu gün, tek saat, güncel alıcıları her açılışta okuma, mali rol/aktif/seçili filtresi, arama/sayım/ana cihaz bilgisi, kapalı oluştur/iptal/yükleme/hata ve başarılı kayıt sonrası kart/üyelik yenileme. Mevcut GET recipients/POST summary-rules aynen kullanılır; backend/metot/model/migration/paket/anahtar/yetki/retention değişmedi. ADR-0007 korunur, yeni ADR gerekmedi. Önceki ilk kayıt için ayrı sekme yönlendirmesi bu kullanıcı talebiyle kaldırıldı.
+
+Typecheck/mevcut51 test başarılı. Yerel gerçek UI1280px/576px dialog: alıcı yok, seçili Sekreter dışarıda/Muhasebe aday, zorunlu gün ve alıcı, arama/sonuç yok seçimi koruma; Salı/Cuma10:30/tek Muhasebe ile UI oluştur/yenile ve aynı personel kartında üyelik; form tekrar varsayılanları sıfırlar, Vazgeç ek kayıt yapmaz. Native saat fill sonrasında klavye Tab/ArrowUp ile tamamlandı, form özeti ve DB10:30 aynı. Tek kapalı kural/tek üye/0 run/push doğrulandı; kendi iki kullanıcı/alıcı/kural fixture'ı loopback5477 ve prefix/ID/name guard ile temizlendi. Kanıt output/staff-rule-create, Git dışında. Yeni aynalama testi yazılmadı; mevcut API regresyonları ve gerçek akış yeterli. Yeni gerçek iPhone, genel lint CR-011, restore/rollback/tam erişilebilirlik çalıştırılmadı.
+
+Yerel Docker exit0/config2f9c97d0fea3e0eae409803e38924005f0788f7795cf60ab3f7f3ed895342414 (son arama Enter koruması öncesi); yeni demo yayını henüz yok. Mevcut runtime6c4ee5b/etkin Pazartesi09:00 tek Demo Kullanıcı kuralı,10 personel/17 bildirim/ana iPhone guard alındı. Yalnız demo dağıtılacak; main b024011/Özlüce'ye işlem yok, canlı yeni kural/hesap/push oluşturulmayacak. Dosyalar: StaffSummaryCreateDialog, PushPanel ve ürün/API/CR/kalite/operasyon/CHANGELOG/boot/handoff.
+
 ## 2026-10-19 — Personel ekranından etkinleştirme/durdurma (CR-027)
 
 Kapanış: Yalnız demo6c4ee5bc4ac61ef1bf2e512a3d4ba4a840fc639f, Coolify cgkadbvpctgupn7m0gjghe52 Success/02m55s; başlangıç13:32:12 UTC. Yerel Docker exit0/config274ee5d4e76e4c67ee8ca8bca6e4869d51eff94ff4ede4aa779c97ccbd7bcb74, nihai demo Docker başarılı. Runtime pini6c4ee5b/branch codex/staff-summary-20261019/manuel model aynı. Main b024011/Özlüce'ye işlem yapılmadı. ADR-0007 korundu, yeni ADR yok. Aşağıdaki hazırlık satırları tarihçedir.

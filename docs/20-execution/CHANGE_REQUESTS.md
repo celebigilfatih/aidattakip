@@ -1,5 +1,13 @@
 # Change Requests
 
+## CR-028 — Personel ekranından yeni aidat özeti kuralı oluşturma
+
+- Kullanıcı talebi (2026-10-19): Yeni kuralın gün/saat/alıcıları aynı personel formundan seçilsin; ayrı sekmeye gidilmesin.
+- Status: Implemented — typecheck/51 test ve yerel gerçek UI başarılı; Docker/demo doğrulaması sürüyor.
+- Önceki CR-026/027 akışındaki ilk kayıt için ayrı sekme yönlendirmesi değişir. StaffSummaryCreateDialog kural adı, varsayılan Pazartesi09:00, çoklu gün ve güncel seçili mali alıcılar; arama/boş sonuç, ana cihaz bilgisi, zorunlu gün/alıcı, kapalı kayıt ve iptal içerir. Yeni kart/üyelikler aynı ekran içinde yenilenir.
+- Mevcut GET recipients/POST summary-rules kullanılır; backend/yetki/model/migration/paket/anahtar/retention/dağıtım politikası değişmez. ADR-0007 korunur, yeni ADR gerekmedi. Yeni kural daima kapalıdır; bilinçli etkinleştirme mevcut karttadır.
+- Yerel kanıt: Typecheck ve mevcut51 test geçti.1280px/576px dialogda alıcı yok, boş gün, mali rol filtresi (seçili Sekreter dışarıda), arama/sonuç yok ve seçim sayısı; Salı/Cuma10:30/tek Muhasebe ile UI oluştur/yenile ve aynı personel kartında seçili üyelik. Yeni form tekrar Pazartesi09:00/boş alıcı, Vazgeç0 ek kayıt. DB tek kapalı kural/tek üye/0 run/push; kendi fixture'ları temizlendi. Yeni UI testi yazılmadı; mevcut API regresyonu ve gerçek form akışı doğrulandı. Yalnız demo yayımlanacak, mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi korunacak.
+
 ## CR-027 — Personel ekranından kuralı etkinleştirme/durdurma
 
 - Kullanıcı talebi (2026-10-19): Etkinleştirme ve durdurma da Personel ve Cihazlar ekranından yapılsın.

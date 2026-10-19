@@ -1,5 +1,9 @@
 # Aidat Takip — Product Specification
 
+## Personel ekranından yeni aidat özeti kuralı — 2026-10-19
+
+Personel ve Cihazlar → Aidat özeti takvimi → **Yeni aidat özeti kuralı**; kural adı, hafta günleri, Türkiye saati ve alıcılar tek formda seçilir. Varsayılan Pazartesi09:00 ve alıcı seçimi boştur. En az bir gün/alıcı gerekir. Yalnız kapsam içindeki seçili/aktif yönetici ve muhasebe listelenir; adla arama ve ana cihaz hazır/kurulum gerekli bilgisi vardır. Yeni kural kapalı oluşturulur, push göndermez ve aynı ekrandaki kartta görünür; açmak için mevcut Etkinleştir kullanılır. Alıcı bulunmazsa açıklama gösterilir, kayıt açılamaz. Vazgeç kayıt yapmaz. Mevcut POST summary-rules ve ADR-0007 yetki/kapsam/kapalı varsayılanı aynıdır; ilk kayıt için ayrı sekmeye gitme sınırı kullanıcı talebiyle kaldırılmıştır. [CR-028](../20-execution/CHANGE_REQUESTS.md).
+
 ## Personel ekranından kuralı etkinleştirme ve durdurma — 2026-10-19
 
 Personel ve Cihazlar → Aidat özeti takvimi kartında **Etkinleştir / Durdur** bulunur. ADMIN/ACCOUNTING mevcut şube kapsamında kuralın ortak durumunu değiştirir; gün/saat, sahip, şube, alıcılar, cihazlar ve geçmiş korunur. Etkinleştirme en az bir seçili/aktif mali personel ve geçerli kural sahibi ister; cihaz izni gönderim anında ayrıca kontrol edilir. Boş alıcılı kuralda etkinleştirme açıklamayla kapalıdır. Geçersizleşmiş alıcı/sahip kuralın durdurulmasını engellemez. Etkinleşme yalnız gelecek slotlara uygulanır, tekrar aynı durumu kaydetmek cursor'ı değiştirmez. Bu, önceki kısa akışın etkinlik işlemi için ayrı sekmeye gitme sınırını kullanıcı talebiyle kaldırır. ADR-0007 politikası değişmez. [CR-027](../20-execution/CHANGE_REQUESTS.md).

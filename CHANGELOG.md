@@ -4,6 +4,11 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Added — 2026-10-19 — Personel ekranında yeni aidat özeti kuralı
+
+- Yeni kural dialogunda gün, saat ve uygun personel alıcıları; arama, cihaz bilgisi, kapalı kayıt, zorunlu seçimler ve iptal. Oluşan kart/üyelikler aynı ekranda yenilenir; ilk kayıt için ayrı sekme gerekmez.
+- Mevcut API/ADR-0007 ve kapalı varsayılan kullanılır; backend/model/migration/paket/anahtar değişmedi. Typecheck/51 test, yerel gerçek UI oluştur/yenile/iptal ve0 push doğrulandı; CR-028, Docker/demo doğrulaması sürüyor.
+
 ### Added — 2026-10-19 — Personel ekranında özet kuralının etkinliği
 
 - Aidat takvimi kartından Etkinleştir/Durdur; ortak etki, boş alıcı ve sonuç/hata açıklamaları. Seçimler ve takvim korunur, ayrı sekme gerekmez.
