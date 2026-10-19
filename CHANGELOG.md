@@ -9,7 +9,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 - ADR-0007 kullanıcı plan uygulama onayıyla Accepted. Yalnız yönetici seçili personel push; mali özet mevcut mali rol/şube sınırında, diğer personel genel duyuru. Veli daveti/aboneliği/gönderimi sunucuda kapalı; geçmiş korunur.
 - 30 günlük cihaz kaydı, sessiz yenileme ve ana cihaz; çıkış/iptal sonrası sessiz yeniden açmayı engelleme. Üç bölüm ve güncel gecikmiş borç listesi, güvenli tıklama/giriş dönüşü.
 - Haftalık gün/saat, kapalı varsayılan; İstanbul vade günü sonrası aktif/pasif açık borç hesabı; 1 saat telafi, MISSED/çalışma geçmişi ve tekil gönderim. Container içi TSX işleyicisi; yeni paket/servis yok.
-- Additive yerel migration, typecheck ve 27 test başarılı; Docker/demo/personel iPhone/takvim doğrulaması sürüyor.
+- Additive yerel migration, typecheck ve 30 test başarılı; Docker/demo/personel iPhone/takvim doğrulaması sürüyor.
 
 ### Verified — 2026-10-19 — Demo iPhone gerçek push testi tamamlandı
 
