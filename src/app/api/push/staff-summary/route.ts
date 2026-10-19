@@ -70,21 +70,35 @@ export async function PATCH(request: NextRequest) {
 }
 
 const scheduleSchema = summaryRuleSchema.pick({ weekdays: true, time: true }).extend({ ruleId: z.string().min(1).max(100) }).strict()
+const ruleFields = summaryRuleSchema.omit({ enabled: true })
+const editSchema = ruleFields.extend({ ruleId: z.string().min(1).max(100), expected: ruleFields.extend({ recipientIds: z.array(z.string().min(1).max(100)).max(500) }).strict() }).strict()
 
 export async function PUT(request: NextRequest) {
   try {
     requireSameOrigin(request)
     const manager = await requireManager(request)
-    const input = scheduleSchema.parse(await request.json())
+    const input = z.union([scheduleSchema, editSchema]).parse(await request.json())
     const rule = await prisma.$transaction(async tx => {
-      // Membership edits and worker evaluation use the same lock. Update only the schedule.
+      // Membership edits and worker evaluation use the same lock; preserve dispatch state.
       await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.ruleId} FOR UPDATE`
-      const current = await tx.staffSummaryRule.findFirst({ where: { id: input.ruleId, ...summaryRuleScope(manager) } })
+      const current = await tx.staffSummaryRule.findFirst({ where: { id: input.ruleId, ...summaryRuleScope(manager) }, include: { recipients: { select: { recipientId: true } }, createdBy: { select: { isActive: true, role: true, branchId: true } } } })
       if (!current) throw new NotificationError(409, 'Aidat özeti kuralı artık kullanılamıyor. Listeyi yenileyin.')
       const changed = current.time !== input.time || JSON.stringify(current.weekdays) !== JSON.stringify(input.weekdays)
+      if ('recipientIds' in input) {
+        const expected = input.expected
+        const ids = (values: string[]) => JSON.stringify([...values].sort())
+        if (current.name !== expected.name || current.time !== expected.time || JSON.stringify(current.weekdays) !== JSON.stringify(expected.weekdays)
+          || ids(current.recipients.map(r => r.recipientId)) !== ids(expected.recipientIds)) throw new NotificationError(409, 'Kural bu form açıkken değişti. Formu kapatıp güncel değerlerle yeniden açın.')
+        const owner = current.createdBy
+        if (!owner.isActive || !financialRole(owner.role) || (owner.branchId && owner.branchId !== current.branchId)) throw new NotificationError(409, 'Kural sahibinin yetkisi değişmiş. Kuralı kontrol edin.')
+        await validateSummaryRecipients(input.recipientIds, current.branchId, tx)
+        await tx.staffSummaryRecipient.deleteMany({ where: { ruleId: current.id, recipientId: { notIn: input.recipientIds } } })
+        const added = input.recipientIds.filter(id => !current.recipients.some(r => r.recipientId === id))
+        if (added.length) await tx.staffSummaryRecipient.createMany({ data: added.map(recipientId => ({ ruleId: current.id, recipientId })) })
+      }
       return tx.staffSummaryRule.update({
         where: { id: current.id },
-        data: changed ? { weekdays: input.weekdays, time: input.time, lastEvaluatedAt: new Date(Date.now() - 1) } : {},
+        data: { ...('name' in input && current.name !== input.name ? { name: input.name } : {}), ...(changed ? { weekdays: input.weekdays, time: input.time, lastEvaluatedAt: new Date(Date.now() - 1) } : {}) },
         select: { id: true, name: true, weekdays: true, time: true, enabled: true },
       })
     })

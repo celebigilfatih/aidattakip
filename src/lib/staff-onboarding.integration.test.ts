@@ -269,6 +269,57 @@ test('notification staff onboarding uses existing staff roles and atomic recipie
       assert.equal(await prisma.staffSummaryRun.count({ where: { ruleId: otherDay.id } }), 0)
       assert.equal(await prisma.notification.count({ where: { summaryRun: { ruleId: otherDay.id } } }), 0)
     })
+    const snapshot = async (id = rule.id) => {
+      const current = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id }, include: { recipients: true } })
+      return { name: current.name, weekdays: current.weekdays, time: current.time, recipientIds: current.recipients.map(r => r.recipientId) }
+    }
+    await t.test('combined rule edit enforces financial authority, origin and branch', async () => {
+      const expected = await snapshot(), input = { ruleId: rule.id, ...expected, expected }
+      assert.equal((await changeSchedule(request('PUT', undefined, input))).status, 401)
+      assert.equal((await schedule(input, secretary.id)).status, 403)
+      assert.equal((await schedule(input, inactive.id)).status, 401)
+      assert.equal((await schedule(input, admin.id, 'https://other.invalid')).status, 403)
+      assert.equal((await schedule({ ...input, ruleId: foreignRule.id })).status, 409)
+    })
+    await t.test('combined edit saves name, days, clock and recipients atomically while preserving active state, owner and history', async () => {
+      assert.equal((await setEnabled(rule.id, true)).status, 200)
+      const before = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id }, include: { runs: true } })
+      const expected = await snapshot()
+      const input = { ruleId: rule.id, name: prefix + '-edited', weekdays: [5, 2, 2], time: '10:30', recipientIds: [seedRecipient.id], expected }
+      assert.equal((await schedule(input)).status, 200)
+      const after = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id }, include: { recipients: true, runs: true } })
+      assert.equal(after.name, input.name); assert.deepEqual(after.weekdays, [2, 5]); assert.equal(after.time, '10:30')
+      assert.deepEqual(after.recipients.map(r => r.recipientId), [seedRecipient.id]); assert.equal(after.enabled, true)
+      assert.equal(after.createdById, before.createdById); assert.equal(after.branchId, before.branchId); assert.deepEqual(after.runs, before.runs)
+      assert(after.lastEvaluatedAt >= before.lastEvaluatedAt)
+      const current = await snapshot()
+      assert.equal((await schedule({ ruleId: rule.id, ...current, expected: current })).status, 200)
+      const repeated = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id }, include: { recipients: true } })
+      assert.equal(repeated.lastEvaluatedAt.getTime(), after.lastEvaluatedAt.getTime()); assert.deepEqual(repeated.recipients, after.recipients)
+    })
+    await t.test('invalid combined payloads and ineligible recipients roll back all fields', async () => {
+      const expected = await snapshot(), input = { ruleId: rule.id, ...expected, name: prefix + '-invalid-edit', expected }
+      const foreignRecipient = await prisma.notificationRecipient.create({ data: { userId: globalAdmin.id, kind: 'STAFF', staffPushEnabled: true } })
+      const invalidStaff = await prisma.notificationRecipient.findUniqueOrThrow({ where: { userId: secretary.id } })
+      for (const patch of [{ name: '' }, { weekdays: [] }, { time: '25:00' }, { recipientIds: [] }, { recipientIds: [foreignRecipient.id] }, { recipientIds: [invalidStaff.id] }, { enabled: false }]) assert.equal((await schedule({ ...input, ...patch })).status, 400)
+      await prisma.user.update({ where: { id: accountant.id }, data: { isActive: false } })
+      assert.equal((await schedule(input, admin.id)).status, 400)
+      await prisma.user.update({ where: { id: accountant.id }, data: { isActive: true } })
+      assert.deepEqual(await snapshot(), expected)
+    })
+    await t.test('stale or parallel form saves return conflict; concurrent stop is preserved and name edits keep cursor', async () => {
+      const expected = await snapshot()
+      const results = await Promise.all([0, 1].map(i => schedule({ ruleId: rule.id, ...expected, name: prefix + '-parallel-' + i, expected })))
+      assert.deepEqual(results.map(r => r.status).sort(), [200, 409])
+      const fresh = await snapshot()
+      assert.equal((await schedule({ ruleId: rule.id, ...expected, expected })).status, 409)
+      const before = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id } })
+      const saved = await Promise.all([setEnabled(rule.id, false), schedule({ ruleId: rule.id, ...fresh, name: prefix + '-final', expected: fresh })])
+      assert(saved.every(r => r.status === 200))
+      const final = await prisma.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id }, include: { runs: true } })
+      assert.equal(final.enabled, false); assert.equal(final.name, prefix + '-final'); assert.equal(final.runs.length, 1)
+      assert.equal(final.lastEvaluatedAt.getTime(), before.lastEvaluatedAt.getTime())
+    })
   } finally {
     await prisma.staffSummaryRun.deleteMany({ where: { rule: { createdBy: { email: { startsWith: prefix } } } } })
     await prisma.staffSummaryRule.deleteMany({ where: { createdBy: { email: { startsWith: prefix } } } })

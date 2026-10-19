@@ -1,5 +1,7 @@
 # Scope
 
+2026-10-19 CR-029: Mevcut haftalık kuralın adı/günleri/saati/alıcıları Personel ve Cihazlar ekranındaki ortak yeni/düzenle formundan atomik değiştirilir. Mevcut mali yetki/şube, sahip, etkinlik ve geçmiş korunur; stale form409. Veri modeli/servis/politika değişikliği yok. [PRODUCT_SPEC](PRODUCT_SPEC.md).
+
 2026-10-19 CR-028: Yeni haftalık aidat özeti kuralı gün/saat/alıcılarıyla Personel ve Cihazlar formundan da oluşturulur; kapalı varsayılan, mevcut mali rol/şube ve alıcı seçimi politikası korunur. Yeni API/model/servis yok. [PRODUCT_SPEC](PRODUCT_SPEC.md).
 
 2026-10-19 CR-027: Mevcut aidat özeti kuralının etkinleştirme/durdurması Personel ve Cihazlar kartından da yapılır; aynı mali yetki/şube ve ortak kural/alıcı/cihaz politikası korunur. Yeni sağlayıcı, veri modeli veya tekrar türü yok. [PRODUCT_SPEC](PRODUCT_SPEC.md).

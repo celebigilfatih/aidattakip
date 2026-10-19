@@ -1,5 +1,9 @@
 # Deployment
 
+## 2026-10-19 — Mevcut kuralı personel formundan düzenleme (CR-029)
+
+Yerel typecheck/55 test ve Docker exit0/config832fda71898a5e86605bad0d62df05b82698a435117201487c2fa897bb80acab başarılı. Kaynak codex/staff-summary-20261019; yalnız demo sabit ref yayını hazırlanıyor. Model/migration/paket/anahtar/cron/dağıtım modeli değişmez. Canlı etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone/geçmiş için önce guard alındı; canlı tercihe kayıt yapılmayacak. Main b024011/Özlüce kapsam dışında. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+
 ## 2026-10-19 — Personel ekranında yeni aidat kuralı yalnız demo (CR-028)
 
 Kaynak codex/staff-summary-20261019, sabit3b7ebcceef8ce5a3a3397fa876565f1cf652066f. Yalnız demo Coolify uy5h59frb20iukwqm89ueafv Success/03m12s; başlangıç13:55:50 UTC. Manuel/sabit ref modeli aynı. Typecheck/51 test ve yerel UI oluştur/yenile/iptal/arama Enter başarılı. Yerel Docker adayı exit0/config2f9c97d0fea3e0eae409803e38924005f0788f7795cf60ab3f7f3ed895342414 son Enter korumasından öncedir; nihai kaynak demo Docker derlemesinden geçti. Backend/model/migration/paket/anahtar/cron değişmedi; main b024011/Özlüce'ye işlem yok.

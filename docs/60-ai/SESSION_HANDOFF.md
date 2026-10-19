@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Mevcut aidat kuralını ortak formdan düzenleme (CR-029)
+
+Kullanıcı mevcut kuralın ad/gün/saat/alıcılarını aynı personel formunda istedi. StaffSummaryCreateDialog → StaffSummaryRuleDialog ortak oluştur/düzenle; her açılışta fresh rule/catalog, şubeye uygun seçili mali personel, sessizce silinmeyen geçersiz eski üye, min1gün/alıcı ve hata/iptal. StaffSummarySchedule dar dialog yerine ortak Düzenle; PushPanel yeni ad/takvim/üyelikleri yeniler. Tam PUT expected snapshot ve rule lock ile tüm alanları atomik yazar; owner/branch/latest enabled/history korunur, yalnız değişen gün/saat cursor şimdi-1ms. Stale baseline409; stop/worker değişimi üzerine yazılmaz. Eski dar PUT ve POST/GET/PATCH uyumlu. ADR-0007/model/migration/paket/anahtar/yetki/retention aynı, yeni ADR gerekmedi.
+
+Typecheck/55 test (25+30) başarılı;4 yeni alt test auth/scope/origin/invalid rollback/atomiklik/no-op/history/cursor/parallel200+409/stale409/concurrent stop. Yerel1280px gerçek UI eski değer/uygunsuz üye/disabled save, ad/Salı-Perşembe11:15/yeni Muhasebe kaydet/yenile; enabled true/owner/tek eski SKIPPED run korunur. Açık formda dış ad değişimine409 görüldü. Saat fill native Tab/ArrowUp ile tamamlandı. Yerel Docker exit0/config832fda71898a5e86605bad0d62df05b82698a435117201487c2fa897bb80acab. Genel lint CR-011, yeni gerçek iPhone, restore/rollback/tam erişilebilirlik çalıştırılmadı.
+
+Yalnız demo sabit ref yayını bekliyor; mevcut10 personel/17 bildirim/tek etkin Pazartesi09:00 Demo Kullanıcı/ana iPhone/history salt okunur guard alındı. Main b024011/Özlüce korunacak; yeni canlı kural/personel/push yok. Kanıt output/staff-rule-edit Git dışında. Belgeler/CR-029/boot0.4.18 güncellendi; yayın kapanışında sonuç eklenecek.
+
 ## 2026-10-19 — Personel ekranından yeni aidat özeti kuralı (CR-028)
 
 Kapanış: Yalnız demo3b7ebcceef8ce5a3a3397fa876565f1cf652066f, Coolify uy5h59frb20iukwqm89ueafv Success/03m12s; başlangıç13:55:50 UTC. Nihai demo Docker başarılı. Yerel aday config2f9c97d0fea3e0eae409803e38924005f0788f7795cf60ab3f7f3ed895342414 exit0 son arama Enter korumasından öncedir; koruma sonrası typecheck ve nihai Docker geçti. Runtime pini3b7ebcc/branch codex/staff-summary-20261019/manuel model korunur. Main b024011 ve Özlüce'ye işlem yok. ADR-0007 değişmedi, yeni ADR gerekmedi. Aşağıdaki hazırlık satırları tarihçedir.

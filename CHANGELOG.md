@@ -4,6 +4,11 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Changed — 2026-10-19 — Mevcut aidat kuralını tek formdan düzenleme
+
+- Personel ve Cihazlar kartında Düzenle; yeni kayıtla ortak formda mevcut ad/gün/saat/alıcılar, açık geçersiz alıcı kaldırma ve kayıt sonrası kart/üyelik yenileme.
+- Additive tam PUT/expected baseline atomik kaydı ve409 koruması; mevcut mali rol/şube, sahip/etkinlik/geçmiş ve eski API biçimleri korunur. ADR-0007 geçerli, model/paket/anahtar değişmedi. Typecheck/55 test, yerel UI ve Docker geçti; yalnız demo yayını bekliyor (CR-029).
+
 ### Added — 2026-10-19 — Personel ekranında yeni aidat özeti kuralı
 
 - Yeni kural dialogunda gün, saat ve uygun personel alıcıları; arama, cihaz bilgisi, kapalı kayıt, zorunlu seçimler ve iptal. Oluşan kart/üyelikler aynı ekranda yenilenir; ilk kayıt için ayrı sekme gerekmez.

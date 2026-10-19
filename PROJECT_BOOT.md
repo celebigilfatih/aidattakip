@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.17
+- Document version: 0.4.18
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -24,6 +24,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Explicit non-goals: TBD — kullanıcı tarafından belirlenmedi.
 
 ## 2. Current Status
+
+- Güncel iş (CR-029): Mevcut haftalık kural ad/gün/saat/alıcıları Personel ve Cihazlar ekranında ortak formdan düzenlenir. Güncel değer/uygunsuz eski üye/atomik kayıt/stale409; etkinlik/sahip/şube/geçmiş korunur. Typecheck/55 test, yerel UI ve Docker başarılı; yalnız demo yayını bekliyor. ADR-0007 geçerli, model/migration/paket/anahtar/yetki kararı değişmedi. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
 
 - Güncel yayın (CR-028 kapalı): Personel ve Cihazlar bölümünden yeni haftalık kural; gün/saat/alıcılar tek formda, varsayılan Pazartesi09:00/boş alıcı ve daima kapalı kayıt. Mevcut mali rol/şube/API ve ADR-0007 korunur; backend/model/paket/anahtar değişmedi. Typecheck/51 test, yerel UI oluştur/yenile/iptal/arama Enter ve0 push başarılı; yerel Docker adayı/nihai demo Docker geçti. Yalnız demo3b7ebcc Success/3m12s; canlı559px form, mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi,10 personel/17 bildirim/ana iPhone/geçmiş korundu ve worker yayın sonrası ilerledi. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
 

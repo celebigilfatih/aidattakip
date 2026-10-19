@@ -1,5 +1,12 @@
 # Change Requests
 
+## CR-029 — Personel ekranında mevcut kuralı ortak formdan düzenleme
+
+- Kullanıcı talebi (2026-10-19): Mevcut kural adı, gün, saat ve alıcılar Personel ve Cihazlar ekranından birlikte değişsin. CR-026 dar takvim UI sınırı bu taleple genişler; CR-028 yeni formu ortak kullanılır.
+- Status: Implemented — typecheck/55 test, yerel Docker ve UI geçti; yalnız demo yayını bekliyor.
+- Her açılışta güncel değerler; mali rol/şube filtresi, geçersiz eski üyeyi açıkça kaldırma, tek atomik kayıt, expected baseline409, etkinlik/sahip/şube/geçmiş/cihaz koruması. Ad/üye/no-op cursor korur; değişen takvim yalnız geleceğe uygulanır. Eski dar PUT ve GET/PATCH/POST uyumlu. ADR-0007/model/migration/paket/anahtar/yetki/retention aynı, yeni ADR gerekmedi.
+- Kanıt:55 test (onboarding25+diğer30), typecheck; tam PUT yetki/alan/rol/şube/atomiklik/no-op/tarihçe ve paralel200+409/concurrent stop koruması. Yerel UI eski ad/Pazartesi09:00 ve uygunsuz üye, kayıt engeli; ad/Salı-Perşembe11:15/yeni Muhasebe kaydet ve yeniden aç; enabled true/sahip/tek eski run korunur. Dış düzenlemede UI409. Canlı tercih değiştirilmeyecek; main/Özlüce kapsam dışında.
+
 ## CR-028 — Personel ekranından yeni aidat özeti kuralı oluşturma
 
 - Kullanıcı talebi (2026-10-19): Yeni kuralın gün/saat/alıcıları aynı personel formundan seçilsin; ayrı sekmeye gidilmesin.

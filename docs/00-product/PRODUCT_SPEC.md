@@ -1,5 +1,9 @@
 # Aidat Takip — Product Specification
 
+## Mevcut kuralı aynı personel formundan düzenleme — 2026-10-19
+
+Personel ve Cihazlar → Aidat özeti takvimi → **Düzenle**, yeni kayıtla ortak formu mevcut ad/gün/saat/alıcılarla açar. Her açılışta güncel kayıt okunur. **Değişiklikleri kaydet** tüm alanları atomik günceller; sahip, şube, güncel etkinlik, cihazlar ve geçmiş korunur. En az bir gün ve bir uygun mali alıcı gerekir. Uygunluğunu kaybetmiş mevcut alıcı sessizce çıkarılmaz; açıklamayla görünür ve açıkça kaldırılmalıdır. Form açıkken ad/takvim/alıcı değişmişse409 ile yeniden açma istenir; başka bir durdurma işleminin üzerine yazılmaz. Yalnız değişen gün/saat değerlendirme imlecini şimdiye alır; ad/alıcı değişimi veya aynı değerleri kaydetmek imleci korur. ADR-0007 mali rol/şube/cihaz politikası değişmez. [CR-029](../20-execution/CHANGE_REQUESTS.md).
+
 ## Personel ekranından yeni aidat özeti kuralı — 2026-10-19
 
 Personel ve Cihazlar → Aidat özeti takvimi → **Yeni aidat özeti kuralı**; kural adı, hafta günleri, Türkiye saati ve alıcılar tek formda seçilir. Varsayılan Pazartesi09:00 ve alıcı seçimi boştur. En az bir gün/alıcı gerekir. Yalnız kapsam içindeki seçili/aktif yönetici ve muhasebe listelenir; adla arama ve ana cihaz hazır/kurulum gerekli bilgisi vardır. Yeni kural kapalı oluşturulur, push göndermez ve aynı ekrandaki kartta görünür; açmak için mevcut Etkinleştir kullanılır. Alıcı bulunmazsa açıklama gösterilir, kayıt açılamaz. Vazgeç kayıt yapmaz. Mevcut POST summary-rules ve ADR-0007 yetki/kapsam/kapalı varsayılanı aynıdır; ilk kayıt için ayrı sekmeye gitme sınırı kullanıcı talebiyle kaldırılmıştır. [CR-028](../20-execution/CHANGE_REQUESTS.md).
@@ -10,7 +14,7 @@ Personel ve Cihazlar → Aidat özeti takvimi kartında **Etkinleştir / Durdur*
 
 ## Personel ve Cihazlar ekranında aidat takvimi — 2026-10-19
 
-ADMIN/ACCOUNTING kendi kapsamındaki mevcut haftalık kuralın günlerini ve saatini **Aidat özeti takvimi → Gün ve saati düzenle** ile değiştirebilir. Takvim aynı kuralın tüm alıcılarına uygulanır; Türkiye saati (Europe/Istanbul) açıkça gösterilir. Yalnız gün/saat değişir; alıcılar, sahip, şube, etkinlik ve geçmiş korunur. Değişen takvim kaydetme anından sonraki slotlara uygulanır; geçmiş saatler telafi edilmez. Aynı gün/saat tekrar kaydedilirse değerlendirme imleci de korunur. Gün/saat formu yeni kural oluşturmaz; etkinlik aynı karttaki ayrı düğmeden yönetilir (CR-027). [CR-026](../20-execution/CHANGE_REQUESTS.md).
+CR-026 ilk gün/saat formu CR-029 ile yukarıdaki ortak **Düzenle** formuna genişletildi. ADMIN/ACCOUNTING kendi kapsamındaki haftalık kuralın adını, günlerini, saatini ve alıcılarını birlikte değiştirebilir. Takvim aynı kuralın tüm alıcılarına uygulanır; Türkiye saati (Europe/Istanbul) açıkça gösterilir. Güncel formda ad ve alıcılar da seçilebilir; sahip, şube, etkinlik ve geçmiş korunur. Değişen takvim kaydetme anından sonraki slotlara uygulanır; geçmiş saatler telafi edilmez. Aynı gün/saat tekrar kaydedilirse değerlendirme imleci de korunur. Gün/saat formu yeni kural oluşturmaz; etkinlik aynı karttaki ayrı düğmeden yönetilir (CR-027). [CR-026](../20-execution/CHANGE_REQUESTS.md).
 
 Yeni personel formu ve mevcut personel kartları artık yalnız Pazartesi09:00 yerine kapsam içindeki tüm haftalık kuralları güncel gün/saatleriyle gösterir. Bu, CR-024/025'teki Pazartesi09:00 arayüz kısıtının kullanıcı talebiyle genişletilmesidir; ADR-0007'nin haftalık takvim, rol ve şube politikası değişmez.
 
