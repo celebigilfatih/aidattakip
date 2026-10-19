@@ -7,7 +7,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 ### Added — 2026-10-19 — Personel ekranında yeni aidat özeti kuralı
 
 - Yeni kural dialogunda gün, saat ve uygun personel alıcıları; arama, cihaz bilgisi, kapalı kayıt, zorunlu seçimler ve iptal. Oluşan kart/üyelikler aynı ekranda yenilenir; ilk kayıt için ayrı sekme gerekmez.
-- Mevcut API/ADR-0007 ve kapalı varsayılan kullanılır; backend/model/migration/paket/anahtar değişmedi. Typecheck/51 test, yerel gerçek UI oluştur/yenile/iptal ve0 push doğrulandı; CR-028, Docker/demo doğrulaması sürüyor.
+- Mevcut API/ADR-0007 ve kapalı varsayılan kullanılır; backend/model/migration/paket/anahtar değişmedi. Typecheck/51 test, yerel gerçek UI oluştur/yenile/iptal/arama Enter ve0 push doğrulandı. Yerel Docker adayı ve nihai demo Docker başarılı; yalnız demo3b7ebcc Success/3m12s. Canlı form/kapalı kayıt açıklaması ve mevcut etkin kural/personel/bildirim/ana cihaz/geçmiş koruması doğrulandı; CR-028 kapalı.
 
 ### Added — 2026-10-19 — Personel ekranında özet kuralının etkinliği
 

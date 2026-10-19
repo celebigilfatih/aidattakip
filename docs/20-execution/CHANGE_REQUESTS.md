@@ -3,10 +3,11 @@
 ## CR-028 — Personel ekranından yeni aidat özeti kuralı oluşturma
 
 - Kullanıcı talebi (2026-10-19): Yeni kuralın gün/saat/alıcıları aynı personel formundan seçilsin; ayrı sekmeye gidilmesin.
-- Status: Implemented — typecheck/51 test ve yerel gerçek UI başarılı; Docker/demo doğrulaması sürüyor.
+- Status: Closed — yalnız demo3b7ebcc Success/3m12s; typecheck/51 test, yerel/nihai Docker ve UI/koruma kontrolleri başarılı.
 - Önceki CR-026/027 akışındaki ilk kayıt için ayrı sekme yönlendirmesi değişir. StaffSummaryCreateDialog kural adı, varsayılan Pazartesi09:00, çoklu gün ve güncel seçili mali alıcılar; arama/boş sonuç, ana cihaz bilgisi, zorunlu gün/alıcı, kapalı kayıt ve iptal içerir. Yeni kart/üyelikler aynı ekran içinde yenilenir.
 - Mevcut GET recipients/POST summary-rules kullanılır; backend/yetki/model/migration/paket/anahtar/retention/dağıtım politikası değişmez. ADR-0007 korunur, yeni ADR gerekmedi. Yeni kural daima kapalıdır; bilinçli etkinleştirme mevcut karttadır.
 - Yerel kanıt: Typecheck ve mevcut51 test geçti.1280px/576px dialogda alıcı yok, boş gün, mali rol filtresi (seçili Sekreter dışarıda), arama/sonuç yok ve seçim sayısı; Salı/Cuma10:30/tek Muhasebe ile UI oluştur/yenile ve aynı personel kartında seçili üyelik. Yeni form tekrar Pazartesi09:00/boş alıcı, Vazgeç0 ek kayıt. DB tek kapalı kural/tek üye/0 run/push; kendi fixture'ları temizlendi. Yeni UI testi yazılmadı; mevcut API regresyonu ve gerçek form akışı doğrulandı. Yalnız demo yayımlanacak, mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi korunacak.
+- Kapanış: Yalnız demo3b7ebcc/uy5h59frb20iukwqm89ueafv Success/3m12s, nihai Docker başarılı. Son arama Enter koruması geçerli yerel formda0 kayıtla sınandı. Canlı559px/512px dialog gün/saat/alıcı ve kapalı kayıt eylemi, Vazgeç; mevcut10 personel/17 bildirim/ana iPhone/etkin Pazartesi09:00 tek alıcı/sahip/tek eski run aynı. Worker14:00:12.271 UTC ilerledi, yeni run/push yok. Gerçek yeni iPhone testi, genel lint CR-011 ve restore/rollback/tam erişilebilirlik kapsam dışında.
 
 ## CR-027 — Personel ekranından kuralı etkinleştirme/durdurma
 

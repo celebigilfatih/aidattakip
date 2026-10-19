@@ -1,8 +1,10 @@
 # Deployment
 
-## 2026-10-19 — Personel ekranında yeni aidat kuralı (CR-028) hazırlığı
+## 2026-10-19 — Personel ekranında yeni aidat kuralı yalnız demo (CR-028)
 
-Kaynak codex/staff-summary-20261019, yalnız demo sabit ref/manuel yayın hazırlanıyor. Typecheck/51 test ve yerel UI oluştur/yenile/iptal başarılı; Docker7899 sürüyor. Mevcut runtime6c4ee5b ve etkin Pazartesi09:00/Demo Kullanıcı tercihi korunacak; canlı deneme kuralı/hesap/push yok. Backend/model/migration/paket/anahtar/cron değişmez, main b024011/Özlüce'ye işlem yok. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+Kaynak codex/staff-summary-20261019, sabit3b7ebcceef8ce5a3a3397fa876565f1cf652066f. Yalnız demo Coolify uy5h59frb20iukwqm89ueafv Success/03m12s; başlangıç13:55:50 UTC. Manuel/sabit ref modeli aynı. Typecheck/51 test ve yerel UI oluştur/yenile/iptal/arama Enter başarılı. Yerel Docker adayı exit0/config2f9c97d0fea3e0eae409803e38924005f0788f7795cf60ab3f7f3ed895342414 son Enter korumasından öncedir; nihai kaynak demo Docker derlemesinden geçti. Backend/model/migration/paket/anahtar/cron değişmedi; main b024011/Özlüce'ye işlem yok.
+
+Canlı559px/scrollWidth559,512px dialogda varsayılan Pazartesi09:00/boş alıcı, Demo Kullanıcı/ana cihaz hazır; form içi alıcı seçimiyle Kapalı kural oluştur düğmesi açıldı, kayıt yapılmadan Vazgeç kullanıldı. Yeni canlı kural/hesap/push yok. API öncesi/sonrası10 personel/17 bildirim, aynı ana iPhone/aktiflik, etkin Pazartesi09:00 tek Demo Kullanıcı kuralı/sahibi/tek eski run korundu. Worker lastEvaluatedAt14:00:12.271 UTC ile yayın sonrası ilerledi. Kanıt output/staff-rule-create/live-create-form.png ve live-create-recipients.png; guard metadata repository dışında staff-rule-create-release.json. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
 
 ## 2026-10-19 — Personel ekranında Etkinleştir/Durdur yalnız demo (CR-027)
 
