@@ -1,6 +1,6 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.13
+- Document version: 0.4.14
 - CDSK version: TBD
 - Last updated: 2026-10-19
 
@@ -24,6 +24,8 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Explicit non-goals: TBD — kullanıcı tarafından belirlenmedi.
 
 ## 2. Current Status
+
+- Güncel iş (CR-025): Mevcut personelin Pazartesi09:00 aidat özeti üyeliği aynı kartta değiştiriliyor; ADMIN/ACCOUNTING ve mevcut şube/finans sınırı. Tek üyeyi atomik değiştiren API, diğer üyeler/takvim/cihaz/cursor korunur. Typecheck/44 test ve yerel UI aç/yenile/kapat başarılı; Docker/yalnız demo yayını [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md) içinde izlenir. ADR-0007/model değişmedi; aşağıdaki kayıtlar tarihçedir.
 
 - Güncel yayın (CR-024 kapalı): Yeni personelin Pazartesi09:00 aidat özeti aynı formda seçilir. İsteğe bağlı kutu ve mevcut kurala atomik katılım; yeni kural/açma yok, mali rol ve kapsam korunur. Typecheck/40 test, yerel ve nihai Docker başarılı; yalnız demo fed6e33 Success/3m03s, canlı form ve verilerin korunması doğrulandı. Mevcut10 personel/17 bildirim/ana iPhone/etkin Pazartesi09:00 Demo Kullanıcı kuralı aynı. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki yayın kayıtları tarihçedir.
 

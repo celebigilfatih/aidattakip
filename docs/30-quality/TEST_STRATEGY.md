@@ -1,5 +1,9 @@
 # Test Strategy
 
+## Mevcut personelin karttan özet seçimi — 2026-10-19
+
+Toplam44 test başarılı: onboarding paketine4 senaryo eklendi; ADMIN/ACCOUNTING kendi kapsamındaki tek üyeliği açar/kapatır, tekrarlı ve paralel işlemler diğer üyeleri/cursor/saat/etkinliği korur. Veli/oturumsuz/SECRETARY/origin/yabancı şube ve eski kural reddi; pasif/rolü uygun olmayan/seçilmemiş kişi katılamaz, geçersiz eski üyelik çıkarılır. Son üye kaldırıldığında kuralın etkinliği/geçmişi korunur. Test verisi yalnız loopback5477 kendi fixture'larıdır, dış push yok. Typecheck ve gerçek yerel tarayıcı sentetik kart aç/yenile/kapat başarılı. Docker/demo yayını handoff'ta izlenir.
+
 ## Personel formundan özet kuralına katılım — 2026-10-19
 
 Toplam40 test geçti. Onboarding entegrasyonu mevcut6 teste4 senaryo ekler: yönetici kapsamındaki tam Pazartesi09:00 kuralları, mali personelin atomik üyeliği ve mevcut alıcı/cursor/takvim koruması, rol/alıcı/şube/değişmiş-silinmiş-yanlış saatli kural reddi, kapalı kuralın kapalı kalması ve paralel üyelik ekleme. Kendi yerel sentetik fixture'ları temizlenir; dış push yok. Typecheck, yerel ve nihai demo fed6e33 Docker build başarılı. Yerel UI kural yok açıklaması/kapalı kutu, iki kapalı fixture kuralıyla zorunlu seçim/kapalı bilgisi/rol değişimi; canlı tek etkin kural, alıcı ve şube değişiminde kutu temizliği kontrol edildi. Yerel UI fixture'ları temizlendi. Canlı ölçülen559px görünümde scrollWidth=559, dialog512px; tam390px veya gerçek iPhone kabulü iddia edilmez. Hesap/üyelik oluşturma entegrasyon testinde; demoya deneme hesabı/kural/push eklenmedi. Eski ana cihaz/etkin kural ve17 bildirim korundu. Genel lint CR-011, restore/rollback/tam erişilebilirlik bu dar işte çalıştırılmadı.

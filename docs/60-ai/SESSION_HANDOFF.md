@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-19 — Mevcut personelin karttan aidat özeti seçimi (CR-025)
+
+Kullanıcı mevcut personelin de Pazartesi09:00 özetini Personel ve Cihazlar ekranından değiştirmeyi istedi. StaffSummaryMembership kart bileşeni mevcut kural üyeliklerini kutularla gösterir; PushPanel katalog ve kural üyeliklerini birlikte okur. Seçim anında PATCH, başarılı okumayla yenilenir; kayıt başarılı/yenileme hatası ayrı bildirilir. Aktif mali rol/açık alıcı/uygun şube katılım şartı; geçersizleşmiş eski seçim çıkarılabilir. Cihaz yok ve kapalı kural açıklamaları; genel alıcı seçimi ADMIN, mali takvim üyeliği mevcut ADMIN/ACCOUNTING yetkisindedir.
+
+Yeni GET/PATCH /api/push/staff-summary kapsam içi tam `[1]`/09:00 kuralları ve üyelikleri sağlar. Rule row lock, güncel hedef/rol/alıcı/şube/owner kontrolü; tek üyede idempotent upsert/deleteMany. Diğer üyeler, etkinlik, saat, cursor, owner, cihaz/geçmiş değişmez. Son üye çıkarılabilir; kural kapanmaz/silinmez ve alıcı yokken push üretmez. Önceki CR-024 ayrı sekme adımı yalnız diğer takvim saatleri için kalır. Yetki politikası/model/migration/paket/secret değişmedi, ADR-0007 korunur; yeni ADR gerekmez.
+
+Typecheck/44 test başarılı; onboarding14 ve diğer30. Yetki/şube/rol/alıcı/eski kural, idempotent toggle/parallel tek üye/diğer üyelerin korunması/son üye testi var. Yerel tarayıcıda ayrı sentetik ACCOUNTING personeli, alıcısı ve kapalı kural oluşturuldu; karttan aç→Yenile ile kalıcı işaret→kapat başarılı. Yerel fixture son durumda0 üyelik/0 run/kapalı doğrulanıp kendi ID+prefix korumasıyla silindi; repository dışı fixture dosyası kaldırıldı. Dış push yok. Docker92242 exit0, config7b9f25d22e40ba12ce2d1717a50b2f8d69c4738e666fbf3e216859e224c0c9a0. Yeni demo yayını henüz yok, runtime fed6e33 ve etkin Demo Kullanıcı kuralı korunur. Kanıt output/existing-staff-summary (Git dışında). Genel lint CR-011, restore/rollback/tam erişilebilirlik ve yeni gerçek iPhone testi bu kapsamda çalıştırılmadı.
+
 ## 2026-10-19 — Personel formunda Pazartesi09:00 aidat özeti (CR-024)
 
 Kapanış: yalnız demo fed6e335ae17497a6069d541f9ed0d9f7cd9b1f4, Coolify lxbzx3wb5myozldlmekoab6i Success/03m03s; başlangıç12:46:43 UTC. Yerel Docker77027 exit0, config d53848d6c58d0fb1eaf3d9d92a38c7b37d4b7e871923853e6055f6ebdee8b49b; nihai demo Docker build başarılı. Runtime pini fed6e33; branch/manüel dağıtım aynı. Main b024011, Özlüce'ye işlem yapılmadı. ADR-0007 geçerli, yeni ADR/model/migration/anahtar yok. Önceki hazırlık satırları aşağıda tarihçedir.
