@@ -4,6 +4,10 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Fixed — 2026-10-19 — iPhone davet ekranında personel oturumu
+
+- Açık personel oturumu kişisel davet yapıştırma alanını gizliyordu; alan personel oturumunda da gösterilir. Veli/sporcu/personel oturum türü görünür ve davet kabulü beklerken cihaz kayıt düğmesi kapalıdır. Mevcut davet/API/yetki sözleşmesi korunur; typecheck geçti. Yalnız demo için sonraki dağıtım hazırlanır.
+
 ### Deployed — 2026-10-19 — Yalnız SporManage demo manuel push
 
 - Ayrı demo dalı ve sabit 6b1e1c2 commit'i Coolify'da 4m15s içinde Success ile dağıtıldı; additive migration yalnız demo DB'sine uygulandı. Runtime UID/anahtar/HTTPS/API kontrolleri geçti; 60 sporcu ve 300 ödeme korundu. Özlüce container ID/image/StartedAt ve uzak main değişmedi.

@@ -82,20 +82,22 @@ export default function RecipientPage() {
       <p>Bu bağlantı yalnız kulübün sizin adınıza doğruladığı kayıt içindir. Size ait değilse kullanmayın. Bağlantı tek kullanımlıktır.</p>
       <Button disabled={busy} onClick={() => action(activate)}>Daveti kabul et</Button>
     </CardContent></Card>}
-    {!session && !token && <div className="space-y-3">
-      <p>Kulübünüzden kişisel davet bağlantısı isteyin. Personelseniz <a className="text-blue-700 underline" href="/login">personel girişi</a> sonrasında bu ekranı açabilirsiniz.</p>
+    {!token && (!session || session.kind === 'STAFF') && <div className="space-y-3">
+      {!session && <p>Kulübünüzden kişisel davet bağlantısı isteyin. Personelseniz <a className="text-blue-700 underline" href="/login">personel girişi</a> sonrasında bu ekranı açabilirsiniz.</p>}
+      {session?.kind === 'STAFF' && <p>Personel oturumunuz açık. Veli veya sporcu davetini kabul etmek için kişisel davet bağlantısını aşağıya yapıştırın.</p>}
       <p>iPhone ana ekranından açtığınızda oturum görünmüyorsa, kullanılmamış davet bağlantınızı buraya yapıştırıp bu uygulama içinde kabul edin.</p>
       <label className="block" htmlFor="invite-link">Kişisel davet bağlantısı</label>
       <input id="invite-link" type="password" autoComplete="off" spellCheck={false} value={inviteLink} onChange={event => setInviteLink(event.target.value)} className="w-full rounded border p-2" />
       <Button disabled={busy || !inviteLink.trim()} onClick={useInviteLink}>Davet bağlantısını kullan</Button>
     </div>}
     {session && <Card><CardHeader><CardTitle>{session.name}</CardTitle></CardHeader><CardContent className="space-y-4">
+      <p className="font-medium">Açık oturum: {session.kind === 'PARENT' ? 'Veli' : session.kind === 'STUDENT' ? 'Sporcu' : 'Kulüp personeli'}</p>
       {needsInstall && <div className="rounded bg-blue-50 p-3">iPhone: Safari'de Paylaş → Ana Ekrana Ekle seçin. Ardından ana ekrandaki SporManage simgesinden açıp “Bildirimleri aç” düğmesine dokunun.</div>}
       {!configured && <p className="text-amber-800">Push gönderimi sunucuda henüz yapılandırılmadı.</p>}
       {!supported && !needsInstall && <p>Bu tarayıcıda push desteklenmiyor veya güvenli HTTPS bağlantısı yok.</p>}
       <p>Kilit ekranında genel bir mesaj görünür. Bildirim ayrıntıları yalnız bu oturumda açılır. Oturum süresi dolarsa kulüpten yeni davet almanız gerekir.</p>
       <div className="flex gap-2 flex-wrap">
-        <Button disabled={busy || !supported || needsInstall || !configured} onClick={() => action(subscribe)}>Bildirimleri aç / cihazı yenile</Button>
+        <Button disabled={busy || !!token || !supported || needsInstall || !configured} onClick={() => action(subscribe)}>Bildirimleri aç / cihazı yenile</Button>
         <Button variant="outline" disabled={busy || !session.devices.length} onClick={() => action(disable)}>Bildirimleri kapat</Button>
         <Button variant="outline" disabled={busy} onClick={() => action(logout)}>Alıcı oturumunu kapat</Button>
       </div>
