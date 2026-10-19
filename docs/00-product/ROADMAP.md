@@ -1,6 +1,6 @@
 # Roadmap
 
-2026-10-19 CR-026: Personel ve Cihazlar bölümünde mevcut haftalık aidat takviminin gün/saat düzenlemesi ve tüm personel seçimlerinde güncel takvim gösterimi uygulanıyor. Mevcut Pazartesi09:00 demo tercihi değiştirilmeyecek. [CR-026](../20-execution/CHANGE_REQUESTS.md).
+2026-10-19 CR-026 tamamlandı: Personel ve Cihazlar bölümünde mevcut haftalık aidat takviminin gün/saat düzenlemesi ve tüm personel seçimlerinde güncel takvim gösterimi yalnız demo ec5e2dc ile yayımlandı. Mevcut etkin Pazartesi09:00/Demo Kullanıcı tercihi korundu;47 test/typecheck/Docker ve canlı UI doğrulandı. [CR-026](../20-execution/CHANGE_REQUESTS.md).
 
 ## Güncel personel bildirim kapsamı
 

@@ -7,7 +7,7 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 ### Added — 2026-10-19 — Personel ekranında aidat takvimi
 
 - Personel ve Cihazlar → Aidat özeti takvimi kartı ve gün/saat dialogu; çoklu hafta günü, Türkiye saati, ortak alıcı etkisi, kaydet/vazgeç ve hata/boş gün durumları.
-- Yeni PUT yalnız gün/saat değiştirir; mevcut mali yetki/şube ve kural kilidi korunur. Üyeler/sahip/etkinlik/geçmiş değişmez; değişen takvim geleceğe uygulanır, no-op cursor korunur. Yeni/mevcut personel seçimlerinde Pazartesi09:00 kısıtı kaldırıldı, güncel takvim gösterilir. ADR-0007/model/migration/paket/anahtar değişmedi. Typecheck/47 test ve yerel UI başarılı; CR-026, Docker/demo doğrulaması sürüyor.
+- Yeni PUT yalnız gün/saat değiştirir; mevcut mali yetki/şube ve kural kilidi korunur. Üyeler/sahip/etkinlik/geçmiş değişmez; değişen takvim geleceğe uygulanır, no-op cursor korunur. Yeni/mevcut personel seçimlerinde Pazartesi09:00 kısıtı kaldırıldı, güncel takvim gösterilir. ADR-0007/model/migration/paket/anahtar değişmedi. Typecheck/47 test, yerel/nihai Docker ve UI başarılı; yalnız demo ec5e2dc Success/3m06s. Canlı form ve etkin Pazartesi09:00/Demo Kullanıcı tercihi, personel/bildirim/ana cihaz/geçmiş koruması doğrulandı; CR-026 kapalı.
 
 ### Added — 2026-10-19 — Mevcut personelin karttan özet seçimi
 

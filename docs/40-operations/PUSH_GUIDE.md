@@ -1,6 +1,6 @@
 # Personel bildirimleri ve otomatik aidat özeti
 
-Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) Accepted, 2026-10-19. Güncel demo27bd03c yeni personel formu ve mevcut personel kartından özet seçimi UI/API dağıtımı Success; Coolify her dakikalık işleyici doğrulandı. Gerçek personel iPhone manuel ve otomatik tek özet, mali liste açılışı ve kapalı saat kontrolü başarılı. 2026-10-19 kullanıcı talebiyle yalnız Demo Kullanıcı için mevcut Pazartesi09:00 Europe/Istanbul kuralı etkinleştirildi; sıradaki slot26.10.2026 09:00. Yeni oluşturulan kuralların kapalı varsayılanı değişmedi. Önceki veli iPhone testi bu yeni personel kabulünün yerine geçmez.
+Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) Accepted, 2026-10-19. Güncel demo ec5e2dc, Personel ve Cihazlar ekranında ortak gün/saat düzenlemesi ve güncel takvimli yeni/mevcut personel seçimi UI/API dağıtımı Success (CR-026); Coolify her dakikalık işleyici doğrulandı. Gerçek personel iPhone manuel ve otomatik tek özet, mali liste açılışı ve kapalı saat kontrolü başarılı. 2026-10-19 kullanıcı talebiyle yalnız Demo Kullanıcı için mevcut Pazartesi09:00 Europe/Istanbul kuralı etkinleştirildi; sıradaki slot26.10.2026 09:00. Yeni oluşturulan kuralların kapalı varsayılanı değişmedi. Önceki veli iPhone testi bu yeni personel kabulünün yerine geçmez.
 
 ## Günlük kullanım
 

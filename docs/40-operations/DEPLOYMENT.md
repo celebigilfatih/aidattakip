@@ -1,8 +1,10 @@
 # Deployment
 
-## 2026-10-19 — Personel ekranında aidat takvimi (CR-026) hazırlığı
+## 2026-10-19 — Personel ekranında aidat takvimi yalnız demo (CR-026)
 
-Kaynak codex/staff-summary-20261019; yalnız SporManage demo sabit ref/manuel dağıtım kullanılacak. Mevcut runtime27bd03c ve etkin Pazartesi09:00 tek Demo Kullanıcı tercihi korunur; main b024011/Özlüce'ye işlem yok. Migration/model/paket/anahtar/cron değişmez. Typecheck/47 test, gerçek yerel UI kaydet/yenile/vazgeç ve Docker exit0 (config aca0c39d30b9aa7aff7ca9121e8dfbfdab8fe964ed6b46ac3d6e6ac1d15c97c1) başarılı. Canlı doğrulama/yayın henüz yapılmadı; aşağıdaki kayıtlar önceki yayınlardır. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
+Kaynak codex/staff-summary-20261019, sabit ec5e2dc66d79d7ddec577593c3fded5c4148ac27. Yalnız SporManage demo Coolify orvnvpbspsfgvcihnbbkzuxk Success/03m06s; başlangıç13:18:48 UTC. Manuel/sabit ref modeli aynı. Typecheck/47 test ve yerel Docker exit0 (config aca0c39d30b9aa7aff7ca9121e8dfbfdab8fe964ed6b46ac3d6e6ac1d15c97c1); nihai demo Docker derlemesi başarılı. Model/migration/paket/anahtar/cron değişmedi. Main b024011/Özlüce'ye işlem yapılmadı.
+
+Canlı takvim kartı ve dialogda Pazartesi09:00/tek kişi/Türkiye saati;559px scrollWidth559, dialog512px ve kaydet/vazgeç görüldü. Canlı takvim değiştirilmedi; yeni staff-summary/staff GET aynı güncel takvimi döndürdü. Önce/sonra10 personel/17 bildirim, aynı seçili kişi/ana cihaz ve etkin Pazartesi09:00 tek Demo Kullanıcı kuralı/sahibi/tek eski run korundu. Ana iPhone'un geçerliliği mevcut sessiz yenileme politikasıyla18.11.2026 13:21:27.355 UTC'ye ilerlemiş; aynı cihaz ID/aktiflik korunur. Worker cursor13:22:04.316 UTC ile yayın sonrasında ilerledi, yeni run/push yok. Yerel kapalı fixture ile Salı/Perşembe10:31 kaydet/yenile/vazgeç ve kart/yeni form senaryosu doğrulandı, fixture temizlendi. Kanıt output/staff-calendar/live-calendar-dialog.png ve live-personnel-calendar.png (Git dışında); guard metadata repository dışında staff-calendar-release.json. [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).
 
 ## 2026-10-19 — Mevcut personel kartından özet seçimi yalnız demo
 
