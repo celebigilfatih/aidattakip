@@ -1,6 +1,6 @@
 # Change Requests
 
-## CR-032 — Ödemeler ekranı gecikmiş adet/durum tutarsızlığı — Yayın hazırlanıyor
+## CR-032 — Ödemeler ekranı gecikmiş adet/durum tutarsızlığı — Kapalı
 
 - Kanıt:2026-10-20 kullanıcı talebiyle demo örnek aile kontrolü. Ece Arslan'ın vadesi05.08.2026 ve05.10.2026 olan1500'er TL iki açık borcu mevcut; Ödemeler üst sayacı1, aile gecikeni3000 TL. Eski satır durumu Ağustos için OVERDUE, Ekim için PENDING; Eren'de PARTIAL/PENDING satırları3 sayılıyor.
 - Kaynak: src/app/api/payments/route.ts overduePayments yalnız PENDING/PARTIAL sayar, OVERDUE dışarıda; dueDate anlık new Date ile karşılaştırılır. src/app/payments/page.tsx durum rozeti kalıcı status, plan kartı ise tarih bazlı hesap kullanır. Aile/staff-overdue İstanbul gün başlangıcıyla hesaplar; yeni aile toplamları doğru doğrulandı.
@@ -9,6 +9,8 @@
 
 
 - Uygulama/onay: CR-032 kullanıcı tarafından2026-10-20 düzeltme ve yalnız demo yayınıyla onaylandı. Ortak payment-balance hesabı aile, personel gecikmiş borç ve Ödemeler okumasında kullanılır: PENDING/PARTIAL/OVERDUE, max(amount-paidAmount,0), PAID/CANCELLED kapalı, İstanbul vade günü tamamlandıktan sonra gecikme. Veritabanı status/borç/tahsilat geçmişi yazılmaz. API raw status korunur; displayStatus/remainingAmount/overdue/asOf ve summary.totalRemaining/overdueAmount additive alanları eklenir. Filtre ve SQL sayımı aynı koşulla kesişir; plan/rozet/Excel ortak güncel görünümü kullanır. Yeni model/migration/paket/yetki/retention kararı yok, ADR-0007/0009 geçerli. Yerel80 test+son9 test (81 benzersiz) ve typecheck başarılı; yerel Docker başarılı. Demo yayını ve sonrası guard/UI henüz bekliyor.
+
+- Kapanış: Yalnız demo098b493 / Coolify85qgaypbksguci5jmoekoz4l Success03m28s. Canlı Ece2/3000, kutu ve durum filtresi/Excel aynı2; Eren3/4000 ve aile7000 eşleşti. DB status/ödeme/aile hashleri korunur; worker ilerledi, main/Özlüce aynı.81 benzersiz test/typecheck/yerel ve demo Docker başarılı. Önceki bulgu/hazırlık satırları tarihçedir. [Kanıt](../30-quality/PAYMENT_OVERDUE_VALIDATION.md).
 
 ## CR-031 — Aile, sezon, aday kayıt ve sporcu takibi — Kapalı
 

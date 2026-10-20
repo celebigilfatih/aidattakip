@@ -1,5 +1,7 @@
 # Roadmap
 
+2026-10-20 CR-032 kapalı: Ödemeler sayaç/filtre/durum/plan/Excel aile ile ortak İstanbul günü ve açık bakiye hesabına bağlandı.81 test/typecheck/Docker, yalnız demo098b493 Success03m28s ve canlı aile/ödeme karşılaştırması geçti; mevcut veriler/haftalık kural/main/Özlüce korundu. [Doğrulama](../30-quality/PAYMENT_OVERDUE_VALIDATION.md).
+
 ## ADR-0009 uygulaması — 2026-10-20
 
 Aile → sezon → aday/deneme → ilgi bekleyenler yerelde beş additive migration ile uygulandı.37 model/18 migration,79 test ve typecheck başarılı; aile/sezon hazırlık/aday deneme ve390px görünüm doğrulandı; son UI onay/görüşme kontrolü tamamlandı. Yalnız demo8cd9f72 Success/04m05s ile yayımlandı; migration/veri-kural koruması ve kullanıcının gerçek iPhone görünüm kabulü tamam, CR-031 kapalı. Ayrıntılar [doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).

@@ -2,13 +2,13 @@
 
 ## Güncel görev — CR-032
 
-CR-032 kullanıcı tarafından2026-10-20 düzeltme ve yalnız demo yayınıyla onaylandı. Ortak payment-balance hesabı aile, personel gecikmiş borç ve Ödemeler okumasında kullanılır: PENDING/PARTIAL/OVERDUE, max(amount-paidAmount,0), PAID/CANCELLED kapalı, İstanbul vade günü tamamlandıktan sonra gecikme. Veritabanı status/borç/tahsilat geçmişi yazılmaz. API raw status korunur; displayStatus/remainingAmount/overdue/asOf ve summary.totalRemaining/overdueAmount additive alanları eklenir. Filtre ve SQL sayımı aynı koşulla kesişir; plan/rozet/Excel ortak güncel görünümü kullanır. Yeni model/migration/paket/yetki/retention kararı yok, ADR-0007/0009 geçerli. Yerel80 test+son9 test (81 benzersiz) ve typecheck başarılı; yerel Docker başarılı. Demo yayını ve sonrası guard/UI henüz bekliyor. Ayrıntı [doğrulama](docs/30-quality/PAYMENT_OVERDUE_VALIDATION.md).
+CR-032 yalnız demo098b493 ile yayımlandı; Coolify Success03m28s.81 benzersiz test/typecheck/yerel ve demo Docker, canlı sayaç/kutu/durum/Excel ve aile karşılaştırması geçti: Ece2/3000, Eren3/4000, aile7000. Örnek aile ve tüm mevcut veri hashleri aynı; worker ilerledi, main/Özlüce korunur. Yeni migration/ADR yok; CR-032 kapalı. [Doğrulama](docs/30-quality/PAYMENT_OVERDUE_VALIDATION.md).
 
 ## Son modül yayını — ADR-0009 / CR-031
 
 2026-10-20 ADR-0009 dört modül yalnız SporManage demo8cd9f72 ile yayımlandı; Coolify Success/04m05s, beş additive migration applied,37 model/18 migration.79 test/typecheck/yerel ve demo Docker başarılı; son yerel onay/görüşme ve canlı390/1280px kontrolleri geçti. Kullanıcı dört ekranın iPhone görünümünü onayladı; CR-031 kapalı. Önce/sonra hash/sayımlar, mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu; worker ilerledi. main/Özlüce değişmedi. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
 
-- Document version: 0.5.2
+- Document version: 0.5.3
 - CDSK version: TBD
 - Last updated: 2026-10-20
 
@@ -16,7 +16,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 
 ## Demo örnek aile — 2026-10-20
 
-Kullanıcı isteğiyle Merkez Şube’de Örnek Kardeş Ailesi (Ece Arslan/Eren Aksoy) oluşturuldu ve kalıcılık/10 ödeme satırı karşılaştırıldı:13.250 TL tahakkuk,6.250 TL ödenen,7.000 TL kalan/geciken. Kod/yayın değişmedi; eski Ödemeler gecikmiş adet sayacı tutarsızlığıCR-032 açık. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
+Kullanıcı isteğiyle Merkez Şube’de Örnek Kardeş Ailesi (Ece Arslan/Eren Aksoy) oluşturuldu ve kalıcılık/10 ödeme satırı karşılaştırıldı:13.250 TL tahakkuk,6.250 TL ödenen,7.000 TL kalan/geciken. Kod/yayın değişmedi; eski Ödemeler gecikmiş adet sayacı tutarsızlığıCR-032 sonraki düzeltmeyle kapandı. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
 
 ## Project Compass
 
@@ -78,7 +78,7 @@ Kullanıcı isteğiyle Merkez Şube’de Örnek Kardeş Ailesi (Ece Arslan/Eren 
 - Phase: Mevcut uygulamaya CDSK bağlamı kazandırma; ürün kabul aşaması TBD.
 - Version: package.json 1.0.0; 2026-09-15 dağıtım kaydı mevcut, bu numaranın release etiketi/ürün kabulüyle eşlenmesi TBD.
 - Active sprint veya milestone: TBD
-- Current focus: ADR-0009 dört modül demo yayını ve iPhone kabulü tamam; CR-031 kapalı. İlk aile ve sezon ilişkileri personel tarafından açık seçimle kurulacak; eski veriler otomatik bağlanmadı. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Current focus: CR-032 ortak gecikme hesabı yalnız demo yayını ve canlı kabulü tamam; örnek aile/ödeme/bildirim kuralı korunur. Kullanım ve kalan genel riskler handoff içindedir.
 - Critical risks: Demo ADMIN sentetik veriyi değiştirebilir; iki DB aynı fiziksel PostgreSQL servisinin kapasite/erişilebilirliğini paylaşır; doğrulanmış zamanlanmış backup/restore ve parola rotasyon tarihi yoktur. [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
 - Blocking decisions: Dağıtım kaydı mevcut; kesin ürün kabulü TBD. Production başlangıç kimliği/rol düzeltmesi ve kalan secret politikası açık onay bekler. ADR-0001 ve ADR-0002 hâlâ Proposed; login log temizliği ayrı düzeltme olarak tamamlandı.
 - Last status update: 2026-10-19
@@ -192,6 +192,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
+| 0.5.3 | 2026-10-20 | CR-032 yalnız demo098b493 Success03m28s;81 test ve canlı sayaç/filtre/durum/Excel/aile kabulü. |
 | 0.5.2 | 2026-10-20 | Demoda örnek aile ve10 satır mali karşılaştırma; legacy gecikmiş adet sayacıCR-032 bulgusu. |
 | 0.5.1 | 2026-10-20 | ADR-0009 yalnız demo8cd9f72 Success/04m05s; migration/veri-kural koruması ve gerçek iPhone kabulü, CR-031 kapalı. |
 | 0.5.0 | 2026-10-20 | ADR-0009 onaylı dört modül yerelde hazır;79 test/typecheck ve demo yayın hazırlığı, UI engeli/handoff. |

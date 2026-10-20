@@ -2,7 +2,7 @@
 
 ### Fixed — 2026-10-20 — CR-032 ortak gecikme hesabı
 
-- Ödemeler sayaç/filtre/durum/plan/Excel aile hesabıyla ortak bakiye ve İstanbul günü hesabına bağlandı; kısmi ve OVERDUE kayıtları, sıfır/fazla bakiye, kapalı borçlar ve ay sınırları eşlendi. Raw status/geçmiş korunur; yeni migration yok.81 benzersiz test/typecheck ve yerel Docker başarılı, yalnız demo yayın kabulü bekliyor.
+- Ödemeler sayaç/filtre/durum/plan/Excel aile hesabıyla ortak bakiye ve İstanbul günü hesabına bağlandı; kısmi ve OVERDUE kayıtları, sıfır/fazla bakiye, kapalı borçlar ve ay sınırları eşlendi. Raw status/geçmiş korunur; yeni migration yok.81 benzersiz test/typecheck/yerel ve demo Docker başarılı; yalnız demo098b493 Success03m28s, canlı Ece2/3000/Eren3/4000/aile7000, filtre/Excel ve veri koruması doğrulandı. Mevcut kural/ana iPhone/main/Özlüce korunur; CR-032 kapalı.
 
 
 ### Verified — 2026-10-20 — Demo örnek aile
