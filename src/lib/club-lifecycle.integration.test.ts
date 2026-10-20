@@ -131,7 +131,7 @@ test('club lifecycle: family, season, trial and attention HTTP contracts on isol
    assert.equal(await db.payment.count({where:{studentId:converted.convertedStudentId}}),0)
    assert.equal((await db.student.findUniqueOrThrow({where:{id:converted.convertedStudentId}})).familyId,familyId)
    const p=await db.prospect.create({data:{firstName:prefix,lastName:'LinkExisting',branchId:a.id,contactName:prefix,contactPhone:'05000000000'}})
-   assert.equal((await prospect.PATCH(request('PATCH',secretary.id,{action:'convert',id:p.id,existingStudentId:s1.id,groupId:null,familyId:null,seasonId:null}))).status,200)
+   assert.equal((await prospect.PATCH(request('PATCH',secretary.id,{action:'convert',id:p.id,existingStudentId:s1.id,groupId:foreignGroup.id,familyId:null,seasonId:null}))).status,200)
    assert.equal((await db.student.findUniqueOrThrow({where:{id:s1.id}})).groupId,target.id)
   })
   const absent=await child('Absent')

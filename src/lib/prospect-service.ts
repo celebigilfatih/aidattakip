@@ -21,7 +21,7 @@ export async function convertProspect(user:User,input:z.infer<typeof conversionS
   const p=await lockProspect(tx,user,input.id)
   if(p.convertedStudentId)return {studentId:p.convertedStudentId,alreadyConverted:true}
   if(p.stage==='LOST')throw new NotificationError(409,'Önce vazgeçilen adayı yeniden açın.')
-  if(input.groupId)await checkGroup(tx,user,input.groupId,p.branchId)
+  if(!input.existingStudentId&&input.groupId)await checkGroup(tx,user,input.groupId,p.branchId)
   let student
   if(input.existingStudentId){
    await tx.$queryRaw`SELECT id FROM students WHERE id = ${input.existingStudentId} FOR UPDATE`
