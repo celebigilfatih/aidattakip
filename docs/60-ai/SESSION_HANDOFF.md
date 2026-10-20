@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-20 — CR-033 yerel düzeltme; yalnız demo yayın hazırlığı
+
+Kullanıcı makbuzda önceki ödeme/kalanı düzeltip yalnız demo yayınını istedi. src/lib/payment-receipt.ts collection/summary sözleşmesi; tahsilat sonrası toplam yalnız bir kez düşülür, önceki=toplam−bu tahsilat. Yeni makbuz açıkça0 önceki/kalan gösterir; KISMİ ÖDEME/ÖDENDİ. Listeden kısmi veya tam kayıt Ödeme Özeti açar, toplamı son tahsilat gibi göstermez, eksik tarih/yöntem uydurulmaz. Eski hareketleri yeniden kuran ledger eklenmedi. Veri modeli/ödeme PATCH/API/yetki/anahtar/paket aynı; yeni ADR yok.
+
+7 yeni helper/gerçek React render testi, bakiye ve DB/HTTP regresyonuyla16 test/typecheck geçti. Yerel gerçek UI disposable1500 TL borçta500→300→700 tahsilat; makbuzlar önceki0/500/800 ve kalan1000/700/0, kısmi/tam yeniden açma doğru. Fixture temizliği60 sporcu/300 ödeme ve eski ödeme hash'i aynı. Next eski vendor cache hatası için3077 mevcut süreci doğrulanıp yeniden başlatıldı, workspace .next-cr033-before korundu. Docker aidat-cr033:local config c676c8fdee49ed133fd540d1ff96befffdb87af141bae58a9ad5b42e9245b7f4 exit0; UID1001/37 model/worker/env-output hariç probe başarılı.
+
+Demo135536byte/600 dump ve pg_restore --list başarılı; /data/coolify/backups/cr033-20261020. Guard güncellendi (sezon/enrollment/ödeme tarih-yöntem-kaynak hash'i):10 kullanıcı/60 sporcu/1 aile/306 ödeme/1 sezon/2 sezon kaydı/17 bildirim/1 kural/3 cihaz/2 alıcı/1 run. before.json ve ozluce-before.txt alındı; eski demo098b493, kaynak aynı codex/club-lifecycle-20261020 sabiti. Özlüce14c56b463e9e/b024011/StartedAt2026-10-17T21:57:10.916623555Z/Runningtrue. Yeni commit/push/ref pin ve Deploy henüz yapılmadı; sonrası guard/canlı Ece özet1000/aile16250 kabulü gerekli. Mevcut Ece500 TL kaydına yeni demo tahsilatı eklenmeyecek. Kanıt output/cr033 Git dışı. Genel lint/gerçek iPhone/restore tatbikatı bu kapsamda yapılmadı.
+
 ## 2026-10-20 — Demo sezon kısmi ödemesi; makbuz bulgusu
 
 Kullanıcı Ece'nin bir sezon aidatına kısmi ödeme ve aile toplamı kontrolü istedi. Başta açıklanan örnek500 TL, demo Ece/31.01.2027 vadeli1500 TL sezon aidatına Nakit/20.10.2026 ve demo notuyla tek kez kaydedildi. Tam yenileme sonrası satır Kısmi/ödenen500/kalan1000. Sezon planı4500/500/4000, Ece tüm dönem ödenen3750/kalan7000/kayıt8/geciken2 ve3000 TL. Aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken; Eren kalan9250 aynı. Görevde gerçek ödeme sağlayıcısı veya para transferi kullanılmadı; sentetik demo tahsilat kaydıdır.

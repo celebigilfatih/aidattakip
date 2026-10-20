@@ -36,6 +36,7 @@ import { Payment, Group, FeeType, PaymentStatus, PaymentMethod, UserRole } from 
 import { AuthService } from '@/lib/auth'
 import * as XLSX from 'xlsx'
 import { paymentBalance } from '@/lib/payment-balance'
+import type { ReceiptContext } from '@/lib/payment-receipt'
 
 interface PaymentSummary {
   totalAmount: number
@@ -116,7 +117,7 @@ export default function PaymentsPage() {
   const [showReceipt, setShowReceipt] = useState(false)
   const [receiptData, setReceiptData] = useState<{
     payment: Payment
-    paidAmount: number
+    context: ReceiptContext
     paymentMethod: string
     paidDate: string
   } | null>(null)
@@ -414,7 +415,7 @@ export default function PaymentsPage() {
         // Store receipt data
         setReceiptData({
           payment: updatedPayment,
-          paidAmount: parseFloat(data.paidAmount),
+          context: { kind: 'collection', collectedAmount: parseFloat(data.paidAmount) },
           paymentMethod: data.paymentMethod,
           paidDate: data.paidDate
         })
@@ -450,12 +451,12 @@ export default function PaymentsPage() {
   }
 
   const handlePrintReceipt = (payment: Payment) => {
-    // For paid payments, show receipt with full payment info
+    // The row stores cumulative paidAmount, not a historical collection receipt.
     setReceiptData({
       payment: payment,
-      paidAmount: payment.paidAmount || payment.amount,
-      paymentMethod: payment.paymentMethod || PaymentMethod.CASH,
-      paidDate: payment.paidDate ? payment.paidDate.toString() : new Date().toISOString().split('T')[0]
+      context: { kind: 'summary' },
+      paymentMethod: payment.paymentMethod || '',
+      paidDate: payment.paidDate ? payment.paidDate.toString() : ''
     })
     setShowReceipt(true)
   }
@@ -1301,13 +1302,13 @@ export default function PaymentsPage() {
                                       Ödeme Kaydet
                                     </Button>
                                   )}
-                                  {payment.status === PaymentStatus.PAID && (
+                                  {payment.status !== PaymentStatus.CANCELLED && (payment.status === PaymentStatus.PAID || (payment.paidAmount ?? 0) > 0) && (
                                     <Button 
                                       variant="outline" 
                                       size="sm"
                                       onClick={() => handlePrintReceipt(payment)}
                                       className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                                      title="Makbuz Yazdır"
+                                      title="Ödeme Özeti"
                                     >
                                       <Printer className="h-4 w-4" />
                                     </Button>
@@ -1408,7 +1409,7 @@ export default function PaymentsPage() {
       {showReceipt && receiptData && (
         <PaymentReceipt
           payment={receiptData.payment}
-          paidAmount={receiptData.paidAmount}
+          context={receiptData.context}
           paymentMethod={receiptData.paymentMethod}
           paidDate={receiptData.paidDate}
           onClose={() => {

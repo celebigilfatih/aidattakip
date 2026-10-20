@@ -1,5 +1,9 @@
 # Changelog
 
+### Fixed — 2026-10-20 — CR-033 makbuz hesapları (yerel doğrulandı)
+
+- Tahsilat sonrası toplamın çift düşümü kaldırıldı; önceki/bu tahsilat/toplam/kalan ve KISMİ ÖDEME/ÖDENDİ etiketleri doğru. Listeden açılan belge birikimli Ödeme Özeti; kısmi satırlarda da açılır.16 ilgili test/typecheck/yerel UI/Docker başarılı, mevcut veri korundu. Yalnız demo yayını hazırlanıyor; model/migration/ödeme yazma API'si değişmedi.
+
 ### Verified — 2026-10-20 — Demo sezon kısmi ödemesi
 
 - Ece'nin 31 Ocak 2027 vadeli 1500 TL sezon borcuna 500 TL örnek Nakit ödeme kaydedildi; Kısmi/1000 TL kalan ve yenileme sonrası kalıcılık doğru. Ece kalan7000, aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken. Makbuzun güncel tahsilatı iki kez düşmesi ayrı CR-033 açık bulgusudur; kod/model/yayın değiştirilmedi.

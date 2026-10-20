@@ -2,6 +2,8 @@
 
 ## CR-033 — Kısmi ödeme sonrası makbuzda tahsilatın iki kez düşülmesi — Açık
 
+- Düzeltme/yayın onayı:2026-10-20 kullanıcı CR-033'ü kontrol edip yalnız demoda yayımlamayı açıkça istedi. Makbuz hesapları collection/summary bağlamı ve ortak helper ile düzeltildi; listeden açma birikimli özet, kısmi satırda da kullanılabilir.16 ilgili test/typecheck/yerel UI/Docker başarılı, fixture temizliği60 sporcu/300 ödeme ve eski hash aynı. Yeni model/migration/paket/yetki kararı yok; demo yayını henüz bekliyor. [PAYMENT_RECEIPT_VALIDATION](../30-quality/PAYMENT_RECEIPT_VALIDATION.md).
+
 - Kanıt: 2026-10-20 kullanıcı isteğiyle yalnız demo Ece Arslan/31.01.2027 vadeli 1500 TL sezon aidatına ilk 500 TL ödeme kaydedildi. Kalıcı ödeme satırı Kısmi/ödenen500/kalan1000 ve aile23000 tahakkuk/6750 ödenen/16250 kalan olarak doğru. Açılan makbuz Önceden Ödenen500 + Tahsil Edilen500 ve Kalan Bakiye500 gösterdi; önceki ödeme aslında0, doğru kalan1000 olmalıdır. Makbuz ayrıca kısmi kayıtta koşulsuz ÖDENDİ etiketi taşır.
 - Kaynak: src/app/payments/page.tsx handleRecordPayment API'nin güncellenmiş payment nesnesini ve bu tahsilatın paidAmount değerini birlikte PaymentReceipt'e verir. src/components/PaymentReceipt.tsx güncel payment.paidAmount'ı Önceden Ödenen sayar ve kalan hesabında hem bunu hem paidAmount'ı çıkarır; aynı500 iki kez düşülür. Ödeme güncellemesi tek kez kaydedilmiştir.
 - Öneri: Makbuzda tahsilat öncesi/sonrası toplamı açık bir sözleşmeyle ayırmak; kalan=amount−güncel toplam ödenen ve önceki=toplam ödenen−bu tahsilat. İlk/önceki kısmi/tam ödeme ve listeden yeniden açma senaryoları birlikte doğrulanmalı; kısmi ödemede borcun tamamen kapandığı izlenimi giderilmeli.

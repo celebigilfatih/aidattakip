@@ -1,5 +1,9 @@
 # Aidat Takip — Product Specification
 
+## Makbuz ve birikimli ödeme özeti — CR-033
+
+Tahsilat kaydından sonra makbuz, önceki ödemeyi ve bu tahsilatı ayrı; toplam ödenen ve güncel kalan bakiyeyi birlikte gösterir. Tahsilat sonrası birikimli tutar iki kez düşülmez. Açık borç KISMİ ÖDEME, sıfır kalan ÖDENDİ görünür. Listeden yeniden açma, ayrı hareket geçmişi olmayan mevcut modelde birikimli Ödeme Özeti sunar; son tahsilat tutarı varsayılmaz. Kısmi ödemelerden de özet açılabilir. [Doğrulama](../30-quality/PAYMENT_RECEIPT_VALIDATION.md).
+
 ## Ödemelerde ortak gecikme görünümü — CR-032
 
 Sayaç, gecikme kutusu, durum filtresi, satır/plan rozeti ve Excel, aile hesabıyla aynı kalan bakiye/İstanbul vade günü tanımını kullanır. Vadesi geçen kısmi ödeme Gecikmiş ve Kısmi ödeme bilgisiyle görünür. Sıfır/fazla ödeme gecikme üretmez; PAID/CANCELLED açık bakiye sayılmaz. Eski kaydın OVERDUE durumu gelecekteki vadeyi otomatik gecikmiş yapmaz. Görünüm anlık hesaplanır, kayıt statüsü kendiliğinden yazılmaz. Ayrıntı: [PAYMENT_OVERDUE_VALIDATION](../30-quality/PAYMENT_OVERDUE_VALIDATION.md).

@@ -3,11 +3,12 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Payment } from '@/types'
 import { Button } from '@/components/ui/button'
-import { Printer, X, CheckCircle } from 'lucide-react'
+import { Printer, X } from 'lucide-react'
+import { receiptAmounts, type ReceiptContext } from '@/lib/payment-receipt'
 
 interface PaymentReceiptProps {
   payment: Payment
-  paidAmount: number
+  context: ReceiptContext
   paymentMethod: string
   paidDate: string
   onClose: () => void
@@ -22,11 +23,14 @@ interface Settings {
 
 export function PaymentReceipt({ 
   payment, 
-  paidAmount, 
+  context,
   paymentMethod, 
   paidDate,
   onClose 
 }: PaymentReceiptProps) {
+  const amounts = receiptAmounts(payment, context)
+  const isSummary = context.kind === 'summary'
+  const documentTitle = isSummary ? 'Ödeme Özeti' : 'Tahsilat Makbuzu'
   const printRef = useRef<HTMLDivElement>(null)
   const [settings, setSettings] = useState<Settings>({
     schoolName: 'SporManage',
@@ -59,6 +63,7 @@ export function PaymentReceipt({
   }
 
   const formatDate = (dateString: string) => {
+    if (!dateString) return '—'
     return new Date(dateString).toLocaleDateString('tr-TR', {
       day: '2-digit',
       month: 'long',
@@ -73,7 +78,7 @@ export function PaymentReceipt({
       'BANK_TRANSFER': 'Banka Transferi',
       'CHEQUE': 'Çek'
     }
-    return methods[method] || method
+    return methods[method] || method || '—'
   }
 
   const handlePrint = () => {
@@ -83,7 +88,7 @@ export function PaymentReceipt({
         <!DOCTYPE html>
         <html>
           <head>
-            <title>Tahsilat Makbuzu - ${payment.student?.firstName} ${payment.student?.lastName}</title>
+            <title>${documentTitle} - ${payment.student?.firstName} ${payment.student?.lastName}</title>
             <style>
               @media print {
                 @page { 
@@ -353,7 +358,7 @@ export function PaymentReceipt({
       <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
         {/* Action Buttons */}
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
-          <h2 className="text-xl font-bold text-gray-900">Tahsilat Makbuzu</h2>
+          <h2 className="text-xl font-bold text-gray-900">{documentTitle}</h2>
           <div className="flex space-x-2">
             <Button
               onClick={handlePrint}
@@ -390,13 +395,13 @@ export function PaymentReceipt({
 
             {/* Receipt Title */}
             <div className="receipt-title">
-              TAHSİLAT MAKBUZU
+              {isSummary ? 'ÖDEME ÖZETİ' : 'TAHSİLAT MAKBUZU'}
             </div>
 
             {/* Receipt Meta Information */}
             <div className="receipt-meta">
               <div className="receipt-number">
-                <div>Makbuz No:</div>
+                <div>{isSummary ? 'Özet No:' : 'Makbuz No:'}</div>
                 <strong>{receiptNumber}</strong>
               </div>
               <div className="receipt-date">
@@ -430,11 +435,11 @@ export function PaymentReceipt({
                   <span className="info-value">{payment.feeType?.name}</span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Ödeme Yöntemi:</span>
+                  <span className="info-label">{isSummary ? 'Son Ödeme Yöntemi:' : 'Ödeme Yöntemi:'}</span>
                   <span className="info-value">{getPaymentMethodText(paymentMethod)}</span>
                 </div>
                 <div className="info-row">
-                  <span className="info-label">Ödeme Tarihi:</span>
+                  <span className="info-label">{isSummary ? 'Son Ödeme Tarihi:' : 'Ödeme Tarihi:'}</span>
                   <span className="info-value">{formatDate(paidDate)}</span>
                 </div>
                 <div className="info-row">
@@ -451,35 +456,36 @@ export function PaymentReceipt({
                 <span>Toplam Tutar:</span>
                 <span>{formatCurrency(payment.amount)}</span>
               </div>
-              {payment.paidAmount && payment.paidAmount > 0 && (
+              {!isSummary && (
                 <div className="amount-row">
                   <span>Önceden Ödenen:</span>
-                  <span style={{ color: '#059669', fontWeight: '600' }}>{formatCurrency(payment.paidAmount)}</span>
+                  <span style={{ color: '#059669', fontWeight: '600' }}>{formatCurrency(amounts.previousPaid!)}</span>
                 </div>
               )}
               <div className="amount-row total">
-                <span>Tahsil Edilen Tutar:</span>
+                <span>{isSummary ? 'Toplam Ödenen:' : 'Tahsil Edilen Tutar:'}</span>
                 <span>
-                  {formatCurrency(paidAmount)}
-                  <span className="paid-badge">
+                  {formatCurrency(isSummary ? amounts.totalPaid : amounts.collected!)}
+                  <span className="paid-badge" style={amounts.remaining > 0 ? { backgroundColor: '#fef3c7', color: '#92400e' } : undefined}>
                     <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    ÖDENDİ
+                    {amounts.status}
                   </span>
                 </span>
               </div>
-              {payment.amount - (payment.paidAmount || 0) - paidAmount > 0 && (
-                <div className="amount-row" style={{ fontSize: '16px', color: '#dc2626', fontWeight: '600' }}>
-                  <span>Kalan Bakiye:</span>
-                  <span>{formatCurrency(payment.amount - (payment.paidAmount || 0) - paidAmount)}</span>
-                </div>
-              )}
+              {!isSummary && <div className="amount-row"><span>Toplam Ödenen:</span><span>{formatCurrency(amounts.totalPaid)}</span></div>}
+              <div className="amount-row" style={{ fontSize: '16px', color: amounts.remaining > 0 ? '#dc2626' : '#059669', fontWeight: '600' }}>
+                <span>Kalan Bakiye:</span>
+                <span>{formatCurrency(amounts.remaining)}</span>
+              </div>
             </div>
 
             {/* Declaration */}
             <div className="declaration">
-              ✓ Yukarıda belirtilen tutarı {getPaymentMethodText(paymentMethod)} yöntemi ile eksiksiz olarak tahsil ettim.
+              {isSummary
+                ? 'Bu belge borcun güncel ödeme özetidir. Ayrı tahsilatların geçmişini göstermez.'
+                : `✓ Yukarıda belirtilen ${formatCurrency(amounts.collected!)} tutarını ${getPaymentMethodText(paymentMethod)} yöntemi ile tahsil ettim.`}
             </div>
 
             {/* Footer */}
