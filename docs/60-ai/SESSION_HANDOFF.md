@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-20 — Demo sezon kısmi ödemesi; makbuz bulgusu
+
+Kullanıcı Ece'nin bir sezon aidatına kısmi ödeme ve aile toplamı kontrolü istedi. Başta açıklanan örnek500 TL, demo Ece/31.01.2027 vadeli1500 TL sezon aidatına Nakit/20.10.2026 ve demo notuyla tek kez kaydedildi. Tam yenileme sonrası satır Kısmi/ödenen500/kalan1000. Sezon planı4500/500/4000, Ece tüm dönem ödenen3750/kalan7000/kayıt8/geciken2 ve3000 TL. Aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken; Eren kalan9250 aynı. Görevde gerçek ödeme sağlayıcısı veya para transferi kullanılmadı; sentetik demo tahsilat kaydıdır.
+
+Makbuzda ayrı CR-033 açıldı: güncellenmiş payment.paidAmount500 Önceden Ödenen sayılıp tahsil edilen500 tekrar düşülüyor, kalan500 gösteriliyor; doğru önceki0/kalan1000. Kaynak handleRecordPayment→PaymentReceipt çift düşümü ve koşulsuz ÖDENDİ etiketiyle eşlendi. Ödeme satırı/aile doğru; makbuz yazdırılmadı ve kodu bu işletim görevinde değiştirilmedi. Önerilen sonraki iş CR-033 ilk/önceki kısmi/tam/yeniden açma makbuz düzeltmesidir.
+
+Kalite/kullanım/CHANGELOG/PROJECT_BOOT ve CHANGE_REQUESTS güncel. Kanıt output/season-example/demo-family-after-partial.png ve demo-partial-receipt-issue.png Git dışı. Ana sekme aile toplamlarıyla açık, örnek kayıt bırakıldı. Kod/model/migration/runtime/main/Özlüce/bildirim ayarlarında işlem yok; ADR-0009 geçerli, yeni karar gerekmedi. Canlı UI/persist/aritmetik kontrol edildi; kaynak değişmediği için test/typecheck/Docker yeniden çalıştırılmadı. Önceki mali onay/önizleme kayıtları tarihçedir.
+
 ## 2026-10-20 — Demo sezon mali onayı; mükerrer borç kontrolü
 
 Kullanıcının açık talebiyle Örnek 2027 İlkbahar Sezonu Ece/Eren aidatları demo UI üzerinden onaylandı. 31 Ocak/28 Şubat/31 Mart 2027, Ece 3 × 1500 = 4500 TL, Eren 3 × 1750 = 5250 TL, toplam 9750 TL / 6 yeni borç. Aynı onay öncesi önizleme ikinci sekmede tutulup ilk onaydan sonra tekrar gerçek Onayla eylemi yapıldı. Sunucu başarılı yanıtladı; yeniden önizleme Önceden onaylandı / yeni borç 0 TL ve kapalı oluşturma düğmesi gösterdi. İkinci onaydan sonra her sporcunun ödeme ekranında toplam 8 kayıt, yalnız üç yeni gelecek vadeli Bekliyor sezon borcu vardır. Yeni paralel yarış kontrolü yapılmadı; bu deneme art arda iki sekme onayıdır.

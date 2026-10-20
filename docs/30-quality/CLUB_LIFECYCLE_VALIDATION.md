@@ -1,5 +1,15 @@
 # Kulüp yaşam döngüsü doğrulaması — 2026-10-20
 
+## Demo sezon kısmi ödemesi — 2026-10-20
+
+Kullanıcı Ece'nin bir sezon aidatına kısmi ödeme ve aile toplamı kontrolünü istedi; örnek tutar500 TL seçilip başta açıklandı. Yalnız demo /payments?studentId=demo-v1-student-merkez-u10-07 ekranındaki 31.01.2027 vadeli 1500 TL Merkez U10 Aylık Aidat satırından Ödeme Kaydet açıldı. Nakit,20.10.2026,500 TL; notta örnek demo ödemesi belirtildi. Tek kayıt gönderimi başarılı oldu. Makbuz yazdırılmadı/gönderilmedi.
+
+Kalıcı ödeme satırı (tam sayfa yenileme sonrası): 1500 tutar/500 ödenen/1000 kalan/Kısmi. Diğer iki sezon taksidi1500'er TL Bekliyor; sezon planı4500/500/4000. Ece ödenen3250→3750, kalan7500→7000; kayıt sayısı8, geciken2/3000 TL aynı. Aile: tahakkuk23000 aynı, ödenen6250→6750, kalan16750→16250, geciken7000 aynı. Eren kalan9250 değişmedi; 7000+9250=16250. Yeni ödeme gelecekteki vadelidir; eski geciken borcu azaltmaz.
+
+Ayrı hata CR-033: otomatik açılan makbuz güncellenmiş toplam ödeneni önceki tahsilat sanarak bu500 TL'yi iki kez düşürdü; Önceden Ödenen500/Kalan500 gösterdi (doğrusu önceki0/kalan1000). Ödeme satırı/aile hesabı doğru; bu kontrol tüm makbuz akışının geçtiği anlamına gelmez. Kaynak incelemesi PaymentReceipt çift düşümünü doğruladı. Kod düzeltmesi bu veri işleminde yapılmadı.
+
+Kanıt output/season-example/demo-family-after-partial.png ve demo-partial-receipt-issue.png Git dışı. Örnek ödeme demoda bırakıldı. Kod/model/migration/yayın/anahtar/bildirim ayarı değişmedi; main/Özlüce üzerinde işlem yok, ADR-0009 geçerli. Canlı kayıt/persist/aritmetik kontrolleri yapıldı; kaynak değişmediği için test/typecheck/Docker tekrar çalıştırılmadı. Yeni iPhone kontrolü yok. Aşağıdaki toplamlar önceki aşamaların tarihçesidir.
+
 ## Demo sezon mali onayı ve tekrar koruması — 2026-10-20
 
 Kullanıcı Ece/Eren sezon aidatlarını oluşturmayı ve tekrar onay/aile toplamı kontrolünü açıkça istedi. Yalnız SporManage demo **Örnek 2027 İlkbahar Sezonu** için mevcut iki kayıt ve 9750 TL / 6 taksit önizlemesi doğrulandı. İlk aile görünümü 13250 tahakkuk/6250 ödenen/7000 kalan-geciken idi. Aynı onay öncesi önizleme ikinci sekmede de hazırlandı. Ana sekmeden Aidat borçlarını oluştur → Onayla sonrası iki kayıt Aidatlar onaylı oldu; aile 23000/6250/16750/7000 gösterdi. İkinci sekmenin eski önizlemesinden aynı iki kayıt tekrar Onayla ile sunucuya gönderildi. İşlem başarılı döndü; güncel önizleme iki sporcu için Önceden onaylandı, aynı üçer taksit ve yeni borç toplamı 0 TL / oluşturma düğmesi kapalı gösterdi. Bu kontrol yalnız düğmenin kapanması değildir; ikinci gerçek UI onayı da yapıldı. Paralel yarış bu canlı görevde sınanmadı; önceki entegrasyon testlerinin ayrı kanıtıdır.

@@ -2,6 +2,8 @@
 
 ## Güncel işletim — demo örnek sezon
 
+Son kullanım: Ece'nin 31.01.2027 vadeli 1500 TL sezon aidatına 20.10.2026 tarihli 500 TL örnek Nakit kısmi ödeme kaydedildi. Kalıcı satır Kısmi/ödenen500/kalan1000, Ece toplam kalan7000; aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken. Makbuzda bu tahsilat iki kez düşülüp kalan500 gösteriliyor: CR-033 açık; ödeme listesi/aile doğru. Kod/yayın değişmedi. Aşağıdaki mali onay toplamları ödeme öncesinin tarihçesidir.
+
 2026-10-20 kullanıcı isteğiyle Örnek 2027 İlkbahar Sezonu (01.01–31.03.2027) mevcut Ece/Eren için mali onaylandı: 31 Ocak/28 Şubat/31 Mart vadeli 3 × 1500 ve 3 × 1750 TL, toplam 9750 TL yeni borç. Önceden açılmış ikinci sekmeden aynı önizleme tekrar onaylandı; her sporcuda 8 kayıt (5 eski + 3 sezon) kaldı, yeni önizleme Önceden onaylandı / yeni borç 0 TL. Aile 23000 tahakkuk/6250 ödenen/16750 kalan/7000 geciken. Grup geçişi yapılmadı. Kod/migration/yayın yok; [kabul kaydı](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md).
 
 ## Son düzeltme — CR-032
@@ -12,7 +14,7 @@ CR-032 yalnız demo098b493 ile yayımlandı; Coolify Success03m28s.81 benzersiz 
 
 2026-10-20 ADR-0009 dört modül yalnız SporManage demo8cd9f72 ile yayımlandı; Coolify Success/04m05s, beş additive migration applied,37 model/18 migration.79 test/typecheck/yerel ve demo Docker başarılı; son yerel onay/görüşme ve canlı390/1280px kontrolleri geçti. Kullanıcı dört ekranın iPhone görünümünü onayladı; CR-031 kapalı. Önce/sonra hash/sayımlar, mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu; worker ilerledi. main/Özlüce değişmedi. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
 
-- Document version: 0.5.5
+- Document version: 0.5.6
 - CDSK version: TBD
 - Last updated: 2026-10-20
 

@@ -10,6 +10,8 @@ ADMIN/SECRETARY aile ilişkilerini yönetir; ADMIN/ACCOUNTING tüm dönemler ve 
 
 ## Sezon yenileme
 
+Sonraki örnek kısmi ödeme (2026-10-20): Ailede Ece'nin **Sporcunun ödemeleri** bağlantısı → 31.01.2027 sezon aidatında **Ödeme Kaydet**,500 TL/Nakit/20.10.2026 ile kayıt yapıldı. 1500 TL taksit Kısmi, ödenen500/kalan1000; Ece toplam kalan7000, Eren9250, aile kalan16250/ödenen6750/tahakkuk23000/geciken7000. Kalıcılık ve toplamlar kontrol edildi. Makbuzda çift düşüm nedeniyle kalan500 gösterilmesi CR-033 açık hatasıdır; doğru bakiye ödeme listesi ve ailede1000/16250 olarak doğrulandı. Aşağıdaki onay toplamları ödeme öncesidir.
+
 Demo kullanım örneği (2026-10-20): **Örnek 2027 İlkbahar Sezonu**, 01.01.2027–31.03.2027. Mevcut Ece Arslan ve Eren Aksoy sezona bağlandı; ikisi **Devam edecek**, hedefleri sırasıyla Merkez U10 ve Merkez U16. Ücretler ilgili aylık aidat türüyle 1500/1750 TL, ilk vade 31.01.2027; 31 Ocak/28 Şubat/31 Mart için Ece 4500 TL, Eren 5250 TL, toplam 9750 TL. İlk görevde taslak bırakıldı; sonraki açık kullanıcı isteğiyle **Aidat borçlarını oluştur → Onayla** yapıldı. Aynı eski önizlemeyi tutan ikinci sekmeden tekrar onay da sınandı: yalnız 6 yeni borç, her sporcuda 8 toplam ödeme kaydı, yeni önizlemede **Önceden onaylandı / yeni borç 0 TL**. Aile artık 23000 TL tahakkuk, 6250 TL ödenen, 16750 TL kalan ve 7000 TL geciken gösterir. Gelecek vadeler gecikmiş sayılmaz; tahsilat ve grup geçişi yapılmadı. Bu tutarlar sentetik demo örneğidir, gerçek sezon fiyat kararı değildir.
 
 1. Şubesi olmayan kulüp geneli ADMIN ortak takvimi oluşturur. Tarihlerde saat dilimi Europe/Istanbul kullanılır.

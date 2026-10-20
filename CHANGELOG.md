@@ -1,5 +1,9 @@
 # Changelog
 
+### Verified — 2026-10-20 — Demo sezon kısmi ödemesi
+
+- Ece'nin 31 Ocak 2027 vadeli 1500 TL sezon borcuna 500 TL örnek Nakit ödeme kaydedildi; Kısmi/1000 TL kalan ve yenileme sonrası kalıcılık doğru. Ece kalan7000, aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken. Makbuzun güncel tahsilatı iki kez düşmesi ayrı CR-033 açık bulgusudur; kod/model/yayın değiştirilmedi.
+
 ### Verified — 2026-10-20 — Demo sezon aidatı mali onayı
 
 - Açık kullanıcı isteğiyle Ece/Eren için toplam 9750 TL / 6 sezon borcu oluşturuldu. Aynı önizlemeyi koruyan ikinci sekmeden tekrar onay başarılı; yeni önizleme Önceden onaylandı / 0 TL, her sporcuda yalnız 3 yeni borç ve 8 toplam kayıt doğrulandı. Aile 23000 TL tahakkuk/6250 TL ödenen/16750 TL kalan/7000 TL geciken. Tahsilat veya grup geçişi yapılmadı; kod/migration/yayın değişmedi.

@@ -1,5 +1,12 @@
 # Change Requests
 
+## CR-033 — Kısmi ödeme sonrası makbuzda tahsilatın iki kez düşülmesi — Açık
+
+- Kanıt: 2026-10-20 kullanıcı isteğiyle yalnız demo Ece Arslan/31.01.2027 vadeli 1500 TL sezon aidatına ilk 500 TL ödeme kaydedildi. Kalıcı ödeme satırı Kısmi/ödenen500/kalan1000 ve aile23000 tahakkuk/6750 ödenen/16250 kalan olarak doğru. Açılan makbuz Önceden Ödenen500 + Tahsil Edilen500 ve Kalan Bakiye500 gösterdi; önceki ödeme aslında0, doğru kalan1000 olmalıdır. Makbuz ayrıca kısmi kayıtta koşulsuz ÖDENDİ etiketi taşır.
+- Kaynak: src/app/payments/page.tsx handleRecordPayment API'nin güncellenmiş payment nesnesini ve bu tahsilatın paidAmount değerini birlikte PaymentReceipt'e verir. src/components/PaymentReceipt.tsx güncel payment.paidAmount'ı Önceden Ödenen sayar ve kalan hesabında hem bunu hem paidAmount'ı çıkarır; aynı500 iki kez düşülür. Ödeme güncellemesi tek kez kaydedilmiştir.
+- Öneri: Makbuzda tahsilat öncesi/sonrası toplamı açık bir sözleşmeyle ayırmak; kalan=amount−güncel toplam ödenen ve önceki=toplam ödenen−bu tahsilat. İlk/önceki kısmi/tam ödeme ve listeden yeniden açma senaryoları birlikte doğrulanmalı; kısmi ödemede borcun tamamen kapandığı izlenimi giderilmeli.
+- Bu görev yalnız demo veri işlemi/kabul kontrolüdür; bulgu kaydedildi, makbuz kodu ve geçmiş borçlar düzeltilmedi. Kanıt output/season-example/demo-partial-receipt-issue.png Git dışı. Yeni ADR kararı yok; mevcut mali ledger konusu CR-009 ve eski rol konuları CR-002/003 ayrı kalır.
+
 ## CR-032 — Ödemeler ekranı gecikmiş adet/durum tutarsızlığı — Kapalı
 
 - Kanıt:2026-10-20 kullanıcı talebiyle demo örnek aile kontrolü. Ece Arslan'ın vadesi05.08.2026 ve05.10.2026 olan1500'er TL iki açık borcu mevcut; Ödemeler üst sayacı1, aile gecikeni3000 TL. Eski satır durumu Ağustos için OVERDUE, Ekim için PENDING; Eren'de PARTIAL/PENDING satırları3 sayılıyor.
