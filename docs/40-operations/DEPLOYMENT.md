@@ -1,5 +1,9 @@
 # Deployment
 
+## 2026-10-20 — Nihai yerel aday; demo henüz yayımlanmadı
+
+Nihai kaynak 8cd9f72e1ab4ca8a576bb70c009cda2a27530f95 uzak codex/club-lifecycle-20261020 dalına push edildi. aidat-club-lifecycle:8cd9f72e1ab4 Docker exit0, config sha256:04448a20e21a3334d37c4f16fc57bb383dd18db385fc260939d593d883220175. Image probe UID1001/37 model/mevcut worker, .env/output/cache backup hariç. Son ilgili16 test ve typecheck başarılı; toplam79 test kanıtı korunur. Yerel60 sporcu/300 ödeme ve18 applied migration doğrulandı. Demo CF Git Source salt okunur kontrolünde hâlâ codex/staff-summary-20261019 / 7f5710cb0d7f0a9ca5467f8055c3a6ca84c4efbe; alanlar kaydedilmedi, Deploy başlatılmadı. Uzak main b024011fd240fc65581eed24469ef88dbb271fe7. CF kaynak paneli sekme21 handoff olarak işaretlendi; geçici viewport override'ları reset edildi. Teknolojik onay eksiği yok; yalnız test tarayıcı kontrolü ve son UI/deployment kabulü açık. Kalan iş önceki maddelerde, CR-031 açık.
+
 ## 2026-10-20 — ADR-0009 yayın hazırlığı (henüz dağıtılmadı)
 
 Demo hostunda /data/coolify/backups/club-lifecycle-20261020/demo.dump,108679 byte/600; pg_restore --list başarılı. Aynı dizinde before.json mevcut veri hash/sayımları (10 kullanıcı/60 sporcu/60 veli/300 ödeme/6 grup/17 bildirim/1 kural/3 cihaz/2 alıcı/1 run) ve ozluce-before.txt saklanır. Özlüce14c56b463e9e / image b024011 / StartedAt2026-10-17T21:57:10.916623555Z/Runningtrue. Demo runtime hâlâ7f5710c; kaynak ve dağıtım ayarı değiştirilmedi. Restore tatbikatı yapılmadı.

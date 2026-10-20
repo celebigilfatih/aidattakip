@@ -238,3 +238,8 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 - Mevcut README ve diğer dosyalar korunarak yalnızca eksik dosyalar eklendi.
 - Yeni proje ADR’si veya teknik karar kabul edilmedi.
 - Doğrulama sonuçları: [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
+
+### Verified / Pending — 2026-10-20 — ADR-0009 nihai yerel aday
+
+- Kaynak 8cd9f72 ayrı dalda; nihai Docker, UID1001/37 model/worker ve artifact dışlama probe, son ilgili16 test/typecheck başarılı (toplam79 test). Sporcu ödeme görünümünde genel toplu iptal kapalı; hazırlık düzeltme listesi ve kapsam dışı hedef grup redaksiyonu test edildi.
+- Demo yedeği/öncesi guard hazır; CF hâlâ7f5710c, yayın başlatılmadı. Test tarayıcısı onayı/kontrolü takıldığı için son UI onay/görüşme kabulü ve demo yayını açık. Main/Özlüce ve Pazartesi09:00 kuralı değişmedi; CR-031 kapanmadı.

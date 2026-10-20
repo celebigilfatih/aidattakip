@@ -1,5 +1,9 @@
 # AI Session Handoff
 
+## 2026-10-20 — Nihai yerel aday; demo henüz yayımlanmadı
+
+Nihai kaynak 8cd9f72e1ab4ca8a576bb70c009cda2a27530f95 uzak codex/club-lifecycle-20261020 dalına push edildi. aidat-club-lifecycle:8cd9f72e1ab4 Docker exit0, config sha256:04448a20e21a3334d37c4f16fc57bb383dd18db385fc260939d593d883220175. Image probe UID1001/37 model/mevcut worker, .env/output/cache backup hariç. Son ilgili16 test ve typecheck başarılı; toplam79 test kanıtı korunur. Yerel60 sporcu/300 ödeme ve18 applied migration doğrulandı. Demo CF Git Source salt okunur kontrolünde hâlâ codex/staff-summary-20261019 / 7f5710cb0d7f0a9ca5467f8055c3a6ca84c4efbe; alanlar kaydedilmedi, Deploy başlatılmadı. Uzak main b024011fd240fc65581eed24469ef88dbb271fe7. CF kaynak paneli sekme21 handoff olarak işaretlendi; geçici viewport override'ları reset edildi. Teknolojik onay eksiği yok; yalnız test tarayıcı kontrolü ve son UI/deployment kabulü açık. Kalan iş önceki maddelerde, CR-031 açık.
+
 ## 2026-10-20 — ADR-0009 yerel uygulama hazır, demo yayını bekliyor
 
 Dört modülün kaynakları,37 model/18 migration ve beş additive yerel migration hazır.79 test (72 lib+7 prisma), son anlamlı değişikliklerden sonra ilgili16 test ve typecheck başarılı. Docker adayları başarılı; en son küçük trial session row-lock düzeltmesinin nihai Docker sonucu aşağıda eklenecek. Paket/lock/anahtar/cron değişmedi. Plan onayı zaten alınmış olduğundan model veya demo yayını için yeniden onay istenmez.
