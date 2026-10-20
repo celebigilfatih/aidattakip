@@ -1,5 +1,9 @@
 # Changelog
 
+### Verified — 2026-10-20 — Demo örnek aile
+
+- Kullanıcının isteğiyle Merkez Şube’de mevcut iki sentetik sporcu Örnek Kardeş Ailesi hesabına bağlandı.10 ödeme satırıyla13.250 TL tahakkuk/6.250 TL ödenen/7.000 TL kalan-geciken ve kısmi ödeme, yenileme sonrası kalıcılık doğrulandı. Kod/yayın/migration değişmedi; eski Ödemeler gecikmiş adet sayacı tutarsızlığıCR-032 olarak açık kaydedildi.
+
 ### Added — 2026-10-20 — Aile, sezon, aday ve takip (ADR-0009)
 
 - Açık kullanıcı onaylı dört modül, ortak sunucu yetkisi ve mali redaksiyon; mevcut sporcu/veli/aidat geçmişi korunur.

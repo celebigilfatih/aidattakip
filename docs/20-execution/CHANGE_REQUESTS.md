@@ -1,5 +1,13 @@
 # Change Requests
 
+## CR-032 — Ödemeler ekranı gecikmiş adet/durum tutarsızlığı — Açık
+
+- Kanıt:2026-10-20 kullanıcı talebiyle demo örnek aile kontrolü. Ece Arslan'ın vadesi05.08.2026 ve05.10.2026 olan1500'er TL iki açık borcu mevcut; Ödemeler üst sayacı1, aile gecikeni3000 TL. Eski satır durumu Ağustos için OVERDUE, Ekim için PENDING; Eren'de PARTIAL/PENDING satırları3 sayılıyor.
+- Kaynak: src/app/api/payments/route.ts overduePayments yalnız PENDING/PARTIAL sayar, OVERDUE dışarıda; dueDate anlık new Date ile karşılaştırılır. src/app/payments/page.tsx durum rozeti kalıcı status, plan kartı ise tarih bazlı hesap kullanır. Aile/staff-overdue İstanbul gün başlangıcıyla hesaplar; yeni aile toplamları doğru doğrulandı.
+- Etki/öneri: Üst gecikmiş adet, filtre ve rozetler ortak güncel bakiye/vade hesabına hizalanmalı; PENDING/PARTIAL/OVERDUE, sıfır kalan, PAID/CANCELLED ve İstanbul vade günü sınırı birlikte doğrulanmalı. Mevcut borçların durumlarını otomatik yeniden yazmak yerine okuma hesaplarını düzeltmek değerlendirilmelidir.
+- Bu görevde yalnız bulgu kaydı: kod/ödeme durumu/mali hareket değişmedi. ADR-0009 değiştirilmez. [Doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
+
+
 ## CR-031 — Aile, sezon, aday kayıt ve sporcu takibi — Kapalı
 
 Kullanıcı 2026-10-20 beş bölümlük planın tamamını uygulamayı açıkça onayladı; ADR-0009 Accepted. Önceki “kapsam genişlemesi onayı yok” ifadeleri tarihsel ilk kapsamdır; dört modül artık onaylıdır. Yeni katmanın mali erişimi ADMIN/ACCOUNTING ile sınırlıdır; eski canManagePayments TRAINER izni ve nesne kapsamı ayrı CR-002/003 olarak kalır, sessizce genelleştirilmez. Beş additive migration yerel/demo applied,37 model/18 migration ve79 test/typecheck/Docker başarılı. Son yerel onay/görüşme ve canlı390/1280px kontrolü tamam; yalnız demo8cd9f72 Success/04m05s, önce/sonra tüm mevcut veri hash/sayımları ve Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu, worker ilerledi. Kullanıcı gerçek iPhone görünümünü onayladı; main/Özlüce aynı. CR-031 kapalı. [Doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).

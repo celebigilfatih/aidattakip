@@ -1,5 +1,20 @@
 # AI Session Handoff
 
+## 2026-10-20 — Demo örnek aile hesabı
+
+Kullanıcı demo ortamında iki kardeş senaryosu ve birleşik borç/ödeme görünümü istedi. Canlı /families ekranından **Örnek Kardeş Ailesi**, Merkez Şube'de mevcut sentetik Ece Arslan (Merkez U10, demo-v1-student-merkez-u10-07) ve Eren Aksoy (Merkez U16, demo-v1-student-merkez-u16-06) seçilerek oluşturuldu. Bu, açıkça seçilmiş örnek kardeş ilişkisidir; gerçek akrabalık/soyadı/telefon eşleşmesi varsayılmadı, adlar ve veli kayıtları değiştirilmedi. Kayıt kullanıcı kullanımına bırakıldı, arşivlenmedi.
+
+| Sporcu | Tahakkuk | Ödenen | Kalan |
+|---|---:|---:|---:|
+| Ece Arslan |6.250 TL|3.250 TL|3.000 TL|
+| Eren Aksoy |7.000 TL|3.000 TL|4.000 TL|
+| Aile |13.250 TL|6.250 TL|7.000 TL|
+
+Her sporcunun ailedeki bağlantısından açılan /payments?studentId=… ekranındaki beşer görünür ödeme satırı bağımsız toplandı:10 satır, aile kartıyla aynı toplamlar. Eren'in ekipman1000/ödenen500/kalan500 kısmi ödemesi dahil. Aile geciken7.000 TL; tüm açık satırların vadeleri20 Ekim2026'dan öncedir. Aile sayfası tam yenileme sonrası aynı iki üye/toplamla kalıcı; mevcut veli iletişimleri ve sporcuya özel ödeme bağlantıları görünür. Yeni tahakkuk/tahsilat/veli/sporcu/bildirim üretilmedi. Yalnız demo aile ilişkisi yazıldı; kod/migration/deploy/main/Özlüce/haftalık kural değişmedi. ADR-0009 geçerli, yeni karar yok.
+
+Ayrı bulgu **CR-032**: eski Ödemeler özeti Ece'de gecikmiş1 sayarken5 Ağustos ve5 Ekim vadeli iki açık borç vardır; API sayacı OVERDUE durumunu dışlar, anlık zamanı kullanır. Aile tutar hesabı doğru; legacy sayaç/durum gösterimi bu görevde değiştirilmedi. Kanıt output/club-lifecycle/demo-example-family.png ve demo-family-ece-payments.png (Git dışında). Bu işletim kontrolünde UI ve10 satır aritmetiği çalıştı; kaynak değişmediği için typecheck/test/Docker tekrar çalıştırılmadı.
+
+
 ## 2026-10-20 — ADR-0009 demo yayını ve iPhone kabulü tamamlandı
 
 Yalnız SporManage demo, codex/club-lifecycle-20261020 dalı ve sabit 8cd9f72e1ab4ca8a576bb70c009cda2a27530f95 ile yayımlandı. Coolify vmpdtffg5zhxz6jssxmr7urc **Success / 04m05s**; başlangıç10:51:10 UTC (13:51:10 Türkiye), rolling update10:55:15 UTC. Yeni demo container97bbfdb44a48 / oibkjai6tfoeur5gxnx3ekxt-20261020T105110. Beş additive migration startup logunda applied, toplam18 migration/37 model; seed atlandı ve Next Ready376ms. Paket/anahtar/cron/dağıtım modeli değişmedi.

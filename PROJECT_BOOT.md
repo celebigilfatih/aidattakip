@@ -4,11 +4,15 @@
 
 2026-10-20 ADR-0009 dört modül yalnız SporManage demo8cd9f72 ile yayımlandı; Coolify Success/04m05s, beş additive migration applied,37 model/18 migration.79 test/typecheck/yerel ve demo Docker başarılı; son yerel onay/görüşme ve canlı390/1280px kontrolleri geçti. Kullanıcı dört ekranın iPhone görünümünü onayladı; CR-031 kapalı. Önce/sonra hash/sayımlar, mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu; worker ilerledi. main/Özlüce değişmedi. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
 
-- Document version: 0.5.1
+- Document version: 0.5.2
 - CDSK version: TBD
 - Last updated: 2026-10-20
 
 Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlantılı belgelerdir. Mevcut kod davranışı, kullanıcı hedefi ve Proposed karar birbirinden ayrılır. Statik inceleme uygulamanın çalıştığına dair kanıt değildir.
+
+## Demo örnek aile — 2026-10-20
+
+Kullanıcı isteğiyle Merkez Şube’de Örnek Kardeş Ailesi (Ece Arslan/Eren Aksoy) oluşturuldu ve kalıcılık/10 ödeme satırı karşılaştırıldı:13.250 TL tahakkuk,6.250 TL ödenen,7.000 TL kalan/geciken. Kod/yayın değişmedi; eski Ödemeler gecikmiş adet sayacı tutarsızlığıCR-032 açık. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md).
 
 ## Project Compass
 
@@ -184,6 +188,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
+| 0.5.2 | 2026-10-20 | Demoda örnek aile ve10 satır mali karşılaştırma; legacy gecikmiş adet sayacıCR-032 bulgusu. |
 | 0.5.1 | 2026-10-20 | ADR-0009 yalnız demo8cd9f72 Success/04m05s; migration/veri-kural koruması ve gerçek iPhone kabulü, CR-031 kapalı. |
 | 0.5.0 | 2026-10-20 | ADR-0009 onaylı dört modül yerelde hazır;79 test/typecheck ve demo yayın hazırlığı, UI engeli/handoff. |
 | 0.4.19 | 2026-10-20 | ADR-0008 kullanıcı onaylı arşiv/kapalı geri alma; yerel/demo migration,63 test ve yalnız demo7f5710c canlı kabulü. |

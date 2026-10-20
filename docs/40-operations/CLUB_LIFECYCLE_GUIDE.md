@@ -42,3 +42,7 @@ Beş additive migration yalnız yerel ve demo için; seed/reset/DROP/backfill yo
 Yerel tarayıcıda `APP_ORIGIN=http://127.0.0.1:3077` sunucu ortamında açıkça verilir. Demo runtime origin/anahtar/cron ve Pazartesi09:00/Demo Kullanıcı tercihi korunur. Yayın öncesi yalnız demo DB yedeği alınır; `scripts/club-release-guard.cjs` mevcut kayıtların secret içermeyen sayım/hash özetini verir. Image .env/dump/cache yedeği içermez. Özlüce/main korunur. Migration geri alınırken yeni tablolar/borçlar silinmez; yazmaları durdurup destekleyen düzeltme sürümüyle ilerlenir. Doğrulanmış restore tatbikatı bu iş değildir.
 
 Gerçek doğrulama/yayın sonuçları [CLUB_LIFECYCLE_VALIDATION](../30-quality/CLUB_LIFECYCLE_VALIDATION.md) ve [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md) içindedir.
+
+## Demoda kayıtlı örnek aile
+
+2026-10-20 kullanıcı talebiyle Merkez Şube’de **Örnek Kardeş Ailesi** oluşturuldu. Mevcut sentetik Ece Arslan ve Eren Aksoy açık seçimle örnek kardeş olarak bağlıdır. Tahakkuk13.250 TL, ödenen6.250 TL, kalan/geciken7.000 TL; ayrı ödeme ekranlarının10 satırıyla karşılaştırıldı. Bu kaydı incelemek için Aile Hesapları → Sporcular ve iletişim kullanılır; tahsilat her sporcunun kendi bağlantısından yapılır. Doğrulama notu ve eski Ödemeler gecikmiş adet sayacı bulgusuCR-032, kalite/handoff kaydındadır.
