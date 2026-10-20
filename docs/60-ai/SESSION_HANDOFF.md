@@ -1,5 +1,11 @@
 # AI Session Handoff
 
+## 2026-10-20 — Demo örnek sezon ve aidat önizlemesi
+
+Kullanıcı Ece/Eren için örnek sezon oluşturma, yenileme kararları ve aidat önizlemesini kontrol etme istedi. Yalnız canlı SporManage demo /seasons UI üzerinden **Örnek 2027 İlkbahar Sezonu (01.01.2027–31.03.2027)** oluşturuldu. Mevcut iki sentetik sporcu bağlandı; ikisi Devam edecek, hedefleri mevcut Merkez U10/U16. Aylık aidat türleri 1500/1750 TL, ilk vade 31.01.2027. Önizleme 31 Ocak/28 Şubat/31 Mart: Ece 4500, Eren 5250, toplam 9750 TL / 6 satır. Tam yenileme sonrası karar/taslaklar kalıcı, tekrar önizleme aynı.
+
+Mali onay ve grup geçişi yapılmadı; kartlar Taslak/Geçiş bekliyor. Aile mevcut 13250 tahakkuk/6250 ödenen/7000 kalan-geciken olarak aynı. Kullanım için sezon ve taslaklar bırakıldı, ana demo sekmesinde önizleme açık. Kod/model/migration/runtime değişmedi; runtime 098b493, main/Özlüce üzerinde işlem yok, bildirim ayarı/push işlemi yok. ADR-0009 yeterli; yeni karar gerekmedi. UI kontrolleri çalıştırıldı, kaynak değişmediği için typecheck/test/Docker tekrar çalıştırılmadı. Kanıt output/season-example/demo-preview.png ve demo-decisions.png Git dışı; ayrıntılar CLUB_LIFECYCLE_VALIDATION ve kullanım rehberinde. Sonraki adım, istenirse bu taslakların ayrı mali onayıdır; mevcut görev yalnız önizleme kapsamındadır.
+
 ## 2026-10-20 — CR-032 yalnız demo yayını ve canlı kabul
 
 Kullanıcı sayaç/filtre/durumları aile hesabıyla eşleyip yalnız demo yayını istedi. Kaynak codex/club-lifecycle-20261020, sabit098b493aaf55ba7dabe9a9296d0516e4f499f9ac. Coolify85qgaypbksguci5jmoekoz4l **Success/03m28s**; başlangıç11:17:59 UTC (14:17:59 Türkiye), rolling update11:21:27 UTC. Yeni container ab8470ba6eae / oibkjai6tfoeur5gxnx3ekxt-20261020T111759. Nihai demo Docker geçti; startup: No pending migrations, seed atlandı, Ready253ms.37 model/18 migration aynı, paket/anahtar/cron/yetki/model değişmedi; ADR-0007/0009 geçerli, yeni ADR yok.

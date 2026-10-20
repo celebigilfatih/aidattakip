@@ -1,5 +1,9 @@
 # Changelog
 
+### Verified — 2026-10-20 — Demo örnek sezon
+
+- Örnek 2027 İlkbahar Sezonu (01.01–31.03.2027), mevcut Ece/Eren bağlantıları, Devam edecek kararları ve ayrı U10/U16 ücret taslakları oluşturuldu. Yenileme sonrası kalıcılık ve 31 Ocak/28 Şubat/31 Mart vadeli 6 satır/9750 TL önizleme doğrulandı. Mali onay ve grup geçişi yapılmadı; aile bakiyesi 7000 TL aynı. Yalnız demo işletim verisi; kod/migration/yayın değişmedi.
+
 ### Fixed — 2026-10-20 — CR-032 ortak gecikme hesabı
 
 - Ödemeler sayaç/filtre/durum/plan/Excel aile hesabıyla ortak bakiye ve İstanbul günü hesabına bağlandı; kısmi ve OVERDUE kayıtları, sıfır/fazla bakiye, kapalı borçlar ve ay sınırları eşlendi. Raw status/geçmiş korunur; yeni migration yok.81 benzersiz test/typecheck/yerel ve demo Docker başarılı; yalnız demo098b493 Success03m28s, canlı Ece2/3000/Eren3/4000/aile7000, filtre/Excel ve veri koruması doğrulandı. Mevcut kural/ana iPhone/main/Özlüce korunur; CR-032 kapalı.

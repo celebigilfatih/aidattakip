@@ -1,6 +1,10 @@
 # Aidat Takip — Project Boot
 
-## Güncel görev — CR-032
+## Güncel işletim — demo örnek sezon
+
+2026-10-20 kullanıcı isteğiyle Örnek 2027 İlkbahar Sezonu (01.01–31.03.2027) oluşturuldu; mevcut Ece Arslan/Eren Aksoy bağlandı. İkisi Devam edecek, hedefleri Merkez U10/U16; aylık 1500/1750 TL ve 31 Ocak ilk vade taslakları kalıcı. Önizleme 31 Ocak/28 Şubat/31 Mart, toplam 9750 TL; mali onay/grup geçişi yapılmadı. Aile 13250 tahakkuk/6250 ödenen/7000 kalan-geciken aynı. Kod/migration/yayın yok; [kabul kaydı](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md).
+
+## Son düzeltme — CR-032
 
 CR-032 yalnız demo098b493 ile yayımlandı; Coolify Success03m28s.81 benzersiz test/typecheck/yerel ve demo Docker, canlı sayaç/kutu/durum/Excel ve aile karşılaştırması geçti: Ece2/3000, Eren3/4000, aile7000. Örnek aile ve tüm mevcut veri hashleri aynı; worker ilerledi, main/Özlüce korunur. Yeni migration/ADR yok; CR-032 kapalı. [Doğrulama](docs/30-quality/PAYMENT_OVERDUE_VALIDATION.md).
 
@@ -8,7 +12,7 @@ CR-032 yalnız demo098b493 ile yayımlandı; Coolify Success03m28s.81 benzersiz 
 
 2026-10-20 ADR-0009 dört modül yalnız SporManage demo8cd9f72 ile yayımlandı; Coolify Success/04m05s, beş additive migration applied,37 model/18 migration.79 test/typecheck/yerel ve demo Docker başarılı; son yerel onay/görüşme ve canlı390/1280px kontrolleri geçti. Kullanıcı dört ekranın iPhone görünümünü onayladı; CR-031 kapalı. Önce/sonra hash/sayımlar, mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu; worker ilerledi. main/Özlüce değişmedi. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
 
-- Document version: 0.5.3
+- Document version: 0.5.4
 - CDSK version: TBD
 - Last updated: 2026-10-20
 

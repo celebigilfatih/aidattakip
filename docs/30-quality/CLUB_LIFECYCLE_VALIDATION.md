@@ -1,5 +1,19 @@
 # Kulüp yaşam döngüsü doğrulaması — 2026-10-20
 
+## Demo örnek sezon — 2026-10-20
+
+Kullanıcının örnek sezon/yenileme/önizleme isteği canlı /seasons ekranında uygulandı. **Örnek 2027 İlkbahar Sezonu**, 01.01.2027–31.03.2027; mevcut Ece Arslan (Merkez U10) ve Eren Aksoy (Merkez U16) borç oluşturmadan bağlandı. İlk durumları Karar bekliyor/Ücret hazırlanmadı idi. İkisi ayrı ayrı Devam edecek ve mevcut grupları hedef seçilerek kaydedildi; ücret türleri Merkez U10 Aylık Aidat ve Merkez U16 Aylık Aidat, aylık 1500/1750 TL, ilk vade 31.01.2027.
+
+| Sporcu | Karar / hedef | Önizleme vadeleri | Tutar |
+|---|---|---|---:|
+| Ece Arslan | Devam edecek / Merkez U10 | 31.01, 28.02, 31.03.2027 | 3 × 1500 = 4500 TL |
+| Eren Aksoy | Devam edecek / Merkez U16 | 31.01, 28.02, 31.03.2027 | 3 × 1750 = 5250 TL |
+| Toplam | 2 kayıt | 6 taslak borç | 9750 TL |
+
+Tam sayfa yenilemesi sonrası sezon, kararlar, hedefler ve taslak tutarları kalıcı; yeniden önizleme aynı vadeleri/toplamı verdi. Şubat son güne kısalırken Mart tekrar 31'e döndü. Satırlar Aidatlar onaylı yerine Taslak, güncel gruplar U10/U16 ve Geçiş bekliyor gösterir. Ayrı aile ekranında mevcut 13250 TL tahakkuk/6250 TL ödenen/7000 TL kalan-geciken aynı. Mali onay veya grup geçişi yapılmadı; yalnız sezon takvimi/iki ilişki/karar/ücret taslağı yazıldı. Kod/migration/deploy/rol/bildirim kuralı değiştirilmedi; main/Özlüce üzerinde işlem yapılmadı. ADR-0009 geçerli, yeni karar yok.
+
+Kanıtlar Git dışında output/season-example/demo-preview.png ve demo-decisions.png. Tarayıcı tarih fill işlemi ilk gönderimde boş değer hatası verdi; tarih denetiminde klavye değişimiyle değerler kesinleştirilip başarılı kayıt görünür olarak doğrulandı. Kaynak değişmediği için typecheck/entegrasyon testi/Docker yeniden çalıştırılmadı; bu kayıt canlı UI işletim kabulüdür. Yeni iPhone testi yapılmadı.
+
 ADR-0009 açık kullanıcı onayı, yerel/demo kapsam. Bu belge çalıştırılan kontrolleri ürün kabulü veya telefon gözlemiyle karıştırmaz.
 
 | Kontrol | Sonuç |
