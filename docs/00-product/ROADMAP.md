@@ -2,7 +2,7 @@
 
 ## ADR-0009 uygulaması — 2026-10-20
 
-Aile → sezon → aday/deneme → ilgi bekleyenler yerelde beş additive migration ile uygulandı.37 model/18 migration,79 test ve typecheck başarılı; aile/sezon hazırlık/aday deneme ve390px görünüm doğrulandı; son UI onay/görüşme kontrolü ve demo yayını test tarayıcısı engeli nedeniyle bekliyor. Ayrıntılar [doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
+Aile → sezon → aday/deneme → ilgi bekleyenler yerelde beş additive migration ile uygulandı.37 model/18 migration,79 test ve typecheck başarılı; aile/sezon hazırlık/aday deneme ve390px görünüm doğrulandı; son UI onay/görüşme kontrolü tamamlandı. Yalnız demo8cd9f72 Success/04m05s ile yayımlandı; migration/veri-kural koruması ve kullanıcının gerçek iPhone görünüm kabulü tamam, CR-031 kapalı. Ayrıntılar [doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
 
 2026-10-20 CR-030 tamamlandı: ADR-0008 onaylı kural arşivleme/geri alma ve kalıcı gönderim geçmişi. Yerel migration/generate/typecheck ve63 test başarılı; yerel UI ve nihai Docker geçti. Yalnız demo7f5710c Success/4m43s; migration/canlı kart ve mevcut etkin kural/personel/bildirim/cihaz/geçmiş korundu. [CR-030](../20-execution/CHANGE_REQUESTS.md).
 

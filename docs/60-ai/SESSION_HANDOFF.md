@@ -1,5 +1,18 @@
 # AI Session Handoff
 
+## 2026-10-20 — ADR-0009 demo yayını ve iPhone kabulü tamamlandı
+
+Yalnız SporManage demo, codex/club-lifecycle-20261020 dalı ve sabit 8cd9f72e1ab4ca8a576bb70c009cda2a27530f95 ile yayımlandı. Coolify vmpdtffg5zhxz6jssxmr7urc **Success / 04m05s**; başlangıç10:51:10 UTC (13:51:10 Türkiye), rolling update10:55:15 UTC. Yeni demo container97bbfdb44a48 / oibkjai6tfoeur5gxnx3ekxt-20261020T105110. Beş additive migration startup logunda applied, toplam18 migration/37 model; seed atlandı ve Next Ready376ms. Paket/anahtar/cron/dağıtım modeli değişmedi.
+
+Demo yedeği /data/coolify/backups/club-lifecycle-20261020/demo.dump (108679 byte,600) korundu. before.json/predeploy.json/after.json hash ve sayımları birebir aynı:10 kullanıcı/60 sporcu/60 veli/300 ödeme/6 grup/17 bildirim/1 kural/3 cihaz/2 alıcı/1 run. Etkin Pazartesi09:00 tek Demo Kullanıcı ve aynı aktif ana iPhone korunur; worker lastEvaluatedAt10:56:06.024 UTC ile yayın sonrasında ilerledi. Yeni push/run oluşturulmadı. Yeni aile/sezon/aday/takip sayıları0; geçmiş sporcular otomatik bağlanmadı. Özlüce14c56b463e9e, image b024011, StartedAt2026-10-17T21:57:10.916623555Z/Runningtrue aynı; uzak main b024011fd240fc65581eed24469ef88dbb271fe7 değişmedi.
+
+Canlı aile/sezon/aday form açma ve Vazgeç, takipte54 kayıt/20 kart/3 sayfa, arama1 sonuç, ikinci sayfa ve görüşme formu/iptal doğrulandı. Canlı DB'ye deneme kaydı yazılmadı.390px dört sayfa ve1280px takip/görüşme genişlik kontrolünde scrollWidth=viewportWidth; viewport override sıfırlandı. Kullanıcı iPhone'da dört ekranın açıldığını ve görünümün düzgün olduğunu açıkça doğruladı. Yerel uygulama içi kesin kayıt onay/iptal/tamamla ve görüşme/geçmiş testleri de tamam; fixture temizliği60 sporcu/300 ödeme ile kanıtlandı. Önceki tarayıcı engeli/pending yayın kayıtları tarihçedir.
+
+79 test/typecheck/yerel ve nihai demo Docker kanıtı geçerli; bu devamda kod değişmedi. ADR-0009 Accepted, CR-031 kapalı. Modüller yerelde sırayla geliştirildi; beş migration son adayda tek demo yayınıyla uygulandı, ayrı ayrı dört demo yayını yapıldığı iddia edilmez. Kalan genel lint(CR-011), restore/rollback tatbikatı ve eski geniş rol sorunları(CR-002/003) bu kapsamda çözülmedi. Yeni veri oluştuğunda lifecycle ilişkilerini bilmeyen eski runtime'a dönmek güvenli kabul edilmez; additive tablolar ve borçlar silinmez, destekleyen düzeltme sürümüyle ilerlenir.
+
+Kanıtlar Git dışında output/club-lifecycle/live-family-mobile.png, live-season-mobile.png, live-attention-mobile.png, live-attention-desktop.png, demo-runtime-guard.png ve demo-migrations.png. [Kullanım rehberi](../40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
+
+
 ## 2026-10-20 — Nihai yerel aday; demo henüz yayımlanmadı
 
 Nihai kaynak 8cd9f72e1ab4ca8a576bb70c009cda2a27530f95 uzak codex/club-lifecycle-20261020 dalına push edildi. aidat-club-lifecycle:8cd9f72e1ab4 Docker exit0, config sha256:04448a20e21a3334d37c4f16fc57bb383dd18db385fc260939d593d883220175. Image probe UID1001/37 model/mevcut worker, .env/output/cache backup hariç. Son ilgili16 test ve typecheck başarılı; toplam79 test kanıtı korunur. Yerel60 sporcu/300 ödeme ve18 applied migration doğrulandı. Demo CF Git Source salt okunur kontrolünde hâlâ codex/staff-summary-20261019 / 7f5710cb0d7f0a9ca5467f8055c3a6ca84c4efbe; alanlar kaydedilmedi, Deploy başlatılmadı. Uzak main b024011fd240fc65581eed24469ef88dbb271fe7. CF kaynak paneli sekme21 handoff olarak işaretlendi; geçici viewport override'ları reset edildi. Teknolojik onay eksiği yok; yalnız test tarayıcı kontrolü ve son UI/deployment kabulü açık. Kalan iş önceki maddelerde, CR-031 açık.

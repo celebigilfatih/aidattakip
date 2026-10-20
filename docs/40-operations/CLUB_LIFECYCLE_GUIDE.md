@@ -1,6 +1,6 @@
 # Aile, sezon, aday kayıt ve sporcu takibi
 
-Karar: [ADR-0009](../50-decisions/ADR-0009-aile-sezon-aday-takip.md), kullanıcı 2026-10-20 plan uygulama onayı. Yeni sağlayıcı veya otomatik push yoktur.
+Karar: [ADR-0009](../50-decisions/ADR-0009-aile-sezon-aday-takip.md), kullanıcı 2026-10-20 plan uygulama onayı. Yeni sağlayıcı veya otomatik push yoktur. Yalnız SporManage demo8cd9f72 yayını ve kullanıcının iPhone görünüm kabulü2026-10-20 tamamlandı; mevcut kayıtlar otomatik aile/sezon ilişkisi almadı.
 
 ## Aile hesabı
 

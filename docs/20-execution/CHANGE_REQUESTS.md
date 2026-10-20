@@ -1,8 +1,8 @@
 # Change Requests
 
-## CR-031 — Aile, sezon, aday kayıt ve sporcu takibi — Uygulanıyor
+## CR-031 — Aile, sezon, aday kayıt ve sporcu takibi — Kapalı
 
-Kullanıcı 2026-10-20 beş bölümlük planın tamamını uygulamayı açıkça onayladı; ADR-0009 Accepted. Önceki “kapsam genişlemesi onayı yok” ifadeleri tarihsel ilk kapsamdır; dört modül artık onaylıdır. Yeni katmanın mali erişimi ADMIN/ACCOUNTING ile sınırlıdır; eski canManagePayments TRAINER izni ve nesne kapsamı ayrı CR-002/003 olarak kalır, sessizce genelleştirilmez. Beş yerel additive migration,37 model/18 migration ve79 test/typecheck başarılı; son UI onay/görüşme kabulü ve demo yayını test tarayıcısı engeli nedeniyle bekliyor; demo backup/before guard hazır. CR-031 kapanmış sayılmaz. [Doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
+Kullanıcı 2026-10-20 beş bölümlük planın tamamını uygulamayı açıkça onayladı; ADR-0009 Accepted. Önceki “kapsam genişlemesi onayı yok” ifadeleri tarihsel ilk kapsamdır; dört modül artık onaylıdır. Yeni katmanın mali erişimi ADMIN/ACCOUNTING ile sınırlıdır; eski canManagePayments TRAINER izni ve nesne kapsamı ayrı CR-002/003 olarak kalır, sessizce genelleştirilmez. Beş additive migration yerel/demo applied,37 model/18 migration ve79 test/typecheck/Docker başarılı. Son yerel onay/görüşme ve canlı390/1280px kontrolü tamam; yalnız demo8cd9f72 Success/04m05s, önce/sonra tüm mevcut veri hash/sayımları ve Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu, worker ilerledi. Kullanıcı gerçek iPhone görünümünü onayladı; main/Özlüce aynı. CR-031 kapalı. [Doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
 
 ## CR-030 — Kullanılmayan aidat kurallarını geçmişi koruyarak kaldırma
 

@@ -2,9 +2,9 @@
 
 ## Güncel görev — ADR-0009 / CR-031
 
-2026-10-20 kullanıcı dört modüllük planı bütünüyle onayladı: aile, sezon/yenileme, aday/deneme ve ilgi bekleyenler. codex/club-lifecycle-20261020 dalında beş additive yerel migration applied;37 model/18 migration,79 test/typecheck başarılı. Nihai 8cd9f72 Docker/UID1001/37 model probe başarılı, kod uzak dala push edildi. UI onay/görüşme son kabulü ve yalnız demo yayını bekliyor; test tarayıcısındaki native onay kontrolü takıldı, ek izin gerekmiyor. Demo yedeği alındı, runtime hâlâ7f5710c. Anahtar/cron/haftalık kural değişmez. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
+2026-10-20 ADR-0009 dört modül yalnız SporManage demo8cd9f72 ile yayımlandı; Coolify Success/04m05s, beş additive migration applied,37 model/18 migration.79 test/typecheck/yerel ve demo Docker başarılı; son yerel onay/görüşme ve canlı390/1280px kontrolleri geçti. Kullanıcı dört ekranın iPhone görünümünü onayladı; CR-031 kapalı. Önce/sonra hash/sayımlar, mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu; worker ilerledi. main/Özlüce değişmedi. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
 
-- Document version: 0.5.0
+- Document version: 0.5.1
 - CDSK version: TBD
 - Last updated: 2026-10-20
 
@@ -70,7 +70,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 - Phase: Mevcut uygulamaya CDSK bağlamı kazandırma; ürün kabul aşaması TBD.
 - Version: package.json 1.0.0; 2026-09-15 dağıtım kaydı mevcut, bu numaranın release etiketi/ürün kabulüyle eşlenmesi TBD.
 - Active sprint veya milestone: TBD
-- Current focus: ADR-0009 dört modül yerelde hazır;79 test/typecheck/nihai Docker başarılı, kod ayrı uzak dalda. Son UI onay/görüşme kontrolü ve yalnız demo yayını test tarayıcısı kontrolü takıldığı için bekliyor. Mevcut demo runtime7f5710c ve Özlüce korundu. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
+- Current focus: ADR-0009 dört modül demo yayını ve iPhone kabulü tamam; CR-031 kapalı. İlk aile ve sezon ilişkileri personel tarafından açık seçimle kurulacak; eski veriler otomatik bağlanmadı. [DEPLOYMENT](docs/40-operations/DEPLOYMENT.md).
 - Critical risks: Demo ADMIN sentetik veriyi değiştirebilir; iki DB aynı fiziksel PostgreSQL servisinin kapasite/erişilebilirliğini paylaşır; doğrulanmış zamanlanmış backup/restore ve parola rotasyon tarihi yoktur. [CHANGE_REQUESTS](docs/20-execution/CHANGE_REQUESTS.md).
 - Blocking decisions: Dağıtım kaydı mevcut; kesin ürün kabulü TBD. Production başlangıç kimliği/rol düzeltmesi ve kalan secret politikası açık onay bekler. ADR-0001 ve ADR-0002 hâlâ Proposed; login log temizliği ayrı düzeltme olarak tamamlandı.
 - Last status update: 2026-10-19
@@ -184,6 +184,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
+| 0.5.1 | 2026-10-20 | ADR-0009 yalnız demo8cd9f72 Success/04m05s; migration/veri-kural koruması ve gerçek iPhone kabulü, CR-031 kapalı. |
 | 0.5.0 | 2026-10-20 | ADR-0009 onaylı dört modül yerelde hazır;79 test/typecheck ve demo yayın hazırlığı, UI engeli/handoff. |
 | 0.4.19 | 2026-10-20 | ADR-0008 kullanıcı onaylı arşiv/kapalı geri alma; yerel/demo migration,63 test ve yalnız demo7f5710c canlı kabulü. |
 | 0.4.18 | 2026-10-19 | Ortak mevcut kural formu,55 test ve yalnız demo6f11cf1 canlı kabulü (önceki eksik revizyon satırı tamamlandı). |

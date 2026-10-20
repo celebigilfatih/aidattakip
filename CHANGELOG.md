@@ -4,7 +4,7 @@
 
 - Açık kullanıcı onaylı dört modül, ortak sunucu yetkisi ve mali redaksiyon; mevcut sporcu/veli/aidat geçmişi korunur.
 - Sezon önizleme/mali onay ve ADMIN grup geçişi ayrı; benzersiz kaynak/transaction ile tekrar güvenli. Aday dönüşümü ve deneme geçmişi; rol kapsamlı takip ve görüşme/atama.
-- Beş additive yerel migration,79 test ve typecheck başarılı. Masaüstü/mobil okuma ve hazırlık akışları doğrulandı; native test onayı takıldığı için son UI onay/görüşme kabulü ve demo yayını henüz yapılmadı. Yedek alındı, main/Özlüce ve etkin Pazartesi09:00 kuralı korundu.
+- Beş additive migration yerel/demo applied;79 test/typecheck/yerel ve nihai demo Docker başarılı. Yerel kesin kayıt onay/iptal ve görüşme/geçmiş, canlı390/1280px akışlar ve gerçek iPhone görünümü kullanıcı tarafından doğrulandı. Yalnız demo8cd9f72 Success/04m05s; tüm mevcut veri hash/sayımları ve Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu, worker ilerledi. main/Özlüce aynı; CR-031 kapalı.
 
 Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncellenir. Geçmiş sürümler: TBD.
 
