@@ -81,6 +81,8 @@ export default function PaymentsPage() {
   const [branchFilter, setBranchFilter] = useState('all')
   const [overdueFilter, setOverdueFilter] = useState(false)
   const [monthFilter, setMonthFilter] = useState('all') // current, all
+  const [studentFilter, setStudentFilter] = useState('')
+  const [studentFilterReady, setStudentFilterReady] = useState(false)
   
   // Sorting
   const [sortField, setSortField] = useState<'dueDate' | 'amount' | 'student'>('dueDate')
@@ -150,6 +152,8 @@ export default function PaymentsPage() {
 
   useEffect(() => {
     setMounted(true)
+    setStudentFilter(new URLSearchParams(window.location.search).get('studentId') || '')
+    setStudentFilterReady(true)
   }, [])
 
   // Debounced search
@@ -170,9 +174,10 @@ export default function PaymentsPage() {
     fetchGroups()
     fetchFeeTypes()
     fetchBranches()
-  }, [currentPage, statusFilter, groupFilter, branchFilter, overdueFilter, sortField, sortDirection, monthFilter])
+  }, [currentPage, statusFilter, groupFilter, branchFilter, overdueFilter, sortField, sortDirection, monthFilter, studentFilter, studentFilterReady])
 
   const fetchPayments = async () => {
+    if (!studentFilterReady) return
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -185,7 +190,8 @@ export default function PaymentsPage() {
         search: searchTerm,
         sortField: sortField,
         sortDirection: sortDirection,
-        month: monthFilter
+        month: monthFilter,
+        studentId: studentFilter
       })
 
       const response = await fetch(`/api/payments?${params}`)
@@ -486,7 +492,7 @@ export default function PaymentsPage() {
   }
 
   const handleDeleteAll = async () => {
-    if (!canManagePayments) return
+    if (!canManagePayments || studentFilter) return
     if (!confirm('Listelenen tüm ödemeleri iptal etmek istediğinize emin misiniz?')) return
 
     try {
@@ -767,6 +773,8 @@ export default function PaymentsPage() {
                 <Button
                   variant="outline"
                   onClick={() => router.push('/payments/bulk')}
+                  disabled={!!studentFilter}
+                  title={studentFilter ? 'Bu görünüm yalnız seçilen sporcu içindir.' : undefined}
                 >
                   <Users className="h-4 w-4 mr-2" />
                   Toplu İşlemler
@@ -783,6 +791,8 @@ export default function PaymentsPage() {
                 <Button
                   variant="outline"
                   onClick={handleDeleteAll}
+                  disabled={!!studentFilter}
+                  title={studentFilter ? 'Sporcu görünümünde genel toplu iptal kullanılamaz.' : undefined}
                   className="text-red-600 hover:text-red-700 hover:bg-red-50"
                 >
                   <Trash2 className="h-4 w-4 mr-2" />
@@ -883,6 +893,7 @@ export default function PaymentsPage() {
           </div>
         </div>
 
+        {studentFilter && <div role="status" className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm"><span>Yalnız seçilen sporcunun ödemeleri gösteriliyor.</span><Button variant="outline" onClick={() => window.location.assign('/payments')}>Tüm sporcular</Button></div>}
         {/* Filters */}
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-8 gap-3">

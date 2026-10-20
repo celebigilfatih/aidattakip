@@ -1,5 +1,11 @@
 # Deployment
 
+## 2026-10-20 — ADR-0009 yayın hazırlığı (henüz dağıtılmadı)
+
+Demo hostunda /data/coolify/backups/club-lifecycle-20261020/demo.dump,108679 byte/600; pg_restore --list başarılı. Aynı dizinde before.json mevcut veri hash/sayımları (10 kullanıcı/60 sporcu/60 veli/300 ödeme/6 grup/17 bildirim/1 kural/3 cihaz/2 alıcı/1 run) ve ozluce-before.txt saklanır. Özlüce14c56b463e9e / image b024011 / StartedAt2026-10-17T21:57:10.916623555Z/Runningtrue. Demo runtime hâlâ7f5710c; kaynak ve dağıtım ayarı değiştirilmedi. Restore tatbikatı yapılmadı.
+
+Yeni kaynak codex/club-lifecycle-20261020;37 model/18 migration, beş additive dosya yerelde applied. Son doğrulanmış demo hâlâ13 migration/28 modeldir. Kullanıcının plan onayı demo yayınını kapsar; ek onay beklenmiyor. Tarayıcı yerel test onayında takıldığı için Git Source/Deploy henüz uygulanmadı. Önce UI onay/görüşme kontrolü, sonra yalnız demo branch+commit pin/manuel Deploy,18 migration/noseed ve guard/worker/Özlüce karşılaştırması tamamlanmalı. Beş migration tek adayda birikmiştir; modüller henüz ayrı demo yayınlarından geçmiş sayılmaz. [Doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
+
 ## 2026-10-20 — Kural arşivleme/geri alma yalnız demo (CR-030)
 
 Yalnız demo7f5710cb0d7f0a9ca5467f8055c3a6ca84c4efbe, Coolify h9qsg4wutnqewcyyn5vgtrdl Success/04m43s; başlangıç07:09:58 UTC, bitiş07:14:41 UTC. Nihai Docker başarılı; runtime sabit7f5710c/branch codex/staff-summary-20261019 ve manuel dağıtım aynı. 20261020100000_archive_staff_summary_rules startup logunda applied,13 migration başarılı/seed atlandı; yeni archivedAt API alanı doğrulandı. Main b024011/Özlüce'ye işlem yapılmadı.

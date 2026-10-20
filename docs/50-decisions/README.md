@@ -12,7 +12,7 @@
 
 ## Karar dizini
 
-Sekiz proje ADR'si vardır. ADR-0001/0002 Proposed; ADR-0003/0005/0006/0007/0008 kullanıcı onayıyla Accepted. ADR-0006 ilk uygulama adımı manuel push/alıcı kaydıdır; ilk iPhone gerçek teslimi tamamlandı; personel odaklı otomasyon ADR-0007 ile ayrıca onaylandı. ADR-0004, ADR-0005 tarafından Superseded durumundadır.
+Dokuz proje ADR'si vardır. ADR-0001/0002 Proposed; ADR-0003/0005/0006/0007/0008/0009 kullanıcı onayıyla Accepted. ADR-0006 ilk uygulama adımı manuel push/alıcı kaydıdır; ilk iPhone gerçek teslimi tamamlandı; personel odaklı otomasyon ADR-0007 ile ayrıca onaylandı. ADR-0004, ADR-0005 tarafından Superseded durumundadır.
 
 | ADR | Başlık | Durum | Onay kaydı | Yerine geçen karar |
 |---|---|---|---|---|
@@ -24,6 +24,8 @@ Sekiz proje ADR'si vardır. ADR-0001/0002 Proposed; ADR-0003/0005/0006/0007/0008
 | [ADR-0006](ADR-0006-web-push-ve-aidat-hatirlatma-kurallari.md) | Web Push ve aidat hatırlatma kuralları | Accepted | Kullanıcı, 2026-10-19; önce manuel push ve alıcı kaydı. web-push 3.6.7/MPL-2.0 ve yalnız demo HTTPS dağıtımı ayrıca onaylandı; uygulama/cihaz sonucu tarihli kayıtta izlenir | N/A — yeni karar |
 | [ADR-0007](ADR-0007-personel-bildirimleri-ve-aidat-ozeti.md) | Personel bildirimleri ve otomatik aidat özeti | Accepted | Kullanıcı, 2026-10-19; beş bölümlük planı uygula talimatı | ADR-0006 alıcı/cihaz işletimi |
 | [ADR-0008](ADR-0008-aidat-ozeti-kurallarini-arsivleme.md) | Aidat özeti kurallarını geçmişi koruyarak kaldırma | Accepted | Kullanıcı, 2026-10-20; ADR-0008 ve yalnız demo migration/yayını açık onayı | N/A — ADR-0007 politikası korunur |
+
+| [ADR-0009](ADR-0009-aile-sezon-aday-takip.md) | Aile, sezon, aday kayıt ve sporcu takibi | Accepted | Kullanıcı, 2026-10-20; beş bölümlük planı uygula talimatı | N/A — dört modül ve additive demo kapsamı |
 
 ## Açık karar ihtiyaçları
 

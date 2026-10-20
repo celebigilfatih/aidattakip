@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { NotificationError } from '@/lib/notification-policy'
 import { AuthService } from '@/lib/auth'
 
 // Get current user from token
@@ -116,6 +117,9 @@ export async function PUT(
 
     // Update student with parents in a transaction
     const updatedStudent = await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT id FROM students WHERE id = ${id} FOR UPDATE`
+      const current = await tx.student.findUnique({ where: { id }, include: { family: { select: { branchId: true } } } })
+      if (current?.family && current.family.branchId !== (branchId || null)) throw new NotificationError(409, 'Şube değiştirmeden önce sporcuyu mevcut aile hesabından çıkarın.')
       // Update student basic info
       const student = await tx.student.update({
         where: { id },
@@ -232,6 +236,7 @@ export async function PUT(
     return NextResponse.json(completeStudent)
   } catch (error) {
     console.error('Failed to update student:', error)
+    if (error instanceof NotificationError) return NextResponse.json({ error: error.message }, { status: error.status })
     return NextResponse.json(
       { error: 'Failed to update student' },
       { status: 500 }

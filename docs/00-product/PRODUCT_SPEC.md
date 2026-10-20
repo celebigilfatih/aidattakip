@@ -1,5 +1,9 @@
 # Aidat Takip — Product Specification
 
+## Aile, sezon, aday ve takip — ADR-0009 / 2026-10-20
+
+Kullanıcı dört modüllük planın tamamını uygulamayı onayladı. Aynı şube aile görünümü (sporcu başına tahsilat), ortak sezon/yenileme/önizlemeli mali onay/ayrı ADMIN grup geçişi, personel aday-deneme-kesin kayıt ve rol kapsamlı ilgi bekleyenler eklendi. Eski kayıtlar otomatik ilişkilendirilmez; yeni push/veli girişi yok. Ayrıntılı sözleşme ve kullanım: [CLUB_LIFECYCLE_GUIDE](../40-operations/CLUB_LIFECYCLE_GUIDE.md); gerçek sonuçlar [doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md). Yayın kabulü ayrı kaydedilir.
+
 ## Kullanılmayan aidat özeti kurallarını kaldırma — 2026-10-20
 
 Onaylı ADR-0008 yalnız demo7f5710c ile yayımlandı: Personel ve Cihazlar kartındaki **Kaldır**, yalnız kapalı kuralı isim/açıklama ve Vazgeç/Kaldır onayıyla arşivler. Etkin kural için önce Durdur gerekir. Kural günlük kart ve üyelik/personel seçeneklerinden çıkar; **Arşivlenen kurallar → Geri al** ile kapalı olarak döner. Takvim/alıcı/sahip/şube ve tüm gönderim geçmişi korunur. Otomatik Aidat Özeti bölümünde arşivli kural salt okunur, mevcut son10 run görünür; eski kayıtlar silinmez. Arşivli kurala düzenleme, etkinleştirme, üyelik veya manuel/otomatik gönderim sunucuda kapalıdır. Aynı mali rol/şube sınırı geçerlidir; önceki açık formlar409 ile yenilenir. Geri alma kendiliğinden gönderim/telafi yapmaz. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md), [CR-030](../20-execution/CHANGE_REQUESTS.md).

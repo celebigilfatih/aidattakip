@@ -1,5 +1,9 @@
 # Change Requests
 
+## CR-031 — Aile, sezon, aday kayıt ve sporcu takibi — Uygulanıyor
+
+Kullanıcı 2026-10-20 beş bölümlük planın tamamını uygulamayı açıkça onayladı; ADR-0009 Accepted. Önceki “kapsam genişlemesi onayı yok” ifadeleri tarihsel ilk kapsamdır; dört modül artık onaylıdır. Yeni katmanın mali erişimi ADMIN/ACCOUNTING ile sınırlıdır; eski canManagePayments TRAINER izni ve nesne kapsamı ayrı CR-002/003 olarak kalır, sessizce genelleştirilmez. Beş yerel additive migration,37 model/18 migration ve79 test/typecheck başarılı; son UI onay/görüşme kabulü ve demo yayını test tarayıcısı engeli nedeniyle bekliyor; demo backup/before guard hazır. CR-031 kapanmış sayılmaz. [Doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
+
 ## CR-030 — Kullanılmayan aidat kurallarını geçmişi koruyarak kaldırma
 
 - Kullanıcı talebi (2026-10-20): Kaldırma Personel ve Cihazlar ekranından yapılsın; gönderim geçmişi korunsun. enabled tek başına durdurmadır; arşiv alanı yok, StaffSummaryRun FK Restrict silmeyi engeller.

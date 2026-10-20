@@ -33,6 +33,10 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: { mobileO
   const navItems = [
     { name: 'Ana Sayfa', route: '/dashboard', icon: LayoutDashboard },
     { name: 'Öğrenciler', route: '/students', icon: Users },
+    { name: 'Aile Hesapları', route: '/families', icon: UsersRound, hideForTrainer: true },
+    { name: 'Sezon Yenileme', route: '/seasons', icon: Activity, hideForTrainer: true },
+    { name: 'Aday Kayıtlar', route: '/prospects', icon: UserCheck, hideForAccounting: true },
+    { name: 'İlgi Bekleyenler', route: '/attention', icon: UserCheck },
     { name: 'Ödemeler', route: '/payments', icon: CreditCard },
     { name: 'Antrenmanlar', route: '/trainings', icon: Activity },
     { name: 'Yoklama', route: '/attendance', icon: UserCheck },
@@ -99,6 +103,7 @@ export default function Sidebar({ mobileOpen = false, onMobileClose }: { mobileO
               .filter(item => {
                 if (item.adminOnly && user?.role !== 'ADMIN') return false
                 if ((item as any).hideForTrainer && user?.role === 'TRAINER') return false
+                if ('hideForAccounting' in item && item.hideForAccounting && user?.role === 'ACCOUNTING') return false
                 return true
               })
               .map((item) => {

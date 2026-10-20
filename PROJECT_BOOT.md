@@ -1,6 +1,10 @@
 # Aidat Takip — Project Boot
 
-- Document version: 0.4.19
+## Güncel görev — ADR-0009 / CR-031
+
+2026-10-20 kullanıcı dört modüllük planı bütünüyle onayladı: aile, sezon/yenileme, aday/deneme ve ilgi bekleyenler. codex/club-lifecycle-20261020 dalında beş additive yerel migration applied;37 model/18 migration,79 test/typecheck başarılı. UI onay/görüşme son kabulü ve yalnız demo yayını bekliyor; test tarayıcısındaki native onay kontrolü takıldı, ek izin gerekmiyor. Demo yedeği alındı, runtime hâlâ7f5710c. Anahtar/cron/haftalık kural değişmez. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
+
+- Document version: 0.5.0
 - CDSK version: TBD
 - Last updated: 2026-10-20
 
@@ -9,7 +13,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 ## Project Compass
 
 - North star: Spor kulüplerinin sporcu ve aidat takibini yapabilmesi.
-- Current mission: Ayrı SporManage demo dağıtımını işletmek; demo verisi, secret ve yedekleme risklerini yönetmek.
+- Current mission: ADR-0009 aile/sezon/aday/takip modüllerini yalnız demo için doğrulayıp yayımlamak; mevcut veriyi ve bildirim kuralını korumak.
 - Success signal: Ayrıntılı kabul ölçütleri TBD; [REQUIREMENTS](docs/00-product/REQUIREMENTS.md).
 - Accepted trade-offs: Demo ve Özlüce uygulamalarında ayrı DB/rol ile aynı fiziksel PostgreSQL kaynağını paylaşma; demo lisans tablosunu demo DB'sinde tutma, [ADR-0005](docs/50-decisions/ADR-0005-spormanage-ayri-demo-dagitimi.md). Diğer genel mimari tercihler için kabul kaydı TBD.
 
@@ -180,6 +184,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
+| 0.5.0 | 2026-10-20 | ADR-0009 onaylı dört modül yerelde hazır;79 test/typecheck ve demo yayın hazırlığı, UI engeli/handoff. |
 | 0.4.19 | 2026-10-20 | ADR-0008 kullanıcı onaylı arşiv/kapalı geri alma; yerel/demo migration,63 test ve yalnız demo7f5710c canlı kabulü. |
 | 0.4.18 | 2026-10-19 | Ortak mevcut kural formu,55 test ve yalnız demo6f11cf1 canlı kabulü (önceki eksik revizyon satırı tamamlandı). |
 | 0.4.17 | 2026-10-19 | Personel ekranında yeni kapalı aidat kuralı;51 test/typecheck, Docker ve yalnız demo3b7ebcc canlı kabulü. |

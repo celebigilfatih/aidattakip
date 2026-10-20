@@ -1,5 +1,9 @@
 # API Conventions
 
+## ADR-0009 API ekleri
+
+GET/POST/PATCH families: birleşik/redakte görünüm, üye düzenleme, archive/restore. GET/POST/PATCH seasons: takvim ve attach/renewal/plan/preview/approve/activate ayrımı. GET/POST/PATCH prospects: aday/trial/convert ve trainer için yalnız deneme rosterı. GET/PUT/POST attention: salt hesaplama/geçmiş, ADMIN şube politikası, yetkili not/atama. GET club/options rol/şube/grup kapsamlı seçimler. Yazmalar aynı origin ve güncel aktif kullanıcı ister; 401/403/400/404/409 ayrılır, Cache-Control no-store. Yeni modüller eski geniş canManagePayments helperını kullanmaz; mali alanlar yetkisiz yanıtta bulunmaz. [Rehber](../40-operations/CLUB_LIFECYCLE_GUIDE.md).
+
 ## ADR-0008 arşiv sözleşmesi — 2026-10-20
 
 `PATCH /api/push/staff-summary {ruleId,action:"archive"|"restore"}` strict additive biçimdir. Aynı mali yönetici/origin/şube ve row lock; etkin kuralı kaldırma409, tekrar kaldırma/no-op aynı archivedAt değerini korur. Restore kapalı döner; zaten etkin geri alınmış kayıtta409, kullanıcı tercihi üzerine yazılmaz. Yanıt rule id/name/enabled/archivedAt. Eski PATCH ve dar/tam PUT biçimleri korunur; arşivli kurala eski yollar dahil yazma/manuel gönderim/üyelik409.

@@ -32,6 +32,8 @@ model User {
   notificationRecipient NotificationRecipient? @relation("StaffRecipient")
   issuedPushInvites PushInvite[]
   summaryRules StaffSummaryRule[]
+  assignedFollowUps FollowUp[]
+  followUpActivities FollowUpActivity[]
 
   @@map("users")
 }
@@ -60,6 +62,13 @@ model Student {
   parents        Parent[]       @relation("StudentParents")
   attendanceAnalytics AttendanceAnalytics[]
   notificationRecipient NotificationRecipient? @relation("StudentRecipient")
+  familyId       String?
+  family         Family? @relation(fields: [familyId], references: [id], onDelete: Restrict)
+  seasonEnrollments SeasonEnrollment[]
+  convertedProspect Prospect?
+  followUps FollowUp[]
+
+  @@index([familyId])
 
   @@index([groupId, isActive])
   @@index([branchId, isActive])
@@ -118,6 +127,8 @@ model Group {
   trainingExceptions  TrainingException[]
   groupHistories      GroupHistory[]
   userPermissions     UserGroupPermission[]
+  seasonTargets       SeasonEnrollment[]
+  prospects           Prospect[]
   
   @@map("groups")
 }
@@ -147,6 +158,7 @@ model FeeType {
   updatedAt DateTime  @updatedAt
   group     Group?    @relation(fields: [groupId], references: [id])
   payments  Payment[]
+  seasonEnrollments SeasonEnrollment[]
 
   @@map("fee_types")
 }
@@ -170,6 +182,12 @@ model Payment {
   createdBy       User           @relation("PaymentCreator", fields: [createdById], references: [id])
   feeType         FeeType        @relation(fields: [feeTypeId], references: [id])
   student         Student        @relation(fields: [studentId], references: [id])
+
+  seasonEnrollmentId String?
+  seasonInstallment Int?
+  seasonEnrollment SeasonEnrollment? @relation(fields: [seasonEnrollmentId], references: [id], onDelete: Restrict)
+
+  @@unique([seasonEnrollmentId, seasonInstallment])
 
   @@index([studentId, status])
   @@index([dueDate, status])
@@ -221,6 +239,7 @@ model TrainingSession {
   
   attendanceTaken         Boolean                 @default(false)
   attendanceTakenAt       DateTime?
+  trialVisits             TrialVisit[]
   exceptionId             String?
   
   generatedAutomatically  Boolean                 @default(true)
@@ -332,6 +351,9 @@ model Branch {
   fields      Field[]
   locations   Location[]
   users       User[]    @relation("UserBranch")
+  families    Family[]
+  prospects   Prospect[]
+  attentionPolicy AttentionPolicy?
   
   @@map("branches")
 }
@@ -679,4 +701,158 @@ model StaffSummaryRun {
   @@unique([ruleId, scheduledAt])
   @@index([createdAt])
   @@map("staff_summary_runs")
+}
+
+model Family {
+  id String @id @default(cuid())
+  name String
+  branchId String
+  archivedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  students Student[]
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Restrict)
+
+  @@index([branchId, archivedAt])
+  @@map("families")
+}
+
+model Season {
+  id String @id @default(cuid())
+  name String
+  startDate DateTime
+  endDate DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  enrollments SeasonEnrollment[]
+  @@map("seasons")
+}
+
+model SeasonEnrollment {
+  id String @id @default(cuid())
+  seasonId String
+  studentId String
+  decision RenewalDecision @default(UNDECIDED)
+  targetGroupId String?
+  feeTypeId String?
+  plannedAmount Float?
+  firstDueDate DateTime?
+  approvedAt DateTime?
+  activatedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  season Season @relation(fields: [seasonId], references: [id], onDelete: Restrict)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  targetGroup Group? @relation(fields: [targetGroupId], references: [id], onDelete: Restrict)
+  feeType FeeType? @relation(fields: [feeTypeId], references: [id], onDelete: Restrict)
+  payments Payment[]
+  @@unique([seasonId, studentId])
+  @@map("season_enrollments")
+}
+
+enum RenewalDecision {
+  UNDECIDED
+  CONTACT
+  CONTINUING
+  LEFT
+}
+
+model Prospect {
+  id String @id @default(cuid())
+  firstName String
+  lastName String
+  birthDate DateTime?
+  contactName String
+  contactPhone String
+  branchId String
+  groupId String?
+  notes String @default("")
+  stage ProspectStage @default(NEW)
+  convertedStudentId String? @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Restrict)
+  group Group? @relation(fields: [groupId], references: [id], onDelete: Restrict)
+  convertedStudent Student? @relation(fields: [convertedStudentId], references: [id], onDelete: Restrict)
+  visits TrialVisit[]
+  activities ProspectActivity[]
+  @@index([branchId, stage])
+  @@map("prospects")
+}
+model TrialVisit {
+  id String @id @default(cuid())
+  prospectId String
+  sessionId String
+  result TrialResult @default(INVITED)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  prospect Prospect @relation(fields: [prospectId], references: [id], onDelete: Restrict)
+  session TrainingSession @relation(fields: [sessionId], references: [id], onDelete: Restrict)
+  @@unique([prospectId,sessionId])
+  @@map("trial_visits")
+}
+model ProspectActivity {
+  id String @id @default(cuid())
+  prospectId String
+  actorId String
+  message String
+  createdAt DateTime @default(now())
+  prospect Prospect @relation(fields: [prospectId], references: [id], onDelete: Restrict)
+  @@index([prospectId,createdAt])
+  @@map("prospect_activities")
+}
+enum ProspectStage {
+  NEW
+  INVITED
+  ATTENDED
+  CONVERTED
+  LOST
+}
+enum TrialResult {
+  INVITED
+  ATTENDED
+  NO_SHOW
+  CANCELLED
+}
+
+model AttentionPolicy {
+  id String @id @default(cuid())
+  branchId String @unique
+  windowDays Int @default(30)
+  absenceCount Int @default(3)
+  overdueDays Int @default(7)
+  endingDays Int @default(30)
+  updatedAt DateTime @updatedAt
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Restrict)
+  @@map("attention_policies")
+}
+model FollowUp {
+  id String @id @default(cuid())
+  studentId String
+  reason AttentionReason
+  assignedToId String?
+  nextContactAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  student Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
+  assignedTo User? @relation(fields: [assignedToId], references: [id], onDelete: Restrict)
+  activities FollowUpActivity[]
+  @@unique([studentId,reason])
+  @@map("follow_ups")
+}
+model FollowUpActivity {
+  id String @id @default(cuid())
+  followUpId String
+  actorId String
+  note String
+  createdAt DateTime @default(now())
+  followUp FollowUp @relation(fields: [followUpId], references: [id], onDelete: Restrict)
+  actor User @relation(fields: [actorId], references: [id], onDelete: Restrict)
+  @@index([followUpId,createdAt])
+  @@map("follow_up_activities")
+}
+enum AttentionReason {
+  ABSENCE
+  OVERDUE
+  SEASON
 }

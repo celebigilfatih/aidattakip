@@ -1,5 +1,9 @@
 # Data Model
 
+## ADR-0009 additive modeller — 2026-10-20
+
+37 model/18 migration. Family + Student.familyId; Season/SeasonEnrollment (seasonId/studentId unique), Payment.seasonEnrollmentId/seasonInstallment unique kaynak; Prospect/TrialVisit/ProspectActivity (tek convertedStudentId ve aday/seans unique); AttentionPolicy/FollowUp/FollowUpActivity (şube politikası, sporcu/neden unique). İlişkiler Restrict; yeni alanlar eski satırlarda NULL, backfill/silme/retention yok. Finansal Float ve mevcut veli satırları korunur. Beş migration yalnız yerelde applied; demo sonucu ayrıca kaydedilecek. [ADR-0009](../50-decisions/ADR-0009-aile-sezon-aday-takip.md).
+
 ## ADR-0008 arşiv alanı — 2026-10-20
 
 28 model/13 migration. Kullanıcı ADR-0008 ve yalnız demo migration/yayınını onayladı. StaffSummaryRule.archivedAt DateTime? NULL mevcut/yeni kullanılabilir kural, tarihli arşivdir; archivedAt doluysa enabled=false CHECK constraint. 20261020100000_archive_staff_summary_rules yerel5477/aidat_takip üzerinde applied; diğer alanlar/ilişkiler ve geçmiş değişmedi. Aynı migration yalnız demo7f5710c startup logunda başarıyla applied doğrulandı;13 migration ve seed atlandı, yeni archivedAt API alanı NULL. DROP/DELETE/backfill yok. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md).

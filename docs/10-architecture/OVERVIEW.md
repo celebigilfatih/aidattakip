@@ -12,12 +12,12 @@ Tek repository içinde Next.js App Router arayüzü ve API rotaları bulunur; i�
 
 | Katman | Kaynak | Görev |
 |---|---|---|
-| Sayfalar | [src/app](../../src/app) | 19 page.tsx dosyası |
-| API | [src/app/api](../../src/app/api) | 57 route.ts dosyası |
+| Sayfalar | [src/app](../../src/app) | 23 page.tsx dosyası |
+| API | [src/app/api](../../src/app/api) | 62 route.ts dosyası |
 | UI | [components](../../src/components) | Radix tabanlı kontroller, formlar, takvim, yazdırma |
 | İstemci bağlamı | [contexts](../../src/contexts) | AuthContext ve SettingsContext |
 | Ortak işlevler | [lib](../../src/lib) | JWT, Prisma, izin, bildirim, lisans |
-| Veri | [schema.prisma](../../prisma/schema.prisma) | PostgreSQL, 28 model |
+| Veri | [schema.prisma](../../prisma/schema.prisma) | PostgreSQL, 37 model |
 | Tipler | [types](../../src/types/index.ts) | Uygulama tip ve enum tanımları |
 
 Veri akışı: React sayfaları → fetch → Next API → Prisma → PostgreSQL. Lisans servisi `pg.Pool` ile ayrıca bağlanır. Kök layout AuthProvider ve SettingsProvider sağlar; oturum middleware ve rota kontrolleriyle işlenir. [layout](../../src/app/layout.tsx), [middleware](../../middleware.ts), [prisma](../../src/lib/prisma.ts), [license](../../src/lib/license.ts).

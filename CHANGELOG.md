@@ -1,5 +1,11 @@
 # Changelog
 
+### Added — 2026-10-20 — Aile, sezon, aday ve takip (ADR-0009)
+
+- Açık kullanıcı onaylı dört modül, ortak sunucu yetkisi ve mali redaksiyon; mevcut sporcu/veli/aidat geçmişi korunur.
+- Sezon önizleme/mali onay ve ADMIN grup geçişi ayrı; benzersiz kaynak/transaction ile tekrar güvenli. Aday dönüşümü ve deneme geçmişi; rol kapsamlı takip ve görüşme/atama.
+- Beş additive yerel migration,79 test ve typecheck başarılı. Masaüstü/mobil okuma ve hazırlık akışları doğrulandı; native test onayı takıldığı için son UI onay/görüşme kabulü ve demo yayını henüz yapılmadı. Yedek alındı, main/Özlüce ve etkin Pazartesi09:00 kuralı korundu.
+
 Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncellenir. Geçmiş sürümler: TBD.
 
 ## [Unreleased]

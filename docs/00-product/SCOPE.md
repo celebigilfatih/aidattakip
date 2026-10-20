@@ -1,5 +1,9 @@
 # Scope
 
+## Onaylı kapsam genişlemesi — 2026-10-20
+
+[ADR-0009](../50-decisions/ADR-0009-aile-sezon-aday-takip.md) Accepted: Kullanıcı dört modüllük planı, additive migration/erişim sınırları ve yalnız yerel/SporManage demo yayınını açıkça onayladı. Aile birleşik görünüm, sezon yenileme, personel aday kaydı ve sporcu takip listesi kapsam içidir. Ödeme dağıtımı/ledger değişikliği, yeni sağlayıcı/push, public başvuru/veli girişi ve retention değişikliği kapsam dışıdır. Aşağıdaki ilk kapsam kayıtları tarihçedir.
+
 2026-10-20 CR-030 / ADR-0008 Accepted: Kapalı aidat kuralını aynı personel ekranından geçmişi koruyarak arşivleme ve kapalı geri alma; tek nullable archivedAt + additive migration yalnız yerel/SporManage demo. Kullanıcı somut öneri ve demo yayınını açıkça onayladı. Mali rol/şube/cihaz/retention süresi değişmez. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md).
 
 2026-10-19 CR-029: Mevcut haftalık kuralın adı/günleri/saati/alıcıları Personel ve Cihazlar ekranındaki ortak yeni/düzenle formundan atomik değiştirilir. Mevcut mali yetki/şube, sahip, etkinlik ve geçmiş korunur; stale form409. Veri modeli/servis/politika değişikliği yok. [PRODUCT_SPEC](PRODUCT_SPEC.md).
