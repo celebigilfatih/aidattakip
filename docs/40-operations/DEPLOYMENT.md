@@ -1,5 +1,13 @@
 # Deployment
 
+## 2026-10-20 — CR-033 yalnız demo yayını ve canlı kabul
+
+Kullanıcı makbuz hesabını düzeltip yalnız demo yayını istedi. Aynı codex/club-lifecycle-20261020 dalında sabit34a3221f66a5b93a124326de3af3f21fb497a4a3, Coolify1jtvxmeivsnf2c9iiegnx1kv **Success/03m26s**. Başlangıç12:02:49 UTC (15:02:49 Türkiye), rolling12:06:15 UTC. Container a7aefb097bcf / oibkjai6tfoeur5gxnx3ekxt-20261020T120249, image90dd9c494745467c75f6b91d268e9cafef9529aed04c374464933be076dbd962; nihai Docker başarılı. Startup18 migration/No pending/seed atlandı/Next Ready367ms. Manuel sabit ref/worker/anahtarlar/rol/model aynı; yeni ADR veya migration yok.
+
+Yedek /data/coolify/backups/cr033-20261020/demo.dump135536byte/mode600, pg_restore --list geçti. Sezon/enrollment/ödeme tarih-yöntem-kaynağı dahil guard before/after cmp aynı:10 kullanıcı/60 sporcu/1 aile/306 ödeme/1 sezon/2 sezon kaydı/17 bildirim/1 kural/3 cihaz/2 alıcı/1 run. Özlüce before/after inspect aynı14c56b463e9e/b024011/StartedAt2026-10-17T21:57:10.916623555Z/Runningtrue; main b024011 değişmedi. Etkin Pazartesi09:00 tek Demo Kullanıcı/aynı ana iPhone korunur, lastEvaluatedAt12:07:06.763 UTC ile yayın sonrası ilerledi; yeni run/push/tahsilat yok.
+
+Canlı Ece31.01.2027 özet toplam1500/ödenen500/kalan1000/KISMİ; aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken doğru.16 ilgili test/typecheck, yerel gerçek UI500→300→700 ve eski veriyi koruyan cleanup, yerel Docker başarılı. Makbuzdaki önceki tutar yerel tahsilat akışında; canlıda mevcut kayıt yalnız özetle açıldı. Gerçek iPhone/baskı/restore tatbikatı ve genel lint yapılmadı. Kanıt output/cr033; CR-033 kapalı. [Doğrulama](../30-quality/PAYMENT_RECEIPT_VALIDATION.md).
+
 ## 2026-10-20 — CR-032 yalnız demo yayını ve canlı kabul
 
 Kullanıcı sayaç/filtre/durumları aile hesabıyla eşleyip yalnız demo yayını istedi. Kaynak codex/club-lifecycle-20261020, sabit098b493aaf55ba7dabe9a9296d0516e4f499f9ac. Coolify85qgaypbksguci5jmoekoz4l **Success/03m28s**; başlangıç11:17:59 UTC (14:17:59 Türkiye), rolling update11:21:27 UTC. Yeni container ab8470ba6eae / oibkjai6tfoeur5gxnx3ekxt-20261020T111759. Nihai demo Docker geçti; startup: No pending migrations, seed atlandı, Ready253ms.37 model/18 migration aynı, paket/anahtar/cron/yetki/model değişmedi; ADR-0007/0009 geçerli, yeni ADR yok.

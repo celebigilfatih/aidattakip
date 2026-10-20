@@ -1,5 +1,7 @@
 # Roadmap
 
+2026-10-20 CR-033 kapalı: makbuz çift düşümü düzeltildi; tahsilat sonrası önceki/toplam/kalan, kısmi/tam etiketleri ve yeniden açılan birikimli özet.16 test/typecheck/yerel UI/Docker, yalnız demo34a3221 Success03m26s ve canlı Ece500/1000/aile16250 kabulü geçti. Ödeme/sezon hash'leri ve main/Özlüce/bildirim kuralı korundu. [Doğrulama](../30-quality/PAYMENT_RECEIPT_VALIDATION.md).
+
 2026-10-20 CR-032 kapalı: Ödemeler sayaç/filtre/durum/plan/Excel aile ile ortak İstanbul günü ve açık bakiye hesabına bağlandı.81 test/typecheck/Docker, yalnız demo098b493 Success03m28s ve canlı aile/ödeme karşılaştırması geçti; mevcut veriler/haftalık kural/main/Özlüce korundu. [Doğrulama](../30-quality/PAYMENT_OVERDUE_VALIDATION.md).
 
 ## ADR-0009 uygulaması — 2026-10-20

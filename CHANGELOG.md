@@ -1,8 +1,8 @@
 # Changelog
 
-### Fixed — 2026-10-20 — CR-033 makbuz hesapları (yerel doğrulandı)
+### Fixed — 2026-10-20 — CR-033 makbuz hesapları
 
-- Tahsilat sonrası toplamın çift düşümü kaldırıldı; önceki/bu tahsilat/toplam/kalan ve KISMİ ÖDEME/ÖDENDİ etiketleri doğru. Listeden açılan belge birikimli Ödeme Özeti; kısmi satırlarda da açılır.16 ilgili test/typecheck/yerel UI/Docker başarılı, mevcut veri korundu. Yalnız demo yayını hazırlanıyor; model/migration/ödeme yazma API'si değişmedi.
+- Tahsilat sonrası toplamın çift düşümü kaldırıldı; önceki/bu tahsilat/toplam/kalan ve KISMİ ÖDEME/ÖDENDİ etiketleri doğru. Listeden açılan belge birikimli Ödeme Özeti; kısmi satırlarda da açılır.16 ilgili test/typecheck/yerel UI/yerel ve demo Docker başarılı. Yalnız demo34a3221 Success03m26s; canlı Ece500/1000, aile16250 ve tüm mevcut veri hash'leri/haftalık kural/main/Özlüce korundu. Model/migration/ödeme yazma API'si değişmedi; CR-033 kapalı.
 
 ### Verified — 2026-10-20 — Demo sezon kısmi ödemesi
 

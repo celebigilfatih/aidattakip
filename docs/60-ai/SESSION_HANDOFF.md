@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-20 — CR-033 demo yayını ve kapanış
+
+Yalnız demo aynı codex/club-lifecycle-20261020 dalı/sabit34a3221f66a5b93a124326de3af3f21fb497a4a3 ile yayımlandı. Coolify1jtvxmeivsnf2c9iiegnx1kv Success03m26s, başlangıç12:02:49 UTC, rolling12:06:15 UTC. Container a7aefb097bcf / oibkjai6tfoeur5gxnx3ekxt-20261020T120249; nihai Docker geçti,18 migration/no pending/seed atlandı/Ready367ms.
+
+Canlı mevcut Ece500 TL kaydında Ödeme Özeti toplam1500/toplam ödenen500/kalan1000/KISMİ; önceki/son tahsilat uydurulmaz. Aile23000/6750/16250/7000 aynı. Yerel ilk/sonraki/tam tahsilatlar önceki0/500/800, yeni500/300/700, kalan1000/700/0 doğru.16 ilgili test/typecheck/yerel ve demo Docker/gerçek yerel UI geçti; yerel cleanup60 sporcu/300 ödeme/eski hash aynı. Fiziksel baskı/gerçek iPhone testi yapılmadı.
+
+135536byte/mode600 demo yedeği ve pg_restore --list geçerli. Guard before/after cmp aynı (306 ödeme/1 sezon/2 kayıt dahil), Özlüce inspect aynı; uzak main b024011 korunur. Etkin Pazartesi09:00 tek Demo Kullanıcı/ana iPhone aynı, worker12:07:06.763 UTC ilerledi. Yeni canlı tahsilat/run/push yok. Model/API/anahtar/yetki değişmedi; ADR-0009 yeterli. CR-033 kapalı, belgeler/CHANGELOG/BOOT/roadmap güncellendi. Ana sekme canlı Ece özeti açık bırakıldı; output/cr033/live-ece-summary.png, demo-runtime-guard.png, demo-deployment.png Git dışı. Aşağıdaki pending kayıtları tarihçedir; ayrı tahsilat geçmişi/ledger eksikliğiCR-009 ve eski rol sorunlarıCR-002/003 ayrı kalır.
+
 ## 2026-10-20 — CR-033 yerel düzeltme; yalnız demo yayın hazırlığı
 
 Kullanıcı makbuzda önceki ödeme/kalanı düzeltip yalnız demo yayınını istedi. src/lib/payment-receipt.ts collection/summary sözleşmesi; tahsilat sonrası toplam yalnız bir kez düşülür, önceki=toplam−bu tahsilat. Yeni makbuz açıkça0 önceki/kalan gösterir; KISMİ ÖDEME/ÖDENDİ. Listeden kısmi veya tam kayıt Ödeme Özeti açar, toplamı son tahsilat gibi göstermez, eksik tarih/yöntem uydurulmaz. Eski hareketleri yeniden kuran ledger eklenmedi. Veri modeli/ödeme PATCH/API/yetki/anahtar/paket aynı; yeni ADR yok.

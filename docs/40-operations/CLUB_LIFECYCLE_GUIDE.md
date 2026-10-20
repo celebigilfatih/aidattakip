@@ -10,7 +10,7 @@ ADMIN/SECRETARY aile ilişkilerini yönetir; ADMIN/ACCOUNTING tüm dönemler ve 
 
 ## Sezon yenileme
 
-CR-033 düzeltmesi: Ödeme Kaydet sonrası makbuz önceki ödeme/bu tahsilat/toplam ödenen/kalanı gösterir; kısmi borç KISMİ ÖDEME etiketlidir. Satırdaki **Ödeme Özeti**, kısmi veya tam tahsilatı yeniden açar; birikimli toplamı gösterir, eski tahsilat hareketlerini üretmez. Aşağıdaki makbuz bulgusu düzeltme öncesinin tarihçesidir; yayın kabulü [doğrulama](../30-quality/PAYMENT_RECEIPT_VALIDATION.md) içinde izlenir.
+CR-033 yalnız demo34a3221 ile düzeltildi: Ödeme Kaydet sonrası makbuz önceki ödeme/bu tahsilat/toplam ödenen/kalanı gösterir; kısmi borç KISMİ ÖDEME etiketlidir. Satırdaki **Ödeme Özeti**, kısmi veya tam tahsilatı yeniden açar; birikimli toplamı gösterir, eski tahsilat hareketlerini üretmez. Canlı Ece özet500/1000 ve aile16250 doğrulandı. Aşağıdaki makbuz bulgusu düzeltme öncesinin tarihçesidir; yayın kabulü [doğrulama](../30-quality/PAYMENT_RECEIPT_VALIDATION.md) içindedir.
 
 Sonraki örnek kısmi ödeme (2026-10-20): Ailede Ece'nin **Sporcunun ödemeleri** bağlantısı → 31.01.2027 sezon aidatında **Ödeme Kaydet**,500 TL/Nakit/20.10.2026 ile kayıt yapıldı. 1500 TL taksit Kısmi, ödenen500/kalan1000; Ece toplam kalan7000, Eren9250, aile kalan16250/ödenen6750/tahakkuk23000/geciken7000. Kalıcılık ve toplamlar kontrol edildi. Makbuzda çift düşüm nedeniyle kalan500 gösterilmesi CR-033 açık hatasıdır; doğru bakiye ödeme listesi ve ailede1000/16250 olarak doğrulandı. Aşağıdaki onay toplamları ödeme öncesidir.
 

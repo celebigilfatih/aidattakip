@@ -2,11 +2,11 @@
 
 ## Güncel görev — CR-033
 
-Kullanıcı makbuz hesaplarını düzeltip yalnız demo yayını istedi. Çift düşüm düzeltildi, collection makbuzu/yeniden açma birikimli özet ve kısmi/tam etiketleri ayrıldı.16 test/typecheck/gerçek yerel UI/Docker başarılı; fixture sonrası60 sporcu/300 ödeme ve eski ödeme hash'i aynı. Demo135536byte/600 yedeği ve306 ödeme/1 sezon/2 kayıt guard alındı; yayın bekliyor. Yeni ADR/model/migration yok. [Doğrulama](docs/30-quality/PAYMENT_RECEIPT_VALIDATION.md). Aşağıdaki CR-033 açık bulgusu tarihçedir.
+CR-033 yalnız demo34a3221 ile yayımlandı; Coolify Success03m26s. Çift düşüm düzeltildi, tahsilat sonrası önceki/bu tahsilat/toplam/kalan ile yeniden açma birikimli özet ayrıldı.16 test/typecheck/yerel gerçek UI/yerel ve nihai demo Docker geçti. Canlı Ece500 ödenen/1000 kalan/KISMİ ve aile16250 kalan doğru;306 ödeme/1 sezon/2 kayıt dahil hash'ler, haftalık kural/main/Özlüce aynı. Worker12:07:06.763 UTC sonrası ilerledi. Yeni ADR/model/migration yok; CR-033 kapalı. [Doğrulama](docs/30-quality/PAYMENT_RECEIPT_VALIDATION.md). Aşağıdaki açık bulgu tarihçedir.
 
 ## Güncel işletim — demo örnek sezon
 
-Son kullanım: Ece'nin 31.01.2027 vadeli 1500 TL sezon aidatına 20.10.2026 tarihli 500 TL örnek Nakit kısmi ödeme kaydedildi. Kalıcı satır Kısmi/ödenen500/kalan1000, Ece toplam kalan7000; aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken. Makbuzda bu tahsilat iki kez düşülüp kalan500 gösteriliyor: CR-033 açık; ödeme listesi/aile doğru. Kod/yayın değişmedi. Aşağıdaki mali onay toplamları ödeme öncesinin tarihçesidir.
+Son kullanım: Ece'nin 31.01.2027 vadeli 1500 TL sezon aidatına 20.10.2026 tarihli 500 TL örnek Nakit kısmi ödeme kaydedildi. Kalıcı satır Kısmi/ödenen500/kalan1000, Ece toplam kalan7000; aile23000 tahakkuk/6750 ödenen/16250 kalan/7000 geciken. O sıradaki makbuz çift düşüm bulgusuCR-033 yukarıdaki yayınla kapandı. Aşağıdaki mali onay toplamları ödeme öncesinin tarihçesidir.
 
 2026-10-20 kullanıcı isteğiyle Örnek 2027 İlkbahar Sezonu (01.01–31.03.2027) mevcut Ece/Eren için mali onaylandı: 31 Ocak/28 Şubat/31 Mart vadeli 3 × 1500 ve 3 × 1750 TL, toplam 9750 TL yeni borç. Önceden açılmış ikinci sekmeden aynı önizleme tekrar onaylandı; her sporcuda 8 kayıt (5 eski + 3 sezon) kaldı, yeni önizleme Önceden onaylandı / yeni borç 0 TL. Aile 23000 tahakkuk/6250 ödenen/16750 kalan/7000 geciken. Grup geçişi yapılmadı. Kod/migration/yayın yok; [kabul kaydı](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md).
 
@@ -18,7 +18,7 @@ CR-032 yalnız demo098b493 ile yayımlandı; Coolify Success03m28s.81 benzersiz 
 
 2026-10-20 ADR-0009 dört modül yalnız SporManage demo8cd9f72 ile yayımlandı; Coolify Success/04m05s, beş additive migration applied,37 model/18 migration.79 test/typecheck/yerel ve demo Docker başarılı; son yerel onay/görüşme ve canlı390/1280px kontrolleri geçti. Kullanıcı dört ekranın iPhone görünümünü onayladı; CR-031 kapalı. Önce/sonra hash/sayımlar, mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu; worker ilerledi. main/Özlüce değişmedi. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
 
-- Document version: 0.5.7
+- Document version: 0.5.8
 - CDSK version: TBD
 - Last updated: 2026-10-20
 
