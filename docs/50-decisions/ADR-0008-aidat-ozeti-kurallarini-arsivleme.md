@@ -65,10 +65,11 @@ Yeni servis/paket/anahtar/maliyet/rol yetkisi/retention süresi yoktur. Bir null
 
 Onaydan sonra yerel migration/Prisma generate/typecheck, ilgili entegrasyonlar ve Docker build; gerçek UI kaldır/yenile/geri al/iptal. Yetki/origin/yanlış şube/veli, aktif kural reddi, history bütünlüğü, idempotency, stale form/yeni personel transaction rollback, eski API'den tekrar etkinleşme/manuel gönderim reddi, worker/dispatch ve paralel kaldır-etkinleştir/üyelik sınanır. Gönderici stub kullanılır, dış push yok. Demo yayını öncesi mevcut kural/kişi/cihaz/geçmiş guard, sonrası salt okunur karşılaştırma yapılır.
 
-Additive kolon geri dönüşte silinmez; arşiv durumunu ve geçmişi korur. Ürün içi Geri al kuralı kapalı olarak geri getirir. Arşivi tanımayan eski runtime'a dönüş, eski manuel API'nin arşivli kuralları kullanması riski taşır; böyle bir rollback güvenli varsayılmaz ve yayın öncesinde ayrıca değerlendirilir. Kesin uygulama/test/yayın sonuçları henüz yoktur.
+Additive kolon geri dönüşte silinmez; arşiv durumunu ve geçmişi korur. Ürün içi Geri al kuralı kapalı olarak geri getirir. Arşivi tanımayan eski runtime'a dönüş, eski manuel API'nin arşivli kuralları kullanması riski taşır; böyle bir rollback güvenli varsayılmaz ve yayın öncesinde ayrıca değerlendirilir. Yerel/demo migration,63 test/typecheck/UI ve yalnız demo7f5710c Success/4m43s doğrulandı. Ayrıntı ve çalıştırılmayan kontroller SESSION_HANDOFF içindedir. Arşivli kayıtlar varken arşivi tanımayan eski sürüme rollback yapılmaz; arşivi destekleyen düzeltme sürümüyle ilerleme gerekir.
 
 ## Açık karar ve tarihçe
 
 - 2026-10-20: Kullanıcı özelliği istedi; kaynaklar incelendi, bu somut öneri hazırlandı. [AGENTS.md](../../AGENTS.md) model/migration için açık onay gerektirir. İlk incelemede onay bekleniyordu; uygulama/DB/canlı ayar değiştirilmedi.
 - 2026-10-20: Kullanıcı ADR-0008 ve yalnız demo migration/yayınını açıkça onayladı; Accepted. Uygulama ve doğrulama başlatıldı.
+- 2026-10-20: Yerel/demo additive migration applied;63 test/typecheck ve yerel UI/nihai Docker/canlı koruma kontrolleri başarılı. Yalnız demo7f5710c, CR-030 kapalı.
 - İlgili takip: [CR-030](../20-execution/CHANGE_REQUESTS.md), [SESSION_HANDOFF](../60-ai/SESSION_HANDOFF.md).

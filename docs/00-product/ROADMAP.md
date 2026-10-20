@@ -1,6 +1,6 @@
 # Roadmap
 
-2026-10-20 CR-030 uygulanıyor: ADR-0008 onaylı kural arşivleme/geri alma ve kalıcı gönderim geçmişi. Yerel migration/generate/typecheck ve63 test başarılı; gerçek UI/Docker/demo yayını sürüyor. [CR-030](../20-execution/CHANGE_REQUESTS.md).
+2026-10-20 CR-030 tamamlandı: ADR-0008 onaylı kural arşivleme/geri alma ve kalıcı gönderim geçmişi. Yerel migration/generate/typecheck ve63 test başarılı; yerel UI ve nihai Docker geçti. Yalnız demo7f5710c Success/4m43s; migration/canlı kart ve mevcut etkin kural/personel/bildirim/cihaz/geçmiş korundu. [CR-030](../20-execution/CHANGE_REQUESTS.md).
 
 2026-10-19 CR-029 tamamlandı: Mevcut kuralı aynı personel formundan ad/gün/saat/alıcılarla düzenleme; typecheck/55 test ve yerel Docker başarılı. Yerel UI kaydet/yenile/uygunsuz alıcı/409 doğrulandı; yalnız demo6f11cf1 Success/3m08s. Canlı form ve mevcut etkin Pazartesi09:00/Demo Kullanıcı/veriler/geçmiş korundu. [CR-029](../20-execution/CHANGE_REQUESTS.md).
 

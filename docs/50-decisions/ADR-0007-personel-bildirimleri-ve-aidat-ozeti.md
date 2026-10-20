@@ -19,3 +19,5 @@ Mevcut Coolify her dakika container içi işleyici çalıştırır; public cron 
 ## Yayın ve kabul
 
 Yeni servis/paket/anahtar yok. Additive migration yalnız yerel ve SporManage demo; ayrı dal/sabit commit, main/Özlüce korunur. Yetki, zaman sınırı, 30 gün/iptal, 200 sporcu, paralellik/kesinti testleri; Docker build ve demo personel iPhone/takvim/durdurma kabulü gerekir. Sonuçlar PUSH_GUIDE, CHANGELOG, PROJECT_BOOT ve SESSION_HANDOFF'a yazılır.
+
+2026-10-20 yaşam döngüsü eki: Kullanıcı onaylı [ADR-0008](ADR-0008-aidat-ozeti-kurallarini-arsivleme.md), kullanılmayan kapalı kurallar için geçmişi koruyan arşiv ve kapalı geri alma ekler. Bu belgenin mali rol/şube/cihaz/kalıcı geçmiş politikası korunur.

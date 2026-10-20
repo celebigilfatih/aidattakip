@@ -25,7 +25,7 @@ Bu belge kısa çalışma bağlamıdır; ayrıntıların asıl kaynağı bağlan
 
 ## 2. Current Status
 
-- Güncel iş (CR-030): Kullanıcı ADR-0008 ve yalnız demo migration/yayınını onayladı; Accepted. Kapalı kuralı geçmişi koruyarak arşivleme ve kapalı geri alma; tek archivedAt + additive CHECK migration yerelde applied. Typecheck/63 test başarılı; UI/Docker/demo yayını sürüyor. Canlı etkin Pazartesi09:00/Demo Kullanıcı tercihi, main ve Özlüce korunacak. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
+- Güncel yayın (CR-030 kapalı): ADR-0008 açık kullanıcı onaylı/Accepted; kapalı kuralı geçmişi koruyarak Kaldır ve arşivden kapalı Geri al. Tek archivedAt + CHECK additive migration yerel/demo applied,28 model/13 migration;63 test/typecheck, yerel UI ve nihai Docker başarılı. Yalnız demo7f5710c Success/4m43s; canlı559px Kaldır/önce Durdur/arşiv bölümü ve mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone/10 personel/17 bildirim/geçmiş korundu, worker ilerledi. Main/Özlüce aynı; arşivi tanımayan eski runtime'a rollback güvenli sayılmaz. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
 
 - Güncel yayın (CR-029 kapalı): Mevcut haftalık kuralın ad/gün/saat/alıcıları Personel ve Cihazlar ortak Düzenle formundan atomik değiştirilir; güncel değer/uygunsuz eski üye/stale409 ve etkinlik/sahip/şube/geçmiş koruması. Typecheck/55 test, yerel UI ve Docker başarılı; yalnız demo6f11cf1 Success/3m08s. Canlı559px form/iptal,10 personel/17 bildirim/aynı ana iPhone/etkin Pazartesi09:00 tek Demo Kullanıcı/tek eski run korundu; worker yayın sonrası ilerledi. ADR-0007 geçerli, yeni model/migration/paket/anahtar/yetki kararı yok. [SESSION_HANDOFF](docs/60-ai/SESSION_HANDOFF.md). Aşağıdaki kayıtlar tarihçedir.
 
@@ -180,7 +180,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 
 | Version | Date | Summary |
 |---|---|---|
-| 0.4.19 | 2026-10-20 | ADR-0008 kullanıcı onaylı arşiv/kapalı geri alma; yerel migration ve63 test, demo yayını hazırlanıyor. |
+| 0.4.19 | 2026-10-20 | ADR-0008 kullanıcı onaylı arşiv/kapalı geri alma; yerel/demo migration,63 test ve yalnız demo7f5710c canlı kabulü. |
 | 0.4.18 | 2026-10-19 | Ortak mevcut kural formu,55 test ve yalnız demo6f11cf1 canlı kabulü (önceki eksik revizyon satırı tamamlandı). |
 | 0.4.17 | 2026-10-19 | Personel ekranında yeni kapalı aidat kuralı;51 test/typecheck, Docker ve yalnız demo3b7ebcc canlı kabulü. |
 | 0.4.16 | 2026-10-19 | Personel ekranında özet kuralını etkinleştirme/durdurma;51 test/typecheck/Docker ve yalnız demo6c4ee5b canlı kabulü. |

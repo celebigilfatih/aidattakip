@@ -2,6 +2,12 @@
 
 ## 2026-10-20 — Kural arşivleme/geri alma yalnız demo (CR-030)
 
+Yalnız demo7f5710cb0d7f0a9ca5467f8055c3a6ca84c4efbe, Coolify h9qsg4wutnqewcyyn5vgtrdl Success/04m43s; başlangıç07:09:58 UTC, bitiş07:14:41 UTC. Nihai Docker başarılı; runtime sabit7f5710c/branch codex/staff-summary-20261019 ve manuel dağıtım aynı. 20261020100000_archive_staff_summary_rules startup logunda applied,13 migration başarılı/seed atlandı; yeni archivedAt API alanı doğrulandı. Main b024011/Özlüce'ye işlem yapılmadı.
+
+Canlı production sayfası yenileme ve Personel ve Cihazlar kartında Kaldır/etkin kural için önce Durdur açıklaması, Arşivlenen kurallar(0)/boş durum;559px scrollWidth559, yatay taşma yok. Mevcut tercih değiştirilmeden10 personel/17 bildirim, aynı alıcı/ana iPhone/aktiflik/geçerlilik/delivery sonucu, etkin Pazartesi09:00 tek Demo Kullanıcı kuralı/sahibi ve tek eski run korundu (tüm salt okunur guard true). Worker07:15:06.363 UTC ile yayın sonrasında ilerledi; yeni run/push yok. Canlı yeni test kuralı/kişi oluşturulmadı. Screenshot output/staff-rule-archive/live-rule-archive-controls.png kaydedilip görüntülendi; secret/oturum içermeyen metadata repository dışında staff-rule-archive-release.json.
+
+Aşağıdaki hazırlık kaydı tarihçedir.
+
 Yerel1280px UI: Kaldır onayı/iptali, günlük listeden çıkma, yeniden giriş/navigasyon sonrası arşivde kalma, salt okunur geçmişte aynı SKIPPED run, Geri al/kapalı kart ve Yenile doğrulandı. Kendi tek kural/run fixture'ı local DB+ID/prefix/owner/state guard ile temizlendi;0 yeni bildirim. Yerel Docker adayı exit0/config2c6f1e95a440cc7e429c29362de0b62dcea6c9999c67284e4b2efda26f6059eb son etkin-restore409 korumasından öncedir; nihai kaynak demo Docker'da doğrulanacak. Son kaynak typecheck ve63 test tekrar geçti.
 
 ADR-0008 ve yerel/demo additive migration/yayını açık kullanıcı onaylı. Yerel 20261020100000_archive_staff_summary_rules applied ve Prisma generate başarılı;63 test/typecheck geçti. Docker ve UI sürüyor, canlı yayına henüz geçilmedi. Mevcut ayrı branch/sabit ref, cron ve VAPID korunacak; main/Özlüce kapsam dışında. Arşivi tanımayan eski runtime'a dönüş güvenli sayılmaz; kolon DROP/purge yok. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md).
