@@ -217,6 +217,9 @@ export interface Payment {
   paidAmount?: number
   paymentMethod?: PaymentMethod
   status: PaymentStatus
+  displayStatus?: PaymentStatus
+  remainingAmount?: number
+  overdue?: boolean
   referenceNumber?: string
   notes?: string
   receiptUrl?: string

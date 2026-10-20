@@ -1,12 +1,14 @@
 # Change Requests
 
-## CR-032 — Ödemeler ekranı gecikmiş adet/durum tutarsızlığı — Açık
+## CR-032 — Ödemeler ekranı gecikmiş adet/durum tutarsızlığı — Yayın hazırlanıyor
 
 - Kanıt:2026-10-20 kullanıcı talebiyle demo örnek aile kontrolü. Ece Arslan'ın vadesi05.08.2026 ve05.10.2026 olan1500'er TL iki açık borcu mevcut; Ödemeler üst sayacı1, aile gecikeni3000 TL. Eski satır durumu Ağustos için OVERDUE, Ekim için PENDING; Eren'de PARTIAL/PENDING satırları3 sayılıyor.
 - Kaynak: src/app/api/payments/route.ts overduePayments yalnız PENDING/PARTIAL sayar, OVERDUE dışarıda; dueDate anlık new Date ile karşılaştırılır. src/app/payments/page.tsx durum rozeti kalıcı status, plan kartı ise tarih bazlı hesap kullanır. Aile/staff-overdue İstanbul gün başlangıcıyla hesaplar; yeni aile toplamları doğru doğrulandı.
 - Etki/öneri: Üst gecikmiş adet, filtre ve rozetler ortak güncel bakiye/vade hesabına hizalanmalı; PENDING/PARTIAL/OVERDUE, sıfır kalan, PAID/CANCELLED ve İstanbul vade günü sınırı birlikte doğrulanmalı. Mevcut borçların durumlarını otomatik yeniden yazmak yerine okuma hesaplarını düzeltmek değerlendirilmelidir.
 - Bu görevde yalnız bulgu kaydı: kod/ödeme durumu/mali hareket değişmedi. ADR-0009 değiştirilmez. [Doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md).
 
+
+- Uygulama/onay: CR-032 kullanıcı tarafından2026-10-20 düzeltme ve yalnız demo yayınıyla onaylandı. Ortak payment-balance hesabı aile, personel gecikmiş borç ve Ödemeler okumasında kullanılır: PENDING/PARTIAL/OVERDUE, max(amount-paidAmount,0), PAID/CANCELLED kapalı, İstanbul vade günü tamamlandıktan sonra gecikme. Veritabanı status/borç/tahsilat geçmişi yazılmaz. API raw status korunur; displayStatus/remainingAmount/overdue/asOf ve summary.totalRemaining/overdueAmount additive alanları eklenir. Filtre ve SQL sayımı aynı koşulla kesişir; plan/rozet/Excel ortak güncel görünümü kullanır. Yeni model/migration/paket/yetki/retention kararı yok, ADR-0007/0009 geçerli. Yerel80 test+son9 test (81 benzersiz) ve typecheck başarılı; yerel Docker başarılı. Demo yayını ve sonrası guard/UI henüz bekliyor.
 
 ## CR-031 — Aile, sezon, aday kayıt ve sporcu takibi — Kapalı
 

@@ -1,6 +1,10 @@
 # Aidat Takip — Project Boot
 
-## Güncel görev — ADR-0009 / CR-031
+## Güncel görev — CR-032
+
+CR-032 kullanıcı tarafından2026-10-20 düzeltme ve yalnız demo yayınıyla onaylandı. Ortak payment-balance hesabı aile, personel gecikmiş borç ve Ödemeler okumasında kullanılır: PENDING/PARTIAL/OVERDUE, max(amount-paidAmount,0), PAID/CANCELLED kapalı, İstanbul vade günü tamamlandıktan sonra gecikme. Veritabanı status/borç/tahsilat geçmişi yazılmaz. API raw status korunur; displayStatus/remainingAmount/overdue/asOf ve summary.totalRemaining/overdueAmount additive alanları eklenir. Filtre ve SQL sayımı aynı koşulla kesişir; plan/rozet/Excel ortak güncel görünümü kullanır. Yeni model/migration/paket/yetki/retention kararı yok, ADR-0007/0009 geçerli. Yerel80 test+son9 test (81 benzersiz) ve typecheck başarılı; yerel Docker başarılı. Demo yayını ve sonrası guard/UI henüz bekliyor. Ayrıntı [doğrulama](docs/30-quality/PAYMENT_OVERDUE_VALIDATION.md).
+
+## Son modül yayını — ADR-0009 / CR-031
 
 2026-10-20 ADR-0009 dört modül yalnız SporManage demo8cd9f72 ile yayımlandı; Coolify Success/04m05s, beş additive migration applied,37 model/18 migration.79 test/typecheck/yerel ve demo Docker başarılı; son yerel onay/görüşme ve canlı390/1280px kontrolleri geçti. Kullanıcı dört ekranın iPhone görünümünü onayladı; CR-031 kapalı. Önce/sonra hash/sayımlar, mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone korundu; worker ilerledi. main/Özlüce değişmedi. [Rehber](docs/40-operations/CLUB_LIFECYCLE_GUIDE.md), [doğrulama](docs/30-quality/CLUB_LIFECYCLE_VALIDATION.md). Aşağıdaki yayınlar tarihçedir.
 

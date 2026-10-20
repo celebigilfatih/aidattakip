@@ -127,3 +127,7 @@ Push config yalnız public key/yapılandırma durumunu verir. Activate tek kulla
 ## Hedef kurallar
 
 Ortak hata/sayfalama formatı, idempotency ve sürümleme standardı TBD. Geriye uyumsuz değişiklik, yetki veya veri sözleşmesi için Proposed ADR ve açık onay gerekir.
+
+## CR-032 payment okuma alanları
+
+GET /api/payments raw status ve mevcut şekli korur; displayStatus, remainingAmount, overdue ve asOf; summary.totalRemaining/overdueAmount eklenir. Status filtresi gösterilen güncel duruma göre çalışır, overdue=true diğer filtreleri geçersiz kılmaz. Liste ve sayfa dışı özet aynı RepeatableRead transaction/saatinden okunur; ay sınırı Europe/Istanbul ve üst sınır exclusive. Sayfa dışı özet altı mali alandan hesaplanır, pozitif kalan satırları ayrı toplanır. İptal satırları varsayılan gizli; açıkça istendiğinde mali toplamlar dışıdır. Eski bulk DELETE status/overdue seçiminde aynı SQL koşulunu kullanır; mevcut rol/nesne sınırları bu işte genişletilmedi.

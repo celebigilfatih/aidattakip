@@ -1,5 +1,10 @@
 # Changelog
 
+### Fixed — 2026-10-20 — CR-032 ortak gecikme hesabı
+
+- Ödemeler sayaç/filtre/durum/plan/Excel aile hesabıyla ortak bakiye ve İstanbul günü hesabına bağlandı; kısmi ve OVERDUE kayıtları, sıfır/fazla bakiye, kapalı borçlar ve ay sınırları eşlendi. Raw status/geçmiş korunur; yeni migration yok.81 benzersiz test/typecheck ve yerel Docker başarılı, yalnız demo yayın kabulü bekliyor.
+
+
 ### Verified — 2026-10-20 — Demo örnek aile
 
 - Kullanıcının isteğiyle Merkez Şube’de mevcut iki sentetik sporcu Örnek Kardeş Ailesi hesabına bağlandı.10 ödeme satırıyla13.250 TL tahakkuk/6.250 TL ödenen/7.000 TL kalan-geciken ve kısmi ödeme, yenileme sonrası kalıcılık doğrulandı. Kod/yayın/migration değişmedi; eski Ödemeler gecikmiş adet sayacı tutarsızlığıCR-032 olarak açık kaydedildi.

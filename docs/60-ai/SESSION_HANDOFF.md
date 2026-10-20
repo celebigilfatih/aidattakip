@@ -1,5 +1,10 @@
 # AI Session Handoff
 
+## 2026-10-20 — CR-032 uygulaması; demo yayın hazırlığı
+
+CR-032 kullanıcı tarafından2026-10-20 düzeltme ve yalnız demo yayınıyla onaylandı. Ortak payment-balance hesabı aile, personel gecikmiş borç ve Ödemeler okumasında kullanılır: PENDING/PARTIAL/OVERDUE, max(amount-paidAmount,0), PAID/CANCELLED kapalı, İstanbul vade günü tamamlandıktan sonra gecikme. Veritabanı status/borç/tahsilat geçmişi yazılmaz. API raw status korunur; displayStatus/remainingAmount/overdue/asOf ve summary.totalRemaining/overdueAmount additive alanları eklenir. Filtre ve SQL sayımı aynı koşulla kesişir; plan/rozet/Excel ortak güncel görünümü kullanır. Yeni model/migration/paket/yetki/retention kararı yok, ADR-0007/0009 geçerli. Yerel80 test+son9 test (81 benzersiz) ve typecheck başarılı; yerel Docker başarılı. Demo yayını ve sonrası guard/UI henüz bekliyor. Yerel UI sayfa2→gecikme kutusu→sayfa1, durumGecikmiş ve Excel yalnız Ece5 kayıt/kalan3000 kontrolü geçti. Yerel/demo seed tarihleri farklı olduğundan yerel Ece1 gecikme1500, canlı mevcut Ece2 gecikme3000 olmalıdır. Yeni testler yalnız loopback5477/aidat_takip kendi fixture’larını temizledi; legacy bulk iptal testi yalnız bu fixture’ları kullandı. Demo mevcut8cd9f72/97bbfdb44a48, yedek /data/coolify/backups/cr032-20261020/demo.dump134593byte/600, pg_restore --list başarılı; aile dahil fresh before.json/Özlüce inspect alındı.
+
+
 ## 2026-10-20 — Demo örnek aile hesabı
 
 Kullanıcı demo ortamında iki kardeş senaryosu ve birleşik borç/ödeme görünümü istedi. Canlı /families ekranından **Örnek Kardeş Ailesi**, Merkez Şube'de mevcut sentetik Ece Arslan (Merkez U10, demo-v1-student-merkez-u10-07) ve Eren Aksoy (Merkez U16, demo-v1-student-merkez-u16-06) seçilerek oluşturuldu. Bu, açıkça seçilmiş örnek kardeş ilişkisidir; gerçek akrabalık/soyadı/telefon eşleşmesi varsayılmadı, adlar ve veli kayıtları değiştirilmedi. Kayıt kullanıcı kullanımına bırakıldı, arşivlenmedi.

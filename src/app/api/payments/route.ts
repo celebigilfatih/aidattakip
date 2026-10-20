@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { AuthService } from '@/lib/auth'
 import { PaymentStatus } from '@/types'
 import { getTrainerGroupIds } from '@/lib/trainer-permissions'
+import { paymentBalance, paymentMonth } from '@/lib/payment-balance'
+import { paymentStatusWhere, summarizePayments } from '@/lib/payment-read'
 
 async function getCurrentUser(request: NextRequest) {
   const token = request.cookies.get('auth-token')?.value
@@ -37,14 +39,8 @@ export async function GET(request: NextRequest) {
     const monthFilter = searchParams.get('month') || 'all' // current or all
 
     const skip = (page - 1) * limit
-    const where: any = {}
-
-    // Exclude cancelled payments by default unless specifically requested
-    if (!status || status === 'all') {
-      where.status = { not: PaymentStatus.CANCELLED }
-    } else {
-      where.status = status
-    }
+    const now = new Date()
+    const where: any = { AND: [paymentStatusWhere(status || 'all', now)] }
 
     if (studentId) {
       where.studentId = studentId
@@ -83,28 +79,11 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    if (overdue) {
-      where.AND = [
-        { status: { in: [PaymentStatus.PENDING, PaymentStatus.PARTIAL] } },
-        { dueDate: { lt: new Date() } }
-      ]
-    }
+    if (overdue) where.AND.push(paymentStatusWhere('OVERDUE', now))
 
-    // Month filter - show only current month payments
     if (monthFilter === 'current') {
-      const now = new Date()
-      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-      const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
-      
-      if (!where.AND) {
-        where.AND = []
-      }
-      where.AND.push({
-        dueDate: {
-          gte: monthStart,
-          lte: monthEnd
-        }
-      })
+      const month = paymentMonth(now)
+      where.AND.push({ dueDate: { gte: month.start, lt: month.end } })
     }
 
     // Determine sorting
@@ -121,7 +100,7 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const [payments, total] = await Promise.all([
+    const [payments, summaryRows] = await prisma.$transaction([
       prisma.payment.findMany({
         where,
         skip,
@@ -144,80 +123,19 @@ export async function GET(request: NextRequest) {
         },
         orderBy
       }),
-      prisma.payment.count({ where })
-    ])
+      prisma.payment.findMany({ where, select: { amount: true, paidAmount: true, dueDate: true, paidDate: true, status: true } })
+    ], { isolationLevel: 'RepeatableRead' })
 
-    // Calculate summary stats
-    const summaryStats = await prisma.payment.aggregate({
-      where,
-      _sum: {
-        amount: true,
-        paidAmount: true
-      },
-      _count: {
-        id: true
-      }
-    })
-
-    const overduePayments = await prisma.payment.count({
-      where: {
-        ...where,
-        status: { in: [PaymentStatus.PENDING, PaymentStatus.PARTIAL] },
-        dueDate: { lt: new Date() }
-      }
-    })
-
-    // Calculate monthly stats (current month)
-    const now = new Date()
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59)
-
-    const monthlyPaidStats = await prisma.payment.aggregate({
-      where: {
-        ...where,
-        status: PaymentStatus.PAID,
-        paidDate: {
-          gte: monthStart,
-          lte: monthEnd
-        }
-      },
-      _sum: {
-        paidAmount: true
-      }
-    })
-
-    const monthlyPendingStats = await prisma.payment.aggregate({
-      where: {
-        ...where,
-        status: { in: [PaymentStatus.PENDING, PaymentStatus.PARTIAL] },
-        dueDate: {
-          gte: monthStart,
-          lte: monthEnd
-        }
-      },
-      _sum: {
-        amount: true,
-        paidAmount: true
-      }
-    })
-
+    const summary = summarizePayments(summaryRows, now)
     return NextResponse.json({
-      payments,
-      pagination: {
-        page,
-        limit,
-        total,
-        pages: Math.ceil(total / limit)
-      },
-      summary: {
-        totalAmount: summaryStats._sum.amount || 0,
-        totalPaid: summaryStats._sum.paidAmount || 0,
-        totalCount: summaryStats._count.id,
-        overdueCount: overduePayments,
-        monthlyPaid: monthlyPaidStats._sum.paidAmount || 0,
-        monthlyPending: (monthlyPendingStats._sum.amount || 0) - (monthlyPendingStats._sum.paidAmount || 0)
-      }
-    })
+      payments: payments.map(payment => {
+        const state = paymentBalance(payment, now)
+        return { ...payment, displayStatus: state.displayStatus, remainingAmount: state.remaining, overdue: state.overdue }
+      }),
+      asOf: now.toISOString(),
+      pagination: { page, limit, total: summary.totalCount, pages: Math.ceil(summary.totalCount / limit) },
+      summary,
+    }, { headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
     console.error('Failed to fetch payments:', error)
     return NextResponse.json(
@@ -379,11 +297,8 @@ export async function DELETE(request: NextRequest) {
     const where: any = {}
 
     // Target only non-cancelled payments by default
-    where.status = { not: PaymentStatus.CANCELLED }
-
-    if (status && status !== 'all') {
-      where.status = status
-    }
+    const now = new Date()
+    where.AND = [paymentStatusWhere(status || 'all', now)]
 
     if (groupId && groupId !== 'all') {
       where.student = { groupId }
@@ -399,12 +314,7 @@ export async function DELETE(request: NextRequest) {
       }
     }
 
-    if (overdue) {
-      where.AND = [
-        { status: { in: [PaymentStatus.PENDING, PaymentStatus.PARTIAL] } },
-        { dueDate: { lt: new Date() } }
-      ]
-    }
+    if (overdue) where.AND.push(paymentStatusWhere('OVERDUE', now))
 
     const result = await prisma.payment.updateMany({
       where,

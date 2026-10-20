@@ -3,13 +3,13 @@ import type { User } from '@prisma/client'
 import { prisma } from './prisma'
 import { branchScope, checkBranch, finance, liveActor, type ClubDB } from './club-access'
 import { NotificationError } from './notification-policy'
-import { istanbulDayStart } from './staff-summary-policy'
+import { paymentBalance } from './payment-balance'
 
 export const familySchema = z.object({ id: z.string().optional(), name: z.string().trim().min(1).max(100), branchId: z.string().min(1), studentIds: z.array(z.string().min(1)).max(500).transform(ids => Array.from(new Set(ids))), expected: z.string().optional() }).strict()
 export function familyTotals(payments: { status: string; amount: number; paidAmount: number | null; dueDate: Date }[], now = new Date()) {
   return payments.filter(p => p.status !== 'CANCELLED').reduce((sum, p) => {
-    const paid = p.paidAmount ?? 0, remaining = p.status === 'PAID' ? 0 : Math.max(p.amount - paid, 0)
-    return { charged: sum.charged + p.amount, paid: sum.paid + paid, remaining: sum.remaining + remaining, overdue: sum.overdue + (p.dueDate < istanbulDayStart(now) ? remaining : 0) }
+    const paid = p.paidAmount ?? 0, { remaining, overdue } = paymentBalance(p, now)
+    return { charged: sum.charged + p.amount, paid: sum.paid + paid, remaining: sum.remaining + remaining, overdue: sum.overdue + (overdue ? remaining : 0) }
   }, { charged: 0, paid: 0, remaining: 0, overdue: 0 })
 }
 export async function listFamilies(user: User, archived = false) {

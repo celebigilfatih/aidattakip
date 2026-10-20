@@ -1,5 +1,9 @@
 # Aidat Takip — Product Specification
 
+## Ödemelerde ortak gecikme görünümü — CR-032
+
+Sayaç, gecikme kutusu, durum filtresi, satır/plan rozeti ve Excel, aile hesabıyla aynı kalan bakiye/İstanbul vade günü tanımını kullanır. Vadesi geçen kısmi ödeme Gecikmiş ve Kısmi ödeme bilgisiyle görünür. Sıfır/fazla ödeme gecikme üretmez; PAID/CANCELLED açık bakiye sayılmaz. Eski kaydın OVERDUE durumu gelecekteki vadeyi otomatik gecikmiş yapmaz. Görünüm anlık hesaplanır, kayıt statüsü kendiliğinden yazılmaz. Ayrıntı: [PAYMENT_OVERDUE_VALIDATION](../30-quality/PAYMENT_OVERDUE_VALIDATION.md).
+
 ## Aile, sezon, aday ve takip — ADR-0009 / 2026-10-20
 
 Kullanıcı dört modüllük planın tamamını uygulamayı onayladı. Aynı şube aile görünümü (sporcu başına tahsilat), ortak sezon/yenileme/önizlemeli mali onay/ayrı ADMIN grup geçişi, personel aday-deneme-kesin kayıt ve rol kapsamlı ilgi bekleyenler eklendi. Eski kayıtlar otomatik ilişkilendirilmez; yeni push/veli girişi yok. Ayrıntılı sözleşme ve kullanım: [CLUB_LIFECYCLE_GUIDE](../40-operations/CLUB_LIFECYCLE_GUIDE.md); gerçek sonuçlar [doğrulama](../30-quality/CLUB_LIFECYCLE_VALIDATION.md). Yayın kabulü ayrı kaydedilir.

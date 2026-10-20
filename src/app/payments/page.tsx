@@ -35,17 +35,21 @@ import {
 import { Payment, Group, FeeType, PaymentStatus, PaymentMethod, UserRole } from '@/types'
 import { AuthService } from '@/lib/auth'
 import * as XLSX from 'xlsx'
+import { paymentBalance } from '@/lib/payment-balance'
 
 interface PaymentSummary {
   totalAmount: number
   totalPaid: number
   totalCount: number
+  totalRemaining: number
+  overdueAmount: number
   overdueCount: number
   monthlyPaid: number
   monthlyPending: number
 }
 
 interface PaymentsResponse {
+  asOf: string
   payments: Payment[]
   pagination: {
     page: number
@@ -68,11 +72,14 @@ export default function PaymentsPage() {
     totalAmount: 0,
     totalPaid: 0,
     totalCount: 0,
+    totalRemaining: 0,
+    overdueAmount: 0,
     overdueCount: 0,
     monthlyPaid: 0,
     monthlyPending: 0
   })
   const [loading, setLoading] = useState(true)
+  const [asOf, setAsOf] = useState('')
   
   // Filters and search
   const [searchTerm, setSearchTerm] = useState('')
@@ -198,6 +205,7 @@ export default function PaymentsPage() {
       if (response.ok) {
         const data: PaymentsResponse = await response.json()
         setPayments(data.payments)
+        setAsOf(data.asOf)
         setTotalPages(data.pagination.pages)
         setSummary(data.summary)
       }
@@ -555,7 +563,7 @@ export default function PaymentsPage() {
   const formatDate = (date: string | Date) => {
     if (!mounted) return '...';
     try {
-      return new Date(date).toLocaleDateString('tr-TR')
+      return new Date(date).toLocaleDateString('tr-TR', { timeZone: 'Europe/Istanbul' })
     } catch (e) {
       return '...'
     }
@@ -564,13 +572,18 @@ export default function PaymentsPage() {
   const getCurrentMonthName = () => {
     if (!mounted) return 'Bu Ay';
     const now = new Date()
-    return now.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' })
+    return now.toLocaleDateString('tr-TR', { month: 'long', year: 'numeric', timeZone: 'Europe/Istanbul' })
   }
 
-  const isOverdue = (payment: Payment) => {
-    return (payment.status === PaymentStatus.PENDING || payment.status === PaymentStatus.PARTIAL) &&
-           new Date(payment.dueDate) < new Date()
+  const paymentView = (payment: Payment) => {
+    const fallback = () => paymentBalance(payment, asOf ? new Date(asOf) : new Date())
+    return {
+      remaining: payment.remainingAmount ?? fallback().remaining,
+      overdue: payment.overdue ?? fallback().overdue,
+      status: payment.displayStatus ?? fallback().displayStatus as PaymentStatus,
+    }
   }
+  const isOverdue = (payment: Payment) => paymentView(payment).overdue
 
   const handleSort = (field: 'dueDate' | 'amount' | 'student') => {
     if (sortField === field) {
@@ -597,7 +610,8 @@ export default function PaymentsPage() {
         search: searchTerm,
         sortField: sortField,
         sortDirection: sortDirection,
-        month: monthFilter
+        month: monthFilter,
+        studentId: studentFilter
       })
       const response = await fetch(`/api/payments?${params}`)
       if (!response.ok) throw new Error('Veriler alınamadı')
@@ -624,8 +638,8 @@ export default function PaymentsPage() {
         'Ödeme Türü': p.feeType?.name ?? '-',
         'Tutar (₺)': p.amount,
         'Ödenen (₺)': p.paidAmount ?? 0,
-        'Kalan (₺)': p.amount - (p.paidAmount ?? 0),
-        'Durum': statusLabels[p.status] ?? p.status,
+        'Kalan (₺)': paymentView(p).remaining,
+        'Durum': statusLabels[p.displayStatus ?? paymentBalance(p, new Date(data.asOf)).displayStatus] ?? p.status,
         'Vade Tarihi': p.dueDate ? new Date(p.dueDate).toLocaleDateString('tr-TR') : '-',
         'Ödeme Tarihi': p.paidDate ? new Date(p.paidDate).toLocaleDateString('tr-TR') : '-',
         'Ödeme Yöntemi': p.paymentMethod ? (methodLabels[p.paymentMethod] ?? p.paymentMethod) : '-',
@@ -820,11 +834,11 @@ export default function PaymentsPage() {
                 <AlertTriangle className="h-6 w-6 animate-pulse" />
                 <div>
                   <p className="font-bold text-lg">{summary.overdueCount} Gecikmiş Ödeme!</p>
-                  <p className="text-sm opacity-90">Toplam {formatCurrency(summary.totalAmount - summary.totalPaid)} bekleyen tutar var</p>
+                  <p className="text-sm opacity-90">Toplam {formatCurrency(summary.overdueAmount)} gecikmiş açık bakiye var</p>
                 </div>
               </div>
               <Button
-                onClick={() => setOverdueFilter(true)}
+                onClick={() => { setOverdueFilter(true); setCurrentPage(1) }}
                 className="bg-white text-red-600 hover:bg-red-50"
                 size="sm"
               >
@@ -859,7 +873,7 @@ export default function PaymentsPage() {
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Bekleyen</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {formatCurrency(summary.totalAmount - summary.totalPaid)}
+                  {formatCurrency(summary.totalRemaining)}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {getCurrentMonthName()}: {formatCurrency(summary.monthlyPending)}
@@ -916,7 +930,7 @@ export default function PaymentsPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Durum
               </label>
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <Select value={statusFilter} onValueChange={value => { setStatusFilter(value); setCurrentPage(1) }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tüm durumlar" />
                 </SelectTrigger>
@@ -934,7 +948,7 @@ export default function PaymentsPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Grup
               </label>
-              <Select value={groupFilter} onValueChange={setGroupFilter}>
+              <Select value={groupFilter} onValueChange={value => { setGroupFilter(value); setCurrentPage(1) }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tüm gruplar" />
                 </SelectTrigger>
@@ -953,7 +967,7 @@ export default function PaymentsPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Şube
               </label>
-              <Select value={branchFilter} onValueChange={setBranchFilter}>
+              <Select value={branchFilter} onValueChange={value => { setBranchFilter(value); setCurrentPage(1) }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tüm şubeler" />
                 </SelectTrigger>
@@ -972,7 +986,7 @@ export default function PaymentsPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Dönem
               </label>
-              <Select value={monthFilter} onValueChange={setMonthFilter}>
+              <Select value={monthFilter} onValueChange={value => { setMonthFilter(value); setCurrentPage(1) }}>
                 <SelectTrigger>
                   <SelectValue placeholder="Dönem seçin" />
                 </SelectTrigger>
@@ -989,7 +1003,7 @@ export default function PaymentsPage() {
                   type="checkbox"
                   id="overdue"
                   checked={overdueFilter}
-                  onChange={(e) => setOverdueFilter(e.target.checked)}
+                  onChange={(e) => { setOverdueFilter(e.target.checked); setCurrentPage(1) }}
                   className="rounded border-gray-300"
                 />
                 <label htmlFor="overdue" className="text-sm font-medium text-gray-700 whitespace-nowrap cursor-pointer">
@@ -1141,9 +1155,11 @@ export default function PaymentsPage() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {groupPaymentsByPlan(payments).map((group, groupIndex) => {
                     const isGrouped = group.plan !== null
-                    const totalPlanAmount = group.payments.reduce((sum, p) => sum + p.amount, 0)
-                    const totalPlanPaid = group.payments.reduce((sum, p) => sum + (p.paidAmount || 0), 0)
-                    const allPaid = group.payments.every(p => p.status === PaymentStatus.PAID)
+                    const totalPlanAmount = group.payments.reduce((sum, p) => sum + (p.status === PaymentStatus.CANCELLED ? 0 : p.amount), 0)
+                    const totalPlanPaid = group.payments.reduce((sum, p) => sum + (p.status === PaymentStatus.CANCELLED ? 0 : p.paidAmount || 0), 0)
+                    const totalPlanRemaining = group.payments.reduce((sum, p) => sum + paymentView(p).remaining, 0)
+                    const allCancelled = group.payments.every(p => p.status === PaymentStatus.CANCELLED)
+                    const allPaid = group.payments.every(p => paymentView(p).remaining === 0)
                     const anyOverdue = group.payments.some(p => isOverdue(p))
 
                     return (
@@ -1169,10 +1185,12 @@ export default function PaymentsPage() {
                                       Toplam: {formatCurrency(totalPlanAmount)}
                                     </div>
                                     <div className="text-xs text-gray-600">
-                                      Ödenen: {formatCurrency(totalPlanPaid)} | Kalan: {formatCurrency(totalPlanAmount - totalPlanPaid)}
+                                      Ödenen: {formatCurrency(totalPlanPaid)} | Kalan: {formatCurrency(totalPlanRemaining)}
                                     </div>
                                   </div>
-                                  {allPaid ? (
+                                  {allCancelled ? (
+                                    <span className="rounded-full bg-gray-100 px-3 py-1 text-xs text-gray-700">İptal</span>
+                                  ) : allPaid ? (
                                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                       <CheckCircle className="h-4 w-4 mr-1" />
                                       Tamamlandı
@@ -1204,7 +1222,7 @@ export default function PaymentsPage() {
                             >
                               {showBulkActions && canManagePayments && (
                                 <td className="px-6 py-4 whitespace-nowrap">
-                                  {(payment.status !== PaymentStatus.PAID && payment.status !== PaymentStatus.CANCELLED) ? (
+                                  {(paymentView(payment).remaining > 0) ? (
                                     <input
                                       type="checkbox"
                                       checked={selectedPayments.includes(payment.id)}
@@ -1252,7 +1270,7 @@ export default function PaymentsPage() {
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm font-medium text-gray-900">
-                                  {payment.paidAmount ? formatCurrency(payment.amount - (payment.paidAmount || 0)) : formatCurrency(payment.amount)}
+                                  {formatCurrency(paymentView(payment).remaining)}
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
@@ -1266,11 +1284,12 @@ export default function PaymentsPage() {
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                {getStatusBadge(payment.status)}
+                                {getStatusBadge(paymentView(payment).status)}
+                                {paymentView(payment).overdue && (payment.paidAmount ?? 0) > 0 && <span className="ml-2 text-xs text-gray-600">Kısmi ödeme</span>}
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div className="flex justify-end space-x-2">
-                                  {(payment.status === PaymentStatus.PENDING || payment.status === PaymentStatus.PARTIAL) && canManagePayments && (
+                                  {paymentView(payment).remaining > 0 && canManagePayments && (
                                     <Button
                                       size="sm"
                                       onClick={() => {

@@ -8,7 +8,8 @@ const digest = value => createHash('sha256').update(JSON.stringify(value)).diges
   if (name !== 'spormanage_aidat_demo') throw Error('SporManage demo DB only')
   const tables = [
     ['users', () => db.user.findMany({ select: { id:true,name:true,role:true,isActive:true,branchId:true },orderBy:{id:'asc'} })],
-    ['students', () => db.student.findMany({ select: { id:true,firstName:true,lastName:true,branchId:true,groupId:true,isActive:true,enrollmentDate:true },orderBy:{id:'asc'} })],
+    ['students', () => db.student.findMany({ select: { id:true,firstName:true,lastName:true,branchId:true,groupId:true,familyId:true,isActive:true,enrollmentDate:true },orderBy:{id:'asc'} })],
+    ['families', () => db.family.findMany({ orderBy:{id:'asc'} })],
     ['parents', () => db.parent.findMany({ select: { id:true,firstName:true,lastName:true,phone:true,students:{select:{id:true},orderBy:{id:'asc'}} },orderBy:{id:'asc'} })],
     ['payments', () => db.payment.findMany({ select: { id:true,studentId:true,amount:true,paidAmount:true,dueDate:true,status:true },orderBy:{id:'asc'} })],
     ['groups', () => db.group.findMany({ select:{id:true,name:true,branchId:true,isActive:true},orderBy:{id:'asc'} })],
