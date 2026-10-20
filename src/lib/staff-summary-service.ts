@@ -17,7 +17,7 @@ export async function executeSummaryRun(runId: string) {
   const run = await prisma.staffSummaryRun.findUniqueOrThrow({ where: { id: runId }, include: { rule: { include: { createdBy: true, recipients: { include: { recipient: { include: { user: true, primaryDevice: true } } } } } } } })
   let accepted = 0, failed = 0, skipped = 0
   const source = run.rule.createdBy
-  if (!source.isActive || !financialRole(source.role) || (source.branchId && source.branchId !== run.rule.branchId)) {
+  if (run.rule.archivedAt || !source.isActive || !financialRole(source.role) || (source.branchId && source.branchId !== run.rule.branchId)) {
     await prisma.staffSummaryRun.update({ where: { id: runId }, data: { status: 'SKIPPED', skipped: run.rule.recipients.length, finishedAt: new Date() } })
     return
   }
@@ -39,13 +39,13 @@ export async function executeSummaryRun(runId: string) {
 }
 
 export async function runStaffSummaryWorker(now = new Date(), onlyRuleIds?: string[]) {
-  const rules = await prisma.staffSummaryRule.findMany({ where: { enabled: true, ...(onlyRuleIds ? { id: { in: onlyRuleIds } } : {}) }, select: { id: true } })
+  const rules = await prisma.staffSummaryRule.findMany({ where: { enabled: true, archivedAt: null, ...(onlyRuleIds ? { id: { in: onlyRuleIds } } : {}) }, select: { id: true } })
   const ids: string[] = []
   for (const rule of rules) {
     const created = await prisma.$transaction(async tx => {
       await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${rule.id} FOR UPDATE`
       const current = await tx.staffSummaryRule.findUniqueOrThrow({ where: { id: rule.id } })
-      if (!current.enabled || current.lastEvaluatedAt >= now) return []
+      if (current.archivedAt || !current.enabled || current.lastEvaluatedAt >= now) return []
       const slots = summarySlots(current.weekdays, current.time, current.lastEvaluatedAt, now), work: string[] = []
       for (const scheduledAt of slots) {
         const missed = now.getTime() - scheduledAt.getTime() > summaryGraceMs
@@ -63,12 +63,15 @@ export async function runStaffSummaryWorker(now = new Date(), onlyRuleIds?: stri
 }
 
 export async function manualSummaryRun(ruleId: string, user: User) {
-  const rule = await prisma.staffSummaryRule.findFirst({ where: { id: ruleId, ...summaryRuleScope(user) } })
-  if (!rule) throw new NotificationError(404, 'Kural bulunamadı.')
-  // A branch-bound manager may not execute a rule under somebody else's wider identity.
-  const owner = await prisma.user.findUnique({ where: { id: rule.createdById } })
-  if (!owner?.isActive || !financialRole(owner.role) || (owner.branchId && owner.branchId !== rule.branchId)) throw new NotificationError(409, 'Kural sahibinin yetkisi değişti.')
-  const run = await prisma.staffSummaryRun.create({ data: { ruleId, scheduledAt: new Date(), kind: 'MANUAL' } })
+  const run = await prisma.$transaction(async tx => {
+    await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${ruleId} FOR UPDATE`
+    const rule = await tx.staffSummaryRule.findFirst({ where: { id: ruleId, ...summaryRuleScope(user) }, include: { createdBy: true } })
+    if (!rule) throw new NotificationError(404, 'Kural bulunamadı.')
+    if (rule.archivedAt) throw new NotificationError(409, 'Arşivli kural gönderim yapamaz. Önce arşivden geri alın.')
+    const owner = rule.createdBy
+    if (!owner.isActive || !financialRole(owner.role) || (owner.branchId && owner.branchId !== rule.branchId)) throw new NotificationError(409, 'Kural sahibinin yetkisi değişti.')
+    return tx.staffSummaryRun.create({ data: { ruleId, scheduledAt: new Date(), kind: 'MANUAL' } })
+  })
   await executeSummaryRun(run.id)
   return prisma.staffSummaryRun.findUniqueOrThrow({ where: { id: run.id } })
 }

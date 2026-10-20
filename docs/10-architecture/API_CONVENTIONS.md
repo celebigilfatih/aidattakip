@@ -1,5 +1,11 @@
 # API Conventions
 
+## ADR-0008 arşiv sözleşmesi — 2026-10-20
+
+`PATCH /api/push/staff-summary {ruleId,action:"archive"|"restore"}` strict additive biçimdir. Aynı mali yönetici/origin/şube ve row lock; etkin kuralı kaldırma409, tekrar kaldırma/no-op aynı archivedAt değerini korur. Restore kapalı döner; zaten etkin geri alınmış kayıtta409, kullanıcı tercihi üzerine yazılmaz. Yanıt rule id/name/enabled/archivedAt. Eski PATCH ve dar/tam PUT biçimleri korunur; arşivli kurala eski yollar dahil yazma/manuel gönderim/üyelik409.
+
+GET staff-summary varsayılan arşivsiz; `?archived=true` aynı kapsamda arşivli, false arşivsiz, bozuk değer400. GET staff seçeneklerinden arşiv dışlanır, stale onboarding atomik409 ile kullanıcı oluşturmadan reddedilir. GET summary-rules geçmiş için arşivli kuralları da additive archivedAt alanıyla döndürür; mevcut son10 run sınırı aynı. Eski tam PUT/PATCH ve manual run oluşturma kilit altında arşivi tekrar okur. Worker listesi/kilit ve manuel/otomatik dispatch arşivi denetler. Gönderime başlamış/servisin kabul ettiği push geri çekilemez. Route sayısı57 aynı; yeni provider/retention/purge yok. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md).
+
 ## ADR-0007 personel ve özet sözleşmesi
 
 - CR-029 additive `PUT /api/push/staff-summary {ruleId,name,weekdays,time,recipientIds,expected:{name,weekdays,time,recipientIds}}`: aynı aktif mali yönetici/origin/şube sınırı ve kural row lock. expected önceki alanların eşleşmesini gerektirir; ad/takvim/üyelik değişmişse409, enabled/cursor eşleşmesi istenmez. Yeni alanlar ortak şema; en az1 uygun alıcı, mevcut sahip ve tüm yeni alıcılar transaction içinde doğrulanır. Silinen üyeler çıkarılır, yeni üyeler eklenir, kalan üyelik satırları korunur. Sahip/şube/enabled/geçmiş/cihaz değişmez; sadece değişen gün/saat cursor şimdi-1ms, ad/üye/no-op korur. Yanıt `{rule:{id,name,weekdays,time,enabled}}`. Bilinmeyen/enabled alanı400. Eski dar `{ruleId,weekdays,time}` PUT korunur; yeni route/model yok. Eski ayrı summary-rules PUT davranışı değiştirilmedi.

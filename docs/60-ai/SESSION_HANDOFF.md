@@ -1,5 +1,17 @@
 # AI Session Handoff
 
+## 2026-10-20 — Geçmişi koruyan kural arşivi (CR-030)
+
+Yerel1280px UI: Kaldır onayı/iptali, günlük listeden çıkma, yeniden giriş/navigasyon sonrası arşivde kalma, salt okunur geçmişte aynı SKIPPED run, Geri al/kapalı kart ve Yenile doğrulandı. Kendi tek kural/run fixture'ı local DB+ID/prefix/owner/state guard ile temizlendi;0 yeni bildirim. Yerel Docker adayı exit0/config2c6f1e95a440cc7e429c29362de0b62dcea6c9999c67284e4b2efda26f6059eb son etkin-restore409 korumasından öncedir; nihai kaynak demo Docker'da doğrulanacak. Son kaynak typecheck ve63 test tekrar geçti.
+
+Kullanıcı kullanılmayan kuralı Personel ve Cihazlar ekranından kaldırmayı/geçmişi korumayı istedi. Şemada arşiv alanı yok, run FK Restrict; enabled=false durdurma olduğundan farklı yaşam döngüsü için ADR-0008 Proposed hazırlandı. Kullanıcı somut ADR-0008 ve yalnız demo migration/yayınını açıkça onayladı, Accepted. Tek nullable archivedAt + archived-disabled CHECK, 20261020100000_archive_staff_summary_rules yerel5477/aidat_takip üzerinde applied; generate/typecheck ve63 test geçti.
+
+StaffSummaryArchiveAction onay/iptal ve geri alma dialogu, günlük kartta kapalı Kaldır/etkin için önce Durdur, arşiv listesi; read-only geçmiş etiketi. PATCH strict archive/restore ve idempotency, GET filtre; stale form/eski tam PUT/PATCH/onboarding/worker/dispatch kontrolleri. Eski tam PUT scope/archive doğrulaması kilit içine alındı; manuel run oluşturma da aynı kural kilidinde. Kural/üyeler/run/notification/delivery tutulur; cihaz ve mali rol/şube/retention aynı. Restore kapalı; zaten etkin geri alınmışsa409, cursor/gelecek slot politikası korunur. Test7 alt+parent; auth/scope/origin/invalid, constraint/history/atomic rollback/sending0/restore/concurrency kapsanır. Son ek etkin restore409 kontrolü sonrası typecheck/paket kapanışta tekrarlanacak.
+
+Hazırlık tarihçesi: Docker99521 başladı; Next dev32720 loopback3077 açıldı (önceki server durmuştu). İlk UI fixture archive-ui-ba3171601598, kendi rule/run ID'leri repository dışında staff-rule-archive-ui.json; yukarıdaki kapanışta temizlendi. İlk hazırlıkta UI/yayın bekliyordu; UI yukarıda tamamlandı, yalnız demo sabit ref yayını bekliyor. Canlı mevcut etkin Pazartesi09:00/Demo Kullanıcı/ana iPhone/history için fresh guard alınacak, canlı test kuralı veya push oluşturulmayacak. Main b024011/Özlüce korunacak. Yeni gerçek iPhone, genel lint CR-011, restore/rollback/tam erişilebilirlik çalıştırılmadı.
+
+Yerel işletim notu: İlk POST, APP_ORIGIN verilmemiş Next dev origin farkı nedeniyle403 oldu; yalnız loopback runtime APP_ORIGIN=http://127.0.0.1:3077 ile13662 yeniden açıldı. Kalıcı .env/production ayarı değişmedi. Hard reload /notifications sırasında IAB layout.js SyntaxError gözlendi, diskte node --check geçti; kaynak nedeni TBD. Login üzerinden SPA navigasyonu ve panel Yenile başarılı; bu yerel hard-reload kontrolü geçmiş sayılmaz. Demo production sayfa yenilemesi ayrıca sınanacak. Yeni test dosyasının ES5 function/iterator tip hataları const ve array ile giderildi, nihai typecheck63 test başarılı.
+
 ## 2026-10-19 — Mevcut aidat kuralını ortak formdan düzenleme (CR-029)
 
 Kapanış: Yalnız demo6f11cf162b79935d1cf14ff9b457c5d676675072; Coolify kqujvbkdflazvphrjv5m7970 Success/03m08s, başlangıç14:13:50 UTC, bitiş14:16:58 UTC. Nihai demo Docker başarılı, manuel/sabit ref ve branch codex/staff-summary-20261019 korunur. Main b024011/Özlüce'ye işlem yok. CR-029 kapalı, yeni ADR gerekmedi; ADR-0007 aynı. Aşağıdaki hazırlık satırları tarihçedir.

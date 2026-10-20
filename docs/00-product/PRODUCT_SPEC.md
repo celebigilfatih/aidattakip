@@ -1,5 +1,9 @@
 # Aidat Takip — Product Specification
 
+## Kullanılmayan aidat özeti kurallarını kaldırma — 2026-10-20
+
+Onaylı ADR-0008 uygulanıyor: Personel ve Cihazlar kartındaki **Kaldır**, yalnız kapalı kuralı isim/açıklama ve Vazgeç/Kaldır onayıyla arşivler. Etkin kural için önce Durdur gerekir. Kural günlük kart ve üyelik/personel seçeneklerinden çıkar; **Arşivlenen kurallar → Geri al** ile kapalı olarak döner. Takvim/alıcı/sahip/şube ve tüm gönderim geçmişi korunur. Otomatik Aidat Özeti bölümünde arşivli kural salt okunur, mevcut son10 run görünür; eski kayıtlar silinmez. Arşivli kurala düzenleme, etkinleştirme, üyelik veya manuel/otomatik gönderim sunucuda kapalıdır. Aynı mali rol/şube sınırı geçerlidir; önceki açık formlar409 ile yenilenir. Geri alma kendiliğinden gönderim/telafi yapmaz. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md), [CR-030](../20-execution/CHANGE_REQUESTS.md).
+
 ## Mevcut kuralı aynı personel formundan düzenleme — 2026-10-19
 
 Personel ve Cihazlar → Aidat özeti takvimi → **Düzenle**, yeni kayıtla ortak formu mevcut ad/gün/saat/alıcılarla açar. Her açılışta güncel kayıt okunur. **Değişiklikleri kaydet** tüm alanları atomik günceller; sahip, şube, güncel etkinlik, cihazlar ve geçmiş korunur. En az bir gün ve bir uygun mali alıcı gerekir. Uygunluğunu kaybetmiş mevcut alıcı sessizce çıkarılmaz; açıklamayla görünür ve açıkça kaldırılmalıdır. Form açıkken ad/takvim/alıcı değişmişse409 ile yeniden açma istenir; başka bir durdurma işleminin üzerine yazılmaz. Yalnız değişen gün/saat değerlendirme imlecini şimdiye alır; ad/alıcı değişimi veya aynı değerleri kaydetmek imleci korur. ADR-0007 mali rol/şube/cihaz politikası değişmez. [CR-029](../20-execution/CHANGE_REQUESTS.md).

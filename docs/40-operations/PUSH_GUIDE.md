@@ -4,6 +4,8 @@ Karar: [ADR-0007](../50-decisions/ADR-0007-personel-bildirimleri-ve-aidat-ozeti.
 
 ## Günlük kullanım
 
+ADR-0008 onaylı yeni akış: Personel ve Cihazlar → ilgili kapalı kuralda **Kaldır**; kural adını ve geçmişin korunacağı açıklamasını inceleyip onaylayın. Etkin kuralı önce Durdur kullanarak kapatın. Kural günlük listeden ve personel seçimlerinden çıkar; **Arşivlenen kurallar → Geri al** kapalı olarak geri getirir. Yeniden göndermesi için mevcut Etkinleştir ayrıca kullanılır. Alıcı seçimi/takvim/geçmiş aynı kalır; Otomatik Aidat Özeti bölümünde arşivli geçmiş salt okunur görünür. Arşivli kurallar gönderim yapamaz. Vazgeç kaydetmez. Yalnız demo yayını henüz bekliyor; kullanıcıya açık runtime değiştiği henüz doğrulanmadı.
+
 Yeni kural için Personel ve Cihazlar → Aidat özeti takvimi → **Yeni aidat özeti kuralı**. Kural adını, günleri, gönderim saatini ve alıcıları seçip **Kapalı kural oluştur** kullanın. Form Pazartesi09:00/boş alıcı ile başlar; saat Europe/Istanbul'dur. Her açılışta güncel seçili/aktif yönetici ve muhasebe listelenir; aramayla personeli bulun. En az bir gün/alıcı gerekir. Uygun kişi yoksa ADMIN aynı ekrandaki personel kartından önce bildirim alıcısı seçer; muhasebe bu seçim için yöneticisinden yardım ister. Ana cihazı olmayan kişi de seçilebilir, gönderim için kendi hesabıyla cihazını kurmalıdır. Kural aynı ekranda kapalı görünür, bildirim göndermez; inceledikten sonra Etkinleştir kullanın. Vazgeç kayıt yapmaz.
 
 Personel ve Cihazlar → **Aidat özeti takvimi** kartında **Etkinleştir** veya **Durdur** kullanın. İşlem kurala bağlı tüm personel için geçerlidir; gün/saat, alıcılar ve geçmiş korunur. Etkinleştirme gelecek planlanan saatleri açar, geçmiş saatlere push göndermez; en az bir geçerli seçili yönetici/muhasebe ve geçerli kural sahibi gerekir. Alıcısız kuralda önce aşağıdaki kartlardan özet alıcısını seçin. Uygun cihazı olmayan kişinin kurulumu kendi hesabıyla ayrıca tamamlanır. Durdur, yeni otomatik gönderimleri kapatır; önceden servisin kabul ettiği push geri çekilmez. Başarı mesajı ve karttaki durum güncellenir; hata halinde aynı ekranda açıklama gösterilir. Bu işlemler ADMIN/ACCOUNTING'in mevcut şube sınırındadır.
@@ -43,7 +45,7 @@ Bir saat dahil telafi yapılır; daha eski slot MISSED, birikmiş mesaj gönderi
 
 ## Test ve yayın
 
-    node --import tsx --test src/lib/service-worker.test.ts src/lib/notification-policy.test.ts src/lib/staff-summary-policy.test.ts src/lib/notification.integration.test.ts prisma/demo.test.ts prisma/demo.integration.test.ts src/lib/reporting.test.ts
+    node --import tsx --test src/lib/staff-summary-archive.integration.test.ts src/lib/staff-onboarding.integration.test.ts src/lib/service-worker.test.ts src/lib/notification-policy.test.ts src/lib/staff-summary-policy.test.ts src/lib/notification.integration.test.ts prisma/demo.test.ts prisma/demo.integration.test.ts src/lib/reporting.test.ts
     node node_modules/typescript/bin/tsc --noEmit --incremental false
     docker build -t aidattakip:staff-summary-20261019 .
 

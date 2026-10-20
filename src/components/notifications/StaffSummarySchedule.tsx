@@ -3,11 +3,13 @@
 import { Button } from '@/components/ui/button'
 import type { MembershipRule } from './StaffSummaryMembership'
 import StaffSummaryRuleDialog from './StaffSummaryRuleDialog'
+import StaffSummaryArchiveAction from './StaffSummaryArchiveAction'
 import { summarySchedule } from './summary-schedule'
 
-export default function StaffSummarySchedule({ rule, disabled, onSaved, onEnabledChange }: {
+export default function StaffSummarySchedule({ rule, disabled, onSaved, onEnabledChange, onArchived }: {
   rule: MembershipRule; disabled: boolean; onSaved: (rule: Pick<MembershipRule, 'id' | 'name' | 'weekdays' | 'time'>) => void
   onEnabledChange: (enabled: boolean) => void
+  onArchived: (action: 'archive' | 'restore', name: string) => void
 }) {
   return <article className="space-y-3 rounded-md border bg-white p-3">
     <div className="min-w-0 space-y-1 break-words"><p className="text-sm font-semibold">{rule.name}</p><p className="text-sm">{summarySchedule(rule)}</p><p className="text-xs text-slate-600">{rule.enabled ? 'Kural etkin' : 'Kural kapalı; özet gönderilmez'} · {rule.recipientIds.length} seçili personel</p></div>
@@ -15,6 +17,8 @@ export default function StaffSummarySchedule({ rule, disabled, onSaved, onEnable
     <div className="flex flex-wrap gap-2">
       <Button type="button" variant={rule.enabled ? 'outline' : 'default'} className="min-h-11" disabled={disabled || (!rule.enabled && !rule.recipientIds.length)} aria-label={`${rule.name}: ${rule.enabled ? 'kuralı durdur' : 'kuralı etkinleştir'}`} onClick={() => onEnabledChange(!rule.enabled)}>{rule.enabled ? 'Durdur' : 'Etkinleştir'}</Button>
       <StaffSummaryRuleDialog disabled={disabled} rule={rule} onSaved={onSaved}/>
+      <StaffSummaryArchiveAction rule={rule} action="archive" disabled={disabled || rule.enabled} onSaved={onArchived}/>
     </div>
+    {rule.enabled && <p className="text-xs text-slate-600">Kaldırmak için önce kuralı durdurun. Gönderim geçmişi korunur.</p>}
   </article>
 }

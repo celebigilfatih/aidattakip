@@ -1,5 +1,9 @@
 # Data Model
 
+## ADR-0008 arşiv alanı — 2026-10-20
+
+28 model/13 migration. Kullanıcı ADR-0008 ve yalnız demo migration/yayınını onayladı. StaffSummaryRule.archivedAt DateTime? NULL mevcut/yeni kullanılabilir kural, tarihli arşivdir; archivedAt doluysa enabled=false CHECK constraint. 20261020100000_archive_staff_summary_rules yerel5477/aidat_takip üzerinde applied; diğer alanlar/ilişkiler ve geçmiş değişmedi. DROP/DELETE/backfill yok; demo migration henüz bekliyor. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md).
+
 ## ADR-0007 ek modeli
 
 28 model/12 migration: NotificationRecipient staffPushEnabled ve ana cihaz ilişkisi; StaffSummaryRule/Recipient/Run ile haftalık takvim, seçili mali alıcılar ve benzersiz ruleId/scheduledAt çalışması. Notification isFeeSummary/summaryBranchId/summaryRunId alanları ve run/alıcı benzersizliği eklenir. 20261019150000_staff_notifications_summary yerelde applied; eski kayıtlar silinmedi. Veli/sporcu cihazları ve kullanılmamış davetler pasifleştirildi. Bildirim/çalışma geçmişine otomatik silme yok. Demo uygulaması henüz bekler.

@@ -1,5 +1,13 @@
 # Change Requests
 
+## CR-030 — Kullanılmayan aidat kurallarını geçmişi koruyarak kaldırma
+
+- Kullanıcı talebi (2026-10-20): Kaldırma Personel ve Cihazlar ekranından yapılsın; gönderim geçmişi korunsun. enabled tek başına durdurmadır; arşiv alanı yok, StaffSummaryRun FK Restrict silmeyi engeller.
+- Karar/onay: [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md) önce Proposed ve somut SQL/akış olarak sunuldu; kullanıcı “ADR-0008 ve yalnız demo migration/yayınını onaylıyorum” dedi, Accepted.
+- Status: Implemented — yerel migration/generate/typecheck/63 test ve UI geçti; Docker adayı başarılı, nihai demo yayını bekliyor.
+- Kaldır yalnız kapalı kurala onay dialogu; arşiv listesi/kapalı geri al ve salt okunur geçmiş. Tek archivedAt nullable alan + archived-disabled CHECK. Kural/alıcı/run/notification/delivery silinmez; rol/şube/cihaz/retention aynı. Eski API/onboarding/worker/dispatch arşivi yeniden kontrol eder; paralel etkinleşme409, no-op cursor/geçmiş korunur.
+- Testler:7 yeni alt test+parent (toplam63); yetki/origin/şube/strict filtre, aktif kural/DB invariant, idempotency/tüm geçmiş, eski API/stale onboarding rollback, worker+manual/automatic dispatch0 dış push, kapalı geri al/no-catchup ve paralel archive-enable/legacy-edit/üyelik. Main/Özlüce korunacak; canlı mevcut etkin Pazartesi09:00/Demo Kullanıcı kuralı değiştirilmeyecek.
+
 ## CR-029 — Personel ekranında mevcut kuralı ortak formdan düzenleme
 
 - Kullanıcı talebi (2026-10-19): Mevcut kural adı, gün, saat ve alıcılar Personel ve Cihazlar ekranından birlikte değişsin. CR-026 dar takvim UI sınırı bu taleple genişler; CR-028 yeni formu ortak kullanılır.

@@ -1,5 +1,11 @@
 # Deployment
 
+## 2026-10-20 — Kural arşivleme/geri alma yalnız demo (CR-030)
+
+Yerel1280px UI: Kaldır onayı/iptali, günlük listeden çıkma, yeniden giriş/navigasyon sonrası arşivde kalma, salt okunur geçmişte aynı SKIPPED run, Geri al/kapalı kart ve Yenile doğrulandı. Kendi tek kural/run fixture'ı local DB+ID/prefix/owner/state guard ile temizlendi;0 yeni bildirim. Yerel Docker adayı exit0/config2c6f1e95a440cc7e429c29362de0b62dcea6c9999c67284e4b2efda26f6059eb son etkin-restore409 korumasından öncedir; nihai kaynak demo Docker'da doğrulanacak. Son kaynak typecheck ve63 test tekrar geçti.
+
+ADR-0008 ve yerel/demo additive migration/yayını açık kullanıcı onaylı. Yerel 20261020100000_archive_staff_summary_rules applied ve Prisma generate başarılı;63 test/typecheck geçti. Docker ve UI sürüyor, canlı yayına henüz geçilmedi. Mevcut ayrı branch/sabit ref, cron ve VAPID korunacak; main/Özlüce kapsam dışında. Arşivi tanımayan eski runtime'a dönüş güvenli sayılmaz; kolon DROP/purge yok. [ADR-0008](../50-decisions/ADR-0008-aidat-ozeti-kurallarini-arsivleme.md).
+
 ## 2026-10-19 — Mevcut kuralı personel formundan düzenleme (CR-029)
 
 Yalnız demo6f11cf162b79935d1cf14ff9b457c5d676675072; Coolify kqujvbkdflazvphrjv5m7970 Success/03m08s, başlangıç14:13:50 UTC, bitiş14:16:58 UTC. Nihai demo Docker başarılı, manuel/sabit ref ve branch codex/staff-summary-20261019 korunur. Main b024011/Özlüce'ye işlem yok.

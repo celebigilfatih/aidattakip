@@ -4,6 +4,11 @@ Her anlamlı değişiklikte ilgili belgeler ve AI Handoff ile birlikte güncelle
 
 ## [Unreleased]
 
+### Added — 2026-10-20 — Geçmişi koruyan aidat kuralı arşivi
+
+- Personel ve Cihazlar kartında kapalı kuralı Kaldır/onay/iptal, Arşivlenen kurallar ve kapalı Geri al; arşivli geçmiş salt okunur korunur.
+- Kullanıcı onaylı ADR-0008 Accepted; tek archivedAt ve additive migration/constraint. Tüm eski API/onboarding/worker/dispatch yollarında arşiv kontrolü; silme/purge/otomatik gönderim yok. Yerel migration/generate/typecheck ve63 test başarılı; UI/Docker/demo yayını sürüyor.
+
 ### Changed — 2026-10-19 — Mevcut aidat kuralını tek formdan düzenleme
 
 - Personel ve Cihazlar kartında Düzenle; yeni kayıtla ortak formda mevcut ad/gün/saat/alıcılar, açık geçersiz alıcı kaldırma ve kayıt sonrası kart/üyelik yenileme.

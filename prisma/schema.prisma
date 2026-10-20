@@ -640,6 +640,7 @@ model SystemSetting {
 
 model StaffSummaryRule {
   id String @id @default(cuid())
+  archivedAt DateTime?
   name String
   weekdays Int[]
   time String @default("09:00")

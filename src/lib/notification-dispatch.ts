@@ -33,7 +33,7 @@ export async function dispatchNotification(id: string) {
       if (!financialRole(recipient.user.role)) throw new NotificationError(403, 'Mali özet yetkisi gerekli.')
       if (notification.summaryRunId) {
         const run = await prisma.staffSummaryRun.findUnique({ where: { id: notification.summaryRunId }, include: { rule: { include: { recipients: true } } } })
-        if (!run || (run.kind === 'AUTOMATIC' && !run.rule.enabled) || !run.rule.recipients.some(r => r.recipientId === recipient.id)) throw new NotificationError(409, 'Kural kapalı veya alıcı kaldırıldı.')
+        if (!run || run.rule.archivedAt || (run.kind === 'AUTOMATIC' && !run.rule.enabled) || !run.rule.recipients.some(r => r.recipientId === recipient.id)) throw new NotificationError(409, 'Kural kapalı veya alıcı kaldırıldı.')
       }
       const branchId = notification.summaryBranchId
       if ((sender.branchId && sender.branchId !== branchId) || (recipient.user.branchId && recipient.user.branchId !== branchId)) throw new NotificationError(403, 'Özet şube kapsamı değişti.')

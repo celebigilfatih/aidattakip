@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
       orderBy: { name: 'asc' },
     })
     const summaryRules = await prisma.staffSummaryRule.findMany({
-      where: summaryRuleScope(user),
+      where: { ...summaryRuleScope(user), archivedAt: null },
       select: { id: true, name: true, enabled: true, branchId: true, weekdays: true, time: true },
       orderBy: { createdAt: 'asc' },
     })
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
           where: { id: input.summaryRuleId, ...summaryRuleScope(manager) },
           include: { createdBy: { select: { isActive: true, role: true, branchId: true } } },
         })
-        if (!summaryRule) throw new NotificationError(409, 'Seçilen aidat özeti kuralı artık kullanılamıyor. Formu kapatıp yeniden açın.')
+        if (!summaryRule || summaryRule.archivedAt) throw new NotificationError(409, 'Seçilen aidat özeti kuralı artık kullanılamıyor. Formu kapatıp yeniden açın.')
         if (summaryRule.branchId && summaryRule.branchId !== input.branchId) throw new NotificationError(400, 'Aidat özeti kuralı personelin şubesiyle eşleşmelidir.')
         const owner = summaryRule.createdBy
         if (!owner.isActive || !financialRole(owner.role) || (owner.branchId && owner.branchId !== summaryRule.branchId)) throw new NotificationError(409, 'Kural sahibinin yetkisi değişmiş. Başka bir kural seçin.')

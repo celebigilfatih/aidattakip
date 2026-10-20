@@ -9,9 +9,10 @@ import { summaryRuleScope, validateSummaryRecipients } from '@/lib/staff-summary
 export async function GET(request: NextRequest) {
   try {
     const manager = await requireManager(request)
+    const archived = z.enum(['true', 'false']).optional().parse(request.nextUrl.searchParams.get('archived') ?? undefined)
     const rules = await prisma.staffSummaryRule.findMany({
-      where: summaryRuleScope(manager),
-      select: { id: true, name: true, enabled: true, branchId: true, weekdays: true, time: true, recipients: { select: { recipientId: true } } },
+      where: { ...summaryRuleScope(manager), archivedAt: archived === 'true' ? { not: null } : null },
+      select: { id: true, name: true, enabled: true, archivedAt: true, branchId: true, weekdays: true, time: true, recipients: { select: { recipientId: true } } },
       orderBy: { createdAt: 'asc' },
     })
     return notificationResponse({ rules: rules.map(({ recipients, ...rule }) => ({ ...rule, recipientIds: recipients.map(r => r.recipientId) })) })
@@ -23,6 +24,7 @@ export async function PATCH(request: NextRequest) {
     requireSameOrigin(request)
     const manager = await requireManager(request)
     const input = z.union([
+      z.object({ ruleId: z.string().min(1).max(100), action: z.enum(['archive', 'restore']) }).strict(),
       z.object({ ruleId: z.string().min(1).max(100), enabled: z.boolean() }).strict(),
       z.object({ userId: z.string().min(1).max(100), ruleId: z.string().min(1).max(100), receive: z.boolean() }).strict(),
     ]).parse(await request.json())
@@ -33,6 +35,14 @@ export async function PATCH(request: NextRequest) {
         include: { createdBy: { select: { isActive: true, role: true, branchId: true } }, recipients: { select: { recipientId: true } } },
       })
       if (!rule) throw new NotificationError(409, 'Aidat özeti kuralı artık kullanılamıyor. Listeyi yenileyin.')
+      if ('action' in input) {
+        if (input.action === 'archive' && rule.enabled) throw new NotificationError(409, 'Kaldırmadan önce kuralı durdurun.')
+        if (input.action === 'restore' && rule.enabled) throw new NotificationError(409, 'Kural zaten geri alınmış ve etkin. Listeyi yenileyin.')
+        const changed = input.action === 'archive' ? !rule.archivedAt : !!rule.archivedAt
+        const saved = await tx.staffSummaryRule.update({ where: { id: rule.id }, data: changed ? { archivedAt: input.action === 'archive' ? new Date() : null } : {}, select: { id: true, name: true, enabled: true, archivedAt: true } })
+        return { rule: saved }
+      }
+      if (rule.archivedAt) throw new NotificationError(409, 'Kural arşivlendi. Listeyi yenileyin; önce arşivden geri alın.')
       if ('enabled' in input) {
         if (input.enabled) {
           const owner = rule.createdBy
@@ -82,7 +92,7 @@ export async function PUT(request: NextRequest) {
       // Membership edits and worker evaluation use the same lock; preserve dispatch state.
       await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.ruleId} FOR UPDATE`
       const current = await tx.staffSummaryRule.findFirst({ where: { id: input.ruleId, ...summaryRuleScope(manager) }, include: { recipients: { select: { recipientId: true } }, createdBy: { select: { isActive: true, role: true, branchId: true } } } })
-      if (!current) throw new NotificationError(409, 'Aidat özeti kuralı artık kullanılamıyor. Listeyi yenileyin.')
+      if (!current || current.archivedAt) throw new NotificationError(409, 'Aidat özeti kuralı artık kullanılamıyor veya arşivlendi. Listeyi yenileyin.')
       const changed = current.time !== input.time || JSON.stringify(current.weekdays) !== JSON.stringify(input.weekdays)
       if ('recipientIds' in input) {
         const expected = input.expected

@@ -26,12 +26,13 @@ export async function PUT(request: NextRequest) {
   try {
     requireSameOrigin(request)
     const user = await requireManager(request), input = summaryRuleSchema.extend({ id: z.string().min(1).max(100) }).parse(await request.json())
-    const existing = await prisma.staffSummaryRule.findFirst({ where: { id: input.id, ...summaryRuleScope(user) } })
-    if (!existing) throw new NotificationError(404, 'Kural bulunamadı.')
-    await validateSummaryRecipients(input.recipientIds, existing.branchId)
     const { id, recipientIds, ...data } = input
     return notificationResponse(await prisma.$transaction(async tx => {
       await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${id} FOR UPDATE`
+      const existing = await tx.staffSummaryRule.findFirst({ where: { id, ...summaryRuleScope(user) } })
+      if (!existing) throw new NotificationError(404, 'Kural bulunamadı.')
+      if (existing.archivedAt) throw new NotificationError(409, 'Kural arşivlendi. Önce arşivden geri alın.')
+      await validateSummaryRecipients(recipientIds, existing.branchId, tx)
       await tx.staffSummaryRecipient.deleteMany({ where: { ruleId: id } })
       return tx.staffSummaryRule.update({ where: { id }, data: { ...data, branchId: existing.branchId, createdById: user.id, lastEvaluatedAt: new Date(Date.now() - 1), recipients: { create: recipientIds.map(recipientId => ({ recipientId })) } } })
     }))
@@ -43,7 +44,12 @@ export async function PATCH(request: NextRequest) {
     const user = await requireManager(request)
     const input = z.object({ id: z.string().min(1).max(100), action: z.enum(['disable', 'send']) }).parse(await request.json())
     if (input.action === 'send') return notificationResponse(await manualSummaryRun(input.id, user))
-    await prisma.staffSummaryRule.updateMany({ where: { id: input.id, ...summaryRuleScope(user) }, data: { enabled: false } })
+    await prisma.$transaction(async tx => {
+      await tx.$queryRaw`SELECT id FROM staff_summary_rules WHERE id = ${input.id} FOR UPDATE`
+      const rule = await tx.staffSummaryRule.findFirst({ where: { id: input.id, ...summaryRuleScope(user) } })
+      if (rule?.archivedAt) throw new NotificationError(409, 'Kural arşivlendi. Önce arşivden geri alın.')
+      if (rule) await tx.staffSummaryRule.update({ where: { id: rule.id }, data: { enabled: false } })
+    })
     return notificationResponse({ success: true })
   } catch (error) { return notificationFailure(error) }
 }
