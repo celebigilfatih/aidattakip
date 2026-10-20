@@ -6,12 +6,12 @@ Karar: [ADR-0009](../50-decisions/ADR-0009-aile-sezon-aday-takip.md), kullanıc�
 
 Sol menü **Aile Hesapları → Yeni aile**: şube/ad ve sporcuları seçin. Aynı şube ve tek aile koşulu sunucuda denetlenir; benzer telefonlar otomatik birleştirilmez. Düzenle ile üye çıkarılabilir. Arşiv üyelikleri ve borçları korur; Geri al kullanılabilir. Arşivli aileye yeni üye eklenemez.
 
-ADMIN/SECRETARY aile ilişkilerini yönetir; ADMIN/ACCOUNTING tüm dönemler ve aktif/pasif sporcular için mali toplamları görür. SECRETARY yanıtında tutar/bakiye alanı yoktur. Tahsilat aile adına dağıtılmaz; kardeşin **Sporcunun ödemeleri** bağlantısı mevcut sporcu filtresini açar. İptal borçlar toplam dışı; kalan max(amount-paidAmount,0), PAID kalan sıfır; gecikme İstanbul vade günü sonrasıdır. Tarihsel Float/tahsilat hareket modeli değiştirilmedi (CR-009).
+ADMIN/SECRETARY aile ilişkilerini yönetir; ADMIN/ACCOUNTING tüm dönemler ve aktif/pasif sporcular için mali toplamları görür. SECRETARY yanıtında tutar/bakiye alanı yoktur. Tahsilat aile adına dağıtılmaz; kardeşin **Sporcunun ödemeleri** bağlantısı mevcut sporcu filtresini açar. Bu görünümde genel toplu iptal ve toplu işlem bağlantısı kapalıdır; genel listeye geçiş açık eylemle yapılır. İptal borçlar toplam dışı; kalan max(amount-paidAmount,0), PAID kalan sıfır; gecikme İstanbul vade günü sonrasıdır. Tarihsel Float/tahsilat hareket modeli değiştirilmedi (CR-009).
 
 ## Sezon yenileme
 
 1. Şubesi olmayan kulüp geneli ADMIN ortak takvimi oluşturur. Tarihlerde saat dilimi Europe/Istanbul kullanılır.
-2. ADMIN/SECRETARY mevcut sporcuları **borç oluşturmadan** sezona bağlar. Eski sporcu kopyalanmaz; aile/sezon backfill yapılmaz. Şubesiz kayıt önce sporcu ekranından düzeltilir.
+2. ADMIN/SECRETARY mevcut sporcuları **borç oluşturmadan** sezona bağlar. Eski sporcu kopyalanmaz; aile/sezon backfill yapılmaz. Şubesiz kayıt önce sporcu ekranından düzeltilir. Hazırlık düzeltme listesi şubesi eksik/pasif veya farklı şubedeki hedef grup sorunlarını isimleriyle gösterir; kapsam dışı grup ayrıntıları döndürülmez.
 3. Seçili kayıtlar için Karar bekliyor/Görüşülecek/Devam edecek/Ayrıldı ve hedef grup hazırlanır. Güncel grup ve aktiflik değişmez.
 4. ADMIN/ACCOUNTING ücret türü, dönem başına tutar ve ilk vade taslağı kaydeder. MONTHLY/QUARTERLY/SEMI_ANNUAL/YEARLY 1/3/6/12 aylık; ONE_TIME tek borçtur. İlk vade sezon içinde; sonraki vadeler bitişe kadar ve ilk gün çapası korunarak ay sonuna kısaltılır.
 5. **Aidatları önizle → Aidat borçlarını oluştur**: aktif, Devam edecek, uygun grup/ücret şartı. Önizleme özeti değişmişse409 ve yeni önizleme gerekir. Tek transaction, satır kilitleri ve kaynak/sıra benzersizliği mükerrer onayı engeller. Onaylı ücretler taslaktan değişmez.

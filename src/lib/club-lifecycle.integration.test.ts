@@ -87,6 +87,10 @@ test('club lifecycle: family, season, trial and attention HTTP contracts on isol
    assert.equal(await db.payment.count({where:{seasonEnrollmentId:enrollmentId}}),3)
    await assert.rejects(db.payment.create({data:{studentId:s1.id,feeTypeId:fee.id,amount:1,createdById:admin.id,dueDate:dateValue('2026-10-31'),seasonEnrollmentId:enrollmentId}}),'Source requires an installment number at DB level')
    const safe=await(await season.GET(request('GET',secretary.id,undefined,'?seasonId='+seasonId))).json();assert(!('plannedAmount'in safe.enrollments[0]));assert(!('feeType'in safe.enrollments[0]))
+   await db.group.update({where:{id:target.id},data:{branchId:b.id}})
+   const invalid=await(await season.GET(request('GET',secretary.id,undefined,'?seasonId='+seasonId))).json()
+   assert(invalid.enrollments[0].correction);assert.equal(invalid.enrollments[0].targetGroup,null,'Foreign target group details must be redacted')
+   await db.group.update({where:{id:target.id},data:{branchId:a.id}})
    assert.equal((await season.PATCH(request('PATCH',foreign.id,{action:'preview',ids:[enrollmentId]}))).status,404)
   })
   await t.test('group transition is separate, preserves history and does not activate inactive students',async()=>{

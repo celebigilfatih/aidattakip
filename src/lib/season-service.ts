@@ -7,7 +7,11 @@ import { fingerprint, seasonCharges } from './season-policy'
 export const enrollmentInclude = { student: { select: { id: true, firstName: true, lastName: true, branchId: true, groupId: true, isActive: true, updatedAt: true } }, season: true, targetGroup: true, feeType: true } satisfies Prisma.SeasonEnrollmentInclude
 export async function listEnrollments(user: User, seasonId: string) {
   const rows = await prisma.seasonEnrollment.findMany({ where: { seasonId, student: branchScope(user) }, include: enrollmentInclude, orderBy: [{ student: { lastName: 'asc' } },{ id:'asc' }] })
-  return rows.map(row => { const { feeType,feeTypeId,plannedAmount,firstDueDate,approvedAt,...safe } = row; return { ...safe, ...(finance(user) ? { feeType,feeTypeId,plannedAmount,firstDueDate,approvedAt } : {}) } })
+  return rows.map(row => {
+    const { feeType,feeTypeId,plannedAmount,firstDueDate,approvedAt,targetGroup,...safe } = row
+    const correction=!row.student.branchId?'Sporcuya şube atanmalıdır.':targetGroup&&targetGroup.branchId!==row.student.branchId?'Hedef grup ile sporcunun şubesi uyuşmuyor.':targetGroup&&!targetGroup.isActive?'Hedef grup pasif; aktif grup seçilmelidir.':null
+    return { ...safe, correction, targetGroup:targetGroup?.branchId===row.student.branchId?targetGroup:null, ...(finance(user) ? { feeType,feeTypeId,plannedAmount,firstDueDate,approvedAt } : {}) }
+  })
 }
 async function lockedEnrollment(db: ClubDB, user: User, id: string) {
   await db.$queryRaw`SELECT id FROM season_enrollments WHERE id = ${id} FOR UPDATE`

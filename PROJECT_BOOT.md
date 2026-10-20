@@ -136,7 +136,7 @@ Bu sıra öneridir; uygulama onayı değildir.
 ## 8. Known Constraints
 
 - Teknik: Mevcut Next/Prisma/PostgreSQL yapısı; sürümler [OVERVIEW](docs/10-architecture/OVERVIEW.md).
-- Ürün: İlk hedef sporcu/aidat, çocuk ve yetişkin kapsamı; genişleme onayı yok.
+- Ürün: İlk hedef sporcu/aidat, çocuk ve yetişkin kapsamı; ADR-0009 aile/sezon/aday/takip genişlemesi ayrıca onaylıdır.
 - Zaman: TBD
 - Bütçe: TBD
 - Güvenlik: Mevcut riskler [SECURITY_MODEL](docs/10-architecture/SECURITY_MODEL.md); yeni politika onay gerektirir.
