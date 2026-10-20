@@ -1,5 +1,9 @@
 # Changelog
 
+### Verified — 2026-10-20 — Demo sezon aidatı mali onayı
+
+- Açık kullanıcı isteğiyle Ece/Eren için toplam 9750 TL / 6 sezon borcu oluşturuldu. Aynı önizlemeyi koruyan ikinci sekmeden tekrar onay başarılı; yeni önizleme Önceden onaylandı / 0 TL, her sporcuda yalnız 3 yeni borç ve 8 toplam kayıt doğrulandı. Aile 23000 TL tahakkuk/6250 TL ödenen/16750 TL kalan/7000 TL geciken. Tahsilat veya grup geçişi yapılmadı; kod/migration/yayın değişmedi.
+
 ### Verified — 2026-10-20 — Demo örnek sezon
 
 - Örnek 2027 İlkbahar Sezonu (01.01–31.03.2027), mevcut Ece/Eren bağlantıları, Devam edecek kararları ve ayrı U10/U16 ücret taslakları oluşturuldu. Yenileme sonrası kalıcılık ve 31 Ocak/28 Şubat/31 Mart vadeli 6 satır/9750 TL önizleme doğrulandı. Mali onay ve grup geçişi yapılmadı; aile bakiyesi 7000 TL aynı. Yalnız demo işletim verisi; kod/migration/yayın değişmedi.

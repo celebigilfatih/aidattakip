@@ -1,5 +1,19 @@
 # Kulüp yaşam döngüsü doğrulaması — 2026-10-20
 
+## Demo sezon mali onayı ve tekrar koruması — 2026-10-20
+
+Kullanıcı Ece/Eren sezon aidatlarını oluşturmayı ve tekrar onay/aile toplamı kontrolünü açıkça istedi. Yalnız SporManage demo **Örnek 2027 İlkbahar Sezonu** için mevcut iki kayıt ve 9750 TL / 6 taksit önizlemesi doğrulandı. İlk aile görünümü 13250 tahakkuk/6250 ödenen/7000 kalan-geciken idi. Aynı onay öncesi önizleme ikinci sekmede de hazırlandı. Ana sekmeden Aidat borçlarını oluştur → Onayla sonrası iki kayıt Aidatlar onaylı oldu; aile 23000/6250/16750/7000 gösterdi. İkinci sekmenin eski önizlemesinden aynı iki kayıt tekrar Onayla ile sunucuya gönderildi. İşlem başarılı döndü; güncel önizleme iki sporcu için Önceden onaylandı, aynı üçer taksit ve yeni borç toplamı 0 TL / oluşturma düğmesi kapalı gösterdi. Bu kontrol yalnız düğmenin kapanması değildir; ikinci gerçek UI onayı da yapıldı. Paralel yarış bu canlı görevde sınanmadı; önceki entegrasyon testlerinin ayrı kanıtıdır.
+
+| Sporcu | Yeni sezon borcu | Toplam ödeme kaydı | Tahakkuk | Ödenen | Kalan |
+|---|---:|---:|---:|---:|---:|
+| Ece Arslan | 3 × 1500 = 4500 TL | 8 (5 eski + 3 yeni) | 10750 TL | 3250 TL | 7500 TL |
+| Eren Aksoy | 3 × 1750 = 5250 TL | 8 (5 eski + 3 yeni) | 12250 TL | 3000 TL | 9250 TL |
+| Aile | 9750 TL | 16 | 23000 TL | 6250 TL | 16750 TL |
+
+Her sporcunun ödeme listesinde 31.01.2027/28.02.2027/31.03.2027 vadeli yalnız üç sezon satırı Bekliyor ve ödenen sıfır; toplam kayıt sayısı sekiz. Ece geciken 2/3000 TL, Eren 3/4000 TL değişmedi. İkinci onay sonrası aile Yenile ile tekrar okundu: aynı 23000 tahakkuk/6250 ödenen/16750 kalan/7000 geciken. Yeni vadeler gelecekte olduğundan gecikme artmadı. Tahsilat veya grup geçişi yapılmadı; mevcut grup/hedefler U10/U16 ve geçiş bekliyor. Onaylı borçlar örnek kullanım için bırakıldı, silinmedi.
+
+Kod/model/migration/dağıtım değişmedi; ADR-0009 geçerli. Main/Özlüce veya bildirim ayarlarında işlem yapılmadı. Kanıtlar output/season-example/demo-repeat-approved.png ve demo-family-after-approval.png Git dışı. Canlı UI tekrarlı onay/16 ödeme satırı/aile aritmetiği kontrol edildi; kaynak değişmediği için typecheck/entegrasyon paketi/Docker yeniden çalıştırılmadı, yeni iPhone testi yapılmadı. Aşağıdaki önizleme-only kaydı önceki aşamanın tarihçesidir.
+
 ## Demo örnek sezon — 2026-10-20
 
 Kullanıcının örnek sezon/yenileme/önizleme isteği canlı /seasons ekranında uygulandı. **Örnek 2027 İlkbahar Sezonu**, 01.01.2027–31.03.2027; mevcut Ece Arslan (Merkez U10) ve Eren Aksoy (Merkez U16) borç oluşturmadan bağlandı. İlk durumları Karar bekliyor/Ücret hazırlanmadı idi. İkisi ayrı ayrı Devam edecek ve mevcut grupları hedef seçilerek kaydedildi; ücret türleri Merkez U10 Aylık Aidat ve Merkez U16 Aylık Aidat, aylık 1500/1750 TL, ilk vade 31.01.2027.

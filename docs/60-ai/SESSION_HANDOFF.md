@@ -1,5 +1,13 @@
 # AI Session Handoff
 
+## 2026-10-20 — Demo sezon mali onayı; mükerrer borç kontrolü
+
+Kullanıcının açık talebiyle Örnek 2027 İlkbahar Sezonu Ece/Eren aidatları demo UI üzerinden onaylandı. 31 Ocak/28 Şubat/31 Mart 2027, Ece 3 × 1500 = 4500 TL, Eren 3 × 1750 = 5250 TL, toplam 9750 TL / 6 yeni borç. Aynı onay öncesi önizleme ikinci sekmede tutulup ilk onaydan sonra tekrar gerçek Onayla eylemi yapıldı. Sunucu başarılı yanıtladı; yeniden önizleme Önceden onaylandı / yeni borç 0 TL ve kapalı oluşturma düğmesi gösterdi. İkinci onaydan sonra her sporcunun ödeme ekranında toplam 8 kayıt, yalnız üç yeni gelecek vadeli Bekliyor sezon borcu vardır. Yeni paralel yarış kontrolü yapılmadı; bu deneme art arda iki sekme onayıdır.
+
+Aile ilk onay öncesi 13250 tahakkuk/6250 ödenen/7000 kalan-geciken; ilk ve ikinci onay sonrası 23000 tahakkuk/6250 ödenen/16750 kalan/7000 geciken. Ece kalan 7500 (eski3000 + yeni4500), Eren 9250 (eski4000 + yeni5250). Gecikenler Ece 2/3000, Eren 3/4000; yeni vadeler 2027'de olduğundan değişmedi. Tahsilat/grup geçişi yapılmadı, borçlar demoda bırakıldı. Ana sekme aile toplamlarıyla açık.
+
+Kod/model/migration/runtime değişmedi, yeni ADR yok (ADR-0009 geçerli); main/Özlüce/bildirim ayarlarında işlem yok. UI kabulü başarılı; kaynak değişmediği için typecheck/test/Docker yeniden çalıştırılmadı. Kalite/kullanım/CHANGELOG/PROJECT_BOOT güncellendi; kanıtlar output/season-example/demo-repeat-approved.png ve demo-family-after-approval.png Git dışında. Eski önizleme-only anlatımı aşağıda tarihçe olarak kalır. Sonraki ayrı adım istenirse tahsilat senaryosudur; sezon grup geçişi 01.01.2027 öncesi yapılmaz.
+
 ## 2026-10-20 — Demo örnek sezon ve aidat önizlemesi
 
 Kullanıcı Ece/Eren için örnek sezon oluşturma, yenileme kararları ve aidat önizlemesini kontrol etme istedi. Yalnız canlı SporManage demo /seasons UI üzerinden **Örnek 2027 İlkbahar Sezonu (01.01.2027–31.03.2027)** oluşturuldu. Mevcut iki sentetik sporcu bağlandı; ikisi Devam edecek, hedefleri mevcut Merkez U10/U16. Aylık aidat türleri 1500/1750 TL, ilk vade 31.01.2027. Önizleme 31 Ocak/28 Şubat/31 Mart: Ece 4500, Eren 5250, toplam 9750 TL / 6 satır. Tam yenileme sonrası karar/taslaklar kalıcı, tekrar önizleme aynı.
